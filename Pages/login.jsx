@@ -1,0 +1,229 @@
+import { useState } from "react";
+import GoogleIcon from "../assets/svg/googleIcon.svg";
+import FbIcon from "../assets/svg/fbIcon.svg";
+// import Divider from "../Components/Divider";
+
+import {
+  Text,
+  StyleSheet,
+  View,
+  Pressable,
+  Dimensions,
+  Button,
+} from "react-native";
+import InputText from "../Components/InputText";
+import colors from "../assets/colors/colors";
+import AnimatedCheckbox from "react-native-checkbox-reanimated";
+
+function Login() {
+  const { width, height } = Dimensions.get("window");
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
+  const handleCheckboxPress = () => {
+    setRememberMe((prev) => {
+      return !prev;
+    });
+    //Add code to save user's details to local storage On Submit.
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Login</Text>
+      <View style={styles.loginInputContainer}>
+        <InputText
+          label="Email"
+          placeholder="example@email.com"
+          setValue={setEmail}
+          value={email}
+          type="email"
+        />
+        <InputText
+          label="Password"
+          placeholder="Password"
+          setValue={setPassword}
+          value={password}
+          type="password"
+        />
+        <View
+          style={{
+            marginTop: 20,
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
+          <Pressable onPress={handleCheckboxPress} style={styles.checkbox}>
+            <AnimatedCheckbox
+              checked={rememberMe}
+              highlightColor={colors.primary}
+              checkmarkColor={colors.secondary}
+              boxOutlineColor={colors.primary}
+            />
+          </Pressable>
+          <Text style={styles.DontHaveAccountText}>Remember Me</Text>
+        </View>
+
+        <View style={styles.buttonWrapper}>
+          <Pressable
+            onPress={() => {
+              //Login code
+              console.log("Login");
+            }}
+          >
+            <Text style={styles.loginText}>{"Login"}</Text>
+          </Pressable>
+        </View>
+        <Text
+          style={[
+            styles.DontHaveAccountText,
+            { textAlign: "right", marginTop: 20, color: colors.primary },
+          ]}
+        >
+          Forgot Password ?
+        </Text>
+        <Divider withText={true} text="Or" />
+        <View style={styles.SocialContainer}>
+          <Pressable
+            style={styles.socialLoginContainer}
+            onPress={() => {
+              //Login code
+              console.log("Google Login");
+            }}
+          >
+            <GoogleIcon width="70" />
+          </Pressable>
+          <Pressable
+            style={styles.socialLoginContainer}
+            onPress={() => {
+              //Login code
+              console.log("Fb Login");
+            }}
+          >
+            <FbIcon width="70" />
+          </Pressable>
+        </View>
+        <View style={styles.DontHaveAccount}>
+          <Text style={styles.DontHaveAccountText}>
+            Don't have an account ?
+          </Text>
+          <Pressable
+            onPress={() => {
+              console.log("Go to register page");
+            }}
+          >
+            <Text style={styles.DontHaveAccountLink}>Register</Text>
+          </Pressable>
+        </View>
+      </View>
+    </View>
+  );
+}
+
+export default Login;
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: colors.background,
+    height: "100%",
+    padding: 15,
+  },
+  title: {
+    fontSize: 50,
+    marginLeft: 20,
+    marginTop: 40,
+    fontFamily: "Inter-Black",
+  },
+  loginInputContainer: {
+    marginTop: 35,
+    padding: 10,
+    position: "relative",
+    borderRadius: 10,
+  },
+  checkbox: {
+    height: 30,
+    width: 30,
+  },
+  buttonWrapper: {
+    marginTop: 30,
+    width: "100%",
+    alignItems: "center",
+  },
+  loginText: {
+    fontSize: 18,
+    fontFamily: "Inter-ExtraLight",
+    borderRadius: 7,
+    width: 180,
+    textAlign: "center",
+    padding: 10,
+    backgroundColor: colors.primary,
+    color: colors.textLight,
+    elevation: 10,
+  },
+  SocialContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  socialLoginContainer: {
+    width: 55,
+    padding: 5,
+    marginHorizontal: 10,
+    marginTop: 20,
+    alignItems: "center",
+    borderRadius: 90,
+  },
+  DontHaveAccount: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 30,
+  },
+  DontHaveAccountText: {
+    fontFamily: "Inter-ExtraLight",
+    fontSize: 15,
+    marginHorizontal: 10,
+  },
+  DontHaveAccountLink: {
+    fontSize: 15,
+    fontFamily: "Inter-SemiBold",
+    color: colors.primary,
+  },
+
+  //divider style
+  mainContainer: {
+    marginTop: 30,
+    height: 10,
+    width: "100%",
+    paddingVertical: 10,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  divider: {
+    height: 1,
+    flex: 4,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.divider,
+  },
+  text: {
+    fontFamily: "Inter-ExtraLight",
+    fontSize: 18,
+    color: colors.textDark,
+    height: 20,
+    marginHorizontal: 10,
+  },
+});
+
+function Divider({ text, withText }) {
+  return (
+    <View style={styles.mainContainer}>
+      <View style={styles.divider}></View>
+      {withText ? <Text style={styles.text}>{text}</Text> : null}
+      {withText ? <View style={styles.divider}></View> : null}
+    </View>
+  );
+}
