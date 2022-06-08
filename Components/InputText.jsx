@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
   },
   label: {
     marginHorizontal: 5,
-    fontFamily: "Inter-ExtraLight ",
+    fontFamily: "Inter-ExtraLight",
     color: colors.textDark,
   },
   loginInput: {

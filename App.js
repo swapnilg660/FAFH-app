@@ -1,60 +1,42 @@
 import { StatusBar } from "expo-status-bar";
-import * as Font from "expo-font";
-import * as SplashScreen from "expo-splash-screen";
 
-import { StyleSheet, Text, View } from "react-native";
-import Login from "./Pages/login";
-import react, { useState, useEffect, useCallback } from "react";
+
+import { StyleSheet, Text, View, SafeAreaView } from "react-native";
+import { useState, useEffect, useCallback } from "react";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { NavigationContainer } from "@react-navigation/native";
+
+//importing pages
+import Welcome from "./Pages/auth/welcome";
+import Login from "./Pages/auth/login";
+import Register from "./Pages/auth/register";
+import ForgotPassword from "./Pages/auth/forgotPassword";
+import Home from "./Pages/home/home";
 
 //custom hooks import
-import useFonts from "./hooks/useFonts";
+
 
 export default function App() {
-  //loading fonts
-  const [appIsReady, setAppIsReady] = useState(false);
-
-  useEffect(() => {
-    async function prepare() {
-      try {
-        // Keep the splash screen visible while we fetch resources
-        await SplashScreen.preventAutoHideAsync();
-        // Pre-load fonts, make any API calls you need to do here
-        await useFonts();
-        console.log("fonts loaded");
-        // Artificially delay for two seconds to simulate a slow loading
-        // experience. Please remove this if you copy and paste the code!
-      } catch (e) {
-        console.warn(e);
-      } finally {
-        // Tell the application to render
-        setAppIsReady(true);
-      }
-    }
-    prepare();
-  }, []);
-  const onLayoutRootView = useCallback(async () => {
-    if (appIsReady) {
-      await SplashScreen.hideAsync();
-    }
-  }, [appIsReady]);
-
-  if (!appIsReady) {
-    return null;
-  }
+  //route settings
+  const Tab = createBottomTabNavigator();
+  const Stack = createNativeStackNavigator();
+  const [isSignedIn, setIsSignedIn] = useState(false);
 
   return (
-    <View onLayout={onLayoutRootView}>
-      <Login />
-      {/* <StatusBar style="auto" /> */}
-    </View>
+    <NavigationContainer>
+      {isSignedIn ? (
+        <Stack.Navigator>
+          <Stack.Screen name="Welcome" component={Welcome} />
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Register" component={Register} />
+          <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+        </Stack.Navigator>
+      ) : (
+        <Stack.Navigator>
+          <Stack.Screen name="Home" component={Home} />
+        </Stack.Navigator>
+      )}
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,200,0.1)",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});

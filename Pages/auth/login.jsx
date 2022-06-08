@@ -1,7 +1,5 @@
 import { useState } from "react";
-import GoogleIcon from "../assets/svg/googleIcon.svg";
-import FbIcon from "../assets/svg/fbIcon.svg";
-// import Divider from "../Components/Divider";
+import { GoogleIcon, FacebookIcon } from "../../Components/customSvgIcon";
 
 import {
   Text,
@@ -11,11 +9,11 @@ import {
   Dimensions,
   Button,
 } from "react-native";
-import InputText from "../Components/InputText";
-import colors from "../assets/colors/colors";
+import InputText from "../../Components/InputText";
+import colors from "../../assets/colors/colors";
 import AnimatedCheckbox from "react-native-checkbox-reanimated";
 
-function Login() {
+function Login({ navigation }) {
   const { width, height } = Dimensions.get("window");
 
   const [email, setEmail] = useState("");
@@ -30,6 +28,7 @@ function Login() {
 
   return (
     <View style={styles.container}>
+      {console.log("app loaded")}
       <Text style={styles.title}>Login</Text>
       <View style={styles.loginInputContainer}>
         <InputText
@@ -75,14 +74,16 @@ function Login() {
             <Text style={styles.loginText}>{"Login"}</Text>
           </Pressable>
         </View>
-        <Text
+        <Pressable onPress={() => {
+          navigation.navigate("ForgotPassword")
+        }}><Text
           style={[
             styles.DontHaveAccountText,
             { textAlign: "right", marginTop: 20, color: colors.primary },
           ]}
         >
-          Forgot Password ?
-        </Text>
+            Forgot Password ?
+          </Text></Pressable>
         <Divider withText={true} text="Or" />
         <View style={styles.SocialContainer}>
           <Pressable
@@ -101,7 +102,7 @@ function Login() {
               console.log("Fb Login");
             }}
           >
-            <FbIcon width="70" />
+            <FacebookIcon width="70" />
           </Pressable>
         </View>
         <View style={styles.DontHaveAccount}>
@@ -111,6 +112,7 @@ function Login() {
           <Pressable
             onPress={() => {
               console.log("Go to register page");
+              navigation.navigate("Register");
             }}
           >
             <Text style={styles.DontHaveAccountLink}>Register</Text>
@@ -137,7 +139,7 @@ const styles = StyleSheet.create({
   },
   loginInputContainer: {
     marginTop: 35,
-    padding: 10,
+    padding: 20,
     position: "relative",
     borderRadius: 10,
   },
