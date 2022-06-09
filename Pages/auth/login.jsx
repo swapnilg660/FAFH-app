@@ -1,20 +1,22 @@
-import { useState } from "react";
+import React, { useState, useContext } from "react";
 import { GoogleIcon, FacebookIcon } from "../../Components/customSvgIcon";
+import AuthContext from "../../hooks/context";
 
 import {
   Text,
   StyleSheet,
   View,
   Pressable,
-  Dimensions,
   Button,
+  SafeAreaView,
 } from "react-native";
 import InputText from "../../Components/InputText";
 import colors from "../../assets/colors/colors";
 import AnimatedCheckbox from "react-native-checkbox-reanimated";
 
 function Login({ navigation }) {
-  const { width, height } = Dimensions.get("window");
+  //get signIn function from context
+  const { signIn } = React.useContext(AuthContext);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,103 +29,111 @@ function Login({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
-      {console.log("app loaded")}
-      <Text style={styles.title}>Login</Text>
-      <View style={styles.loginInputContainer}>
-        <InputText
-          label="Email"
-          placeholder="example@email.com"
-          setValue={setEmail}
-          value={email}
-          type="email"
-        />
-        <InputText
-          label="Password"
-          placeholder="Password"
-          setValue={setPassword}
-          value={password}
-          type="password"
-        />
-        <View
-          style={{
-            marginTop: 20,
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-          }}
-        >
-          <Pressable onPress={handleCheckboxPress} style={styles.checkbox}>
-            <AnimatedCheckbox
-              checked={rememberMe}
-              highlightColor={colors.primary}
-              checkmarkColor={colors.secondary}
-              boxOutlineColor={colors.primary}
-            />
-          </Pressable>
-          <Text style={styles.DontHaveAccountText}>Remember Me</Text>
-        </View>
+    <SafeAreaView>
+      <View style={styles.container}>
+        {console.log("app loaded")}
+        <Text style={styles.title}>Login</Text>
+        <View style={styles.loginInputContainer}>
+          <InputText
+            label="Email"
+            placeholder="example@email.com"
+            setValue={setEmail}
+            value={email}
+            type="email"
+          />
+          <InputText
+            label="Password"
+            placeholder="Password"
+            setValue={setPassword}
+            value={password}
+            type="password"
+          />
+          <View
+            style={{
+              marginTop: 20,
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <Pressable onPress={handleCheckboxPress} style={styles.checkbox}>
+              <AnimatedCheckbox
+                checked={rememberMe}
+                highlightColor={colors.primary}
+                checkmarkColor={colors.secondary}
+                boxOutlineColor={colors.primary}
+              />
+            </Pressable>
+            <Text style={styles.DontHaveAccountText}>Remember Me</Text>
+          </View>
 
-        <View style={styles.buttonWrapper}>
+          <View style={styles.buttonWrapper}>
+            <Pressable
+              onPress={() => {
+                //Login code
+                //Add form validation before submitting
+                signIn({ email, password, stayLoggedIn: rememberMe });
+                console.log("Login");
+              }}
+            >
+              <Text style={styles.loginText}>{"Login"}</Text>
+            </Pressable>
+          </View>
           <Pressable
             onPress={() => {
-              //Login code
-              console.log("Login");
+              navigation.navigate("ForgotPassword");
             }}
           >
-            <Text style={styles.loginText}>{"Login"}</Text>
+            <Text
+              style={[
+                styles.DontHaveAccountText,
+                { textAlign: "right", marginTop: 20, color: colors.primary },
+              ]}
+            >
+              Forgot Password ?
+            </Text>
           </Pressable>
-        </View>
-        <Pressable onPress={() => {
-          navigation.navigate("ForgotPassword")
-        }}><Text
-          style={[
-            styles.DontHaveAccountText,
-            { textAlign: "right", marginTop: 20, color: colors.primary },
-          ]}
-        >
-            Forgot Password ?
-          </Text></Pressable>
-        <Divider withText={true} text="Or" />
-        <View style={styles.SocialContainer}>
-          <Pressable
-            style={styles.socialLoginContainer}
-            onPress={() => {
-              //Login code
-              console.log("Google Login");
-            }}
-          >
-            <GoogleIcon width="70" />
-          </Pressable>
-          <Pressable
-            style={styles.socialLoginContainer}
-            onPress={() => {
-              //Login code
-              console.log("Fb Login");
-            }}
-          >
-            <FacebookIcon width="70" />
-          </Pressable>
-        </View>
-        <View style={styles.DontHaveAccount}>
-          <Text style={styles.DontHaveAccountText}>
-            Don't have an account ?
-          </Text>
-          <Pressable
-            onPress={() => {
-              console.log("Go to register page");
-              navigation.navigate("Register");
-            }}
-          >
-            <Text style={styles.DontHaveAccountLink}>Register</Text>
-          </Pressable>
+          <Divider withText={true} text="Or" />
+          <View style={styles.SocialContainer}>
+            <Pressable
+              style={styles.socialLoginContainer}
+              onPress={() => {
+                //Login code
+                console.log("Google Login");
+              }}
+            >
+              <GoogleIcon width="70" />
+            </Pressable>
+            <Pressable
+              style={styles.socialLoginContainer}
+              onPress={() => {
+                //Login code
+                console.log("Fb Login");
+              }}
+            >
+              <FacebookIcon width="70" />
+            </Pressable>
+          </View>
+          <View style={styles.DontHaveAccount}>
+            <Text style={styles.DontHaveAccountText}>
+              Don't have an account ?
+            </Text>
+            <Pressable
+              onPress={() => {
+                console.log("Go to register page");
+                navigation.navigate("Register");
+              }}
+            >
+              <Text style={styles.DontHaveAccountLink}>Register</Text>
+            </Pressable>
+          </View>
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
-export default Login;
+export default React.memo(Login);
 
 const styles = StyleSheet.create({
   container: {

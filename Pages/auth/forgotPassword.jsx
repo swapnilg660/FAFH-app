@@ -1,15 +1,17 @@
-import { useState, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, StyleSheet, SafeAreaView } from "react-native";
 
 function ForgotPassword({ navigation }) {
   return (
-    <View style={styles.container}>
-      <Text>Forgot Password page</Text>
-    </View>
+    < >
+      <SafeAreaView style={styles.container}>
+        <Text>Forgot Password page</Text>
+      </SafeAreaView>
+    </>
   );
 }
 
-export default ForgotPassword;
+export default React.memo(ForgotPassword);
 const styles = StyleSheet.create({
   container: {
     flex: 1,

@@ -1,4 +1,4 @@
-import react, { useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { Text, StyleSheet, View, TextInput, Animated } from "react-native";
 import colors from "../assets/colors/colors";
 
@@ -70,7 +70,7 @@ function InputText({ setValue, value, label, placeholder,type }) {
   );
 }
 
-export default InputText;
+export default React.memo(InputText);
 const styles = StyleSheet.create({
   container: {
     display: "flex",

@@ -1,11 +1,12 @@
 import * as SplashScreen from "expo-splash-screen";
-import { View, Text, StyleSheet, Pressable } from "react-native";
-import { useState, useEffect, useCallback } from "react";
+import { View, Text, StyleSheet, Pressable, SafeAreaView } from "react-native";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import useFonts from "../../hooks/useFonts";
 
 function Welcome({ navigation }) {
   //loading fonts
-  const [appIsReady, setAppIsReady] = useState(false);
+  // const [appIsReady, setAppIsReady] = useState(false);
+  const appIsReady = useRef(false);
 
   useEffect(() => {
     //splash screen
@@ -17,7 +18,9 @@ function Welcome({ navigation }) {
       } catch (e) {
         console.warn(e);
       } finally {
-        setAppIsReady(true);
+        // setAppIsReady(true);
+        appIsReady.current = true;
+        SplashScreen.hideAsync();
       }
     }
     prepare();
@@ -25,7 +28,7 @@ function Welcome({ navigation }) {
     //...more code
   }, []);
   const onLayoutRootView = useCallback(async () => {
-    if (appIsReady) {
+    if (appIsReady.current) {
       await SplashScreen.hideAsync();
     }
   }, [appIsReady]);
@@ -34,31 +37,34 @@ function Welcome({ navigation }) {
     return null;
   }
   return (
-    <View
-      onLayout={onLayoutRootView}
-      style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-    ><Pressable
-
-      onPress={() => {
-        console.log("Going to login page");
-        navigation.navigate("Login");
-      }}
-    >
-        <Text style={styles.buttons}>Login</Text>
-      </Pressable>
-      <Pressable
-        onPress={() => {
-          console.log("Going to register page");
-          navigation.navigate("Register");
-        }}
+    // <SafeAreaView>
+      <SafeAreaView
+        onLayout={onLayoutRootView}
+        style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
       >
-        <Text style={styles.buttons}>Register</Text>
-      </Pressable>
-    </View>
+        {console.log("app loaded")}
+        <Pressable
+          onPress={() => {
+            console.log("Going to login page");
+            navigation.navigate("Login");
+          }}
+        >
+          <Text style={styles.buttons}>Login</Text>
+        </Pressable>
+        <Pressable
+          onPress={() => {
+            console.log("Going to register page");
+            navigation.navigate("Register");
+          }}
+        >
+          <Text style={styles.buttons}>Register</Text>
+        </Pressable>
+      </SafeAreaView>
+    // </SafeAreaView>
   );
 }
 
-export default Welcome;
+export default React.memo(Welcome);
 
 const styles = StyleSheet.create({
   container: {
@@ -72,6 +78,5 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     borderWidth: 1,
-  }
-
+  },
 });

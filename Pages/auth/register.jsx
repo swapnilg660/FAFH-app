@@ -1,15 +1,19 @@
-import { useState, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, { useState, useEffect } from "react";
+
+import { View, Text, StyleSheet, SafeAreaView } from "react-native";
 
 function Register({ navigation }) {
   return (
-    <View style={styles.container}>
-      <Text>Register page</Text>
-    </View>
+    <>
+      <SafeAreaView style={styles.container}>
+        <Text>Register page</Text>
+        <Text>Remember me ?</Text>
+      </SafeAreaView>
+    </>
   );
 }
 
-export default Register;
+export default React.memo(Register);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
