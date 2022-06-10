@@ -22,9 +22,7 @@ function Login({ navigation }) {
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const handleCheckboxPress = () => {
-    setRememberMe((prev) => {
-      return !prev;
-    });
+    setRememberMe((prev) => !prev);
     //Add code to save user's details to local storage On Submit.
   };
 
@@ -56,7 +54,10 @@ function Login({ navigation }) {
               alignItems: "center",
             }}
           >
-            <Pressable onPress={handleCheckboxPress} style={styles.checkbox}>
+            <Pressable
+              onPress={() => handleCheckboxPress()}
+              style={styles.checkbox}
+            >
               <AnimatedCheckbox
                 checked={rememberMe}
                 highlightColor={colors.primary}
@@ -73,7 +74,6 @@ function Login({ navigation }) {
                 //Login code
                 //Add form validation before submitting
                 signIn({ email, password, stayLoggedIn: rememberMe });
-                console.log("Login");
               }}
             >
               <Text style={styles.loginText}>{"Login"}</Text>

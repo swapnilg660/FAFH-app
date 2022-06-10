@@ -1,10 +1,11 @@
-import React,{ useState, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, StyleSheet, Button } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import colors from "../../assets/colors/colors";
 
 function Home({ navigation }) {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text
         style={{
           fontSize: 30,
@@ -13,13 +14,23 @@ function Home({ navigation }) {
       >
         Home page
       </Text>
-    </View>
+      <Button
+        title="to counter"
+        onPress={() => {
+          navigation.navigate("HomeScreen");
+        }}
+      />
+    </SafeAreaView>
   );
 }
 
 export default React.memo(Home);
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.backgroundDark,
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 10,
   },
 });

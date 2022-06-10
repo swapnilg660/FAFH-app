@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import colors from "../../assets/colors/colors";
+import {SafeAreaView} from "react-native-safe-area-context";
 
 function Profile({ navigation }) {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text
         style={{
           fontSize: 30,
@@ -14,13 +15,14 @@ function Profile({ navigation }) {
         Profile page
         <Pressable
           onPress={() => {
-            console.log("Profile")
+            console.log("Profile");
+            navigation.toggleDrawer();
           }}
         >
           <Text>We are here for now</Text>
         </Pressable>
       </Text>
-    </View>
+    </SafeAreaView>
   );
 }
 

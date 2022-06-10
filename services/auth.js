@@ -20,7 +20,8 @@ export const signUp = async (data) => {
 };
 export const signOut = async () => {
   //sign out
-  return true;
+  await SecureStore.deleteItemAsync("userToken");
+  return null;
 };
 
 //standalone functions

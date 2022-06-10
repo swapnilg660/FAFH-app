@@ -8,11 +8,18 @@ import React, {
   useReducer,
   useMemo,
 } from "react";
+import { Button, Text, StyleSheet } from "react-native";
+import Icon from "react-native-vector-icons/Ionicons";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createStackNavigator } from "@react-navigation/stack";
-import { createDrawerNavigator } from "@react-navigation/drawer";
+import {
+  createDrawerNavigator,
+  DrawerContentScrollView,
+  DrawerItemList,
+  DrawerItem,
+} from "@react-navigation/drawer";
 import * as SecureStore from "expo-secure-store";
 
 //importing pages
@@ -26,7 +33,8 @@ import Profile from "./Pages/home/profile";
 //importing utilities
 import colors from "./assets/colors/colors";
 import AuthContext from "./hooks/context";
-import { reducer, signIn } from "./services/auth";
+import { reducer, signIn, signOut } from "./services/auth";
+import areYouSure from "./services/alert";
 
 //route settings
 const Tab = createBottomTabNavigator();
@@ -46,8 +54,9 @@ export default function App() {
         const token = await signIn(data);
         dispatch({ type: "SIGN_IN", token: token });
       },
-      signOut: () => {
-        dispatch({ type: "SIGN_OUT" });
+      signOut: async () => {
+        const token = await signOut();
+        dispatch({ type: "SIGN_OUT", token: token });
       },
       signUp: async (data) => {
         const token = await signUp(data);
@@ -61,9 +70,10 @@ export default function App() {
     // Fetch the token from storage then navigate to our appropriate place
     const restoreSavedUser = async () => {
       let userToken;
-      // await SecureStore.deleteItemAsync("userToken");
+      console.log("userToken currently:", userToken);
       try {
         userToken = await SecureStore.getItemAsync("userToken");
+        console.log("userToken after:", userToken);
       } catch (e) {
         // Restoring token failed
         console.log(e);
@@ -73,7 +83,7 @@ export default function App() {
 
       // This will switch to the App screen or Auth screen and this loading
       // screen will be unmounted and thrown away.
-      console.log("token:", userToken);
+      console.log("this point token:", userToken);
       dispatch({ type: "RESTORE_TOKEN", token: userToken });
     };
 
@@ -83,6 +93,7 @@ export default function App() {
   return (
     <AuthContext.Provider value={contextData}>
       <NavigationContainer>
+        {console.log("userData:", userData)}
         {userData.userToken == null ? (
           //if user is not logged in, show auth screens
 
@@ -111,10 +122,21 @@ export default function App() {
           </Stack.Navigator>
         ) : (
           //if user is logged in, show home screen
-          <Drawer.Navigator initialRouteName="Home" >
-            <Drawer.Screen name="Home" component={HomeStackScreen} />
+          <Drawer.Navigator
+            initialRouteName="Home"
+            screenOptions={{
+              headerShown: false,
+            }}
+            drawerContent={CustomDrawerContent}
+          >
             <Drawer.Screen
-              name="Profile"
+              name="HomeStack"
+              options={{ headerTitle: "Home" }}
+              component={HomeStackScreen}
+            />
+            <Drawer.Screen
+              name="ProfileStack"
+              options={{ headerTitle: "Profile" }}
               component={ProfileStackScreen}
             />
           </Drawer.Navigator>
@@ -125,17 +147,92 @@ export default function App() {
 }
 
 //creating stack components
-const HomeStackScreen = () => {
+const HomeStackScreen = ({ navigation }) => {
   return (
-    <Stack.Navigator screenOptions={{headerShown:false}}>
-      <Stack.Screen name="HomeStack" component={Home} />
+    <Stack.Navigator
+      screenOptions={{
+        headerRight: () => (
+          <Icon
+            onPress={async () => {
+              await navigation.toggleDrawer();
+            }}
+            name="md-menu"
+            size={30}
+          />
+        ),
+      }}
+    >
+      <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="HomeScreen" component={HomeScreen} />
     </Stack.Navigator>
   );
 };
-const ProfileStackScreen = () => {
+const ProfileStackScreen = ({ navigation }) => {
   return (
-    <Stack.Navigator screenOptions={{headerShown:false}}>
-      <Stack.Screen name="ProfileStack" component={Profile} />
+    <Stack.Navigator
+      screenOptions={{
+        headerRight: () => (
+          <Icon
+            onPress={async () => {
+              await navigation.toggleDrawer();
+            }}
+            name="md-menu"
+            size={30}
+          />
+        ),
+      }}
+    >
+      <Stack.Screen name="Profile" component={Profile} />
     </Stack.Navigator>
   );
 };
+
+// dummy component to mimic home stack navigation
+function HomeScreen({ navigation }) {
+  const [count, setCount] = React.useState(0);
+
+  useEffect(() => {}, [navigation]);
+
+  return <Text>Count: {count}</Text>;
+}
+
+function CustomDrawerContent(props) {
+  const { signOut } = useContext(AuthContext);
+
+  return (
+    <DrawerContentScrollView
+      contentContainerStyle={styles.DrawerContainer}
+      // {...props}
+    >
+      {/* <DrawerItemList {...props} /> */}
+      <DrawerItem
+        label="Settings"
+        onPress={() => alert("Settings")}
+        style={{ marginTop: 20 }}
+        icon={() => (
+          <Icon name="md-settings" size={30} color={colors.primary} />
+        )}
+      />
+      <DrawerItem
+        label="Log Out"
+        onPress={async () => {
+          const choice = await areYouSure({
+            Title: "Log Out",
+            Message: "Are you sure you want to log out?",
+          });
+          if (choice) signOut();
+        }}
+        style={{ bottom: 0, position: "absolute", left: 0, right: 0 }}
+        icon={() => <Icon name="md-log-out" size={30} color={colors.primary} />}
+      />
+    </DrawerContentScrollView>
+  );
+}
+
+const styles = StyleSheet.create({
+  DrawerContainer: {
+    flex: 1,
+    position: "relative",
+    // justifyContent: "space-between",
+  },
+});

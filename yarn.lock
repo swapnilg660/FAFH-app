@@ -5825,6 +5825,11 @@ react-is@^16.13.0, react-is@^16.13.1, react-is@^16.7.0:
   resolved "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
 
+react-native-alert-async@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/react-native-alert-async/-/react-native-alert-async-1.0.5.tgz#f67e3d1f6c877cce8e8cd74cef3d596713f0fdb4"
+  integrity sha512-HeG0zdjtlANl8KkF9AhqgkaEooXip44Fb01dmCnYSYMm6PoRdcV4aIy6l/yAOQmArrl8LTP58APSiuZXBMCbwQ==
+
 react-native-animated-input@^1.1.0:
   version "1.1.0"
   resolved "https://registry.npmjs.org/react-native-animated-input/-/react-native-animated-input-1.1.0.tgz"
