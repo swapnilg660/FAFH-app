@@ -15,7 +15,7 @@ function Home({ navigation }) {
         Home page
       </Text>
       <Button
-        title="to counter"
+        title="To Another screen"
         onPress={() => {
           navigation.navigate("HomeScreen");
         }}
