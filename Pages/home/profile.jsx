@@ -1,34 +1,21 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Pressable } from "react-native";
-import colors from "../../assets/colors/colors";
-import {SafeAreaView} from "react-native-safe-area-context";
+import { Button, ScrollView } from "native-base";
+import React, { useState, useEffect,useContext } from "react";
+import AuthContext from "../../hooks/context";
 
 function Profile({ navigation }) {
+  const {signOut} = useContext(AuthContext);
   return (
-    <SafeAreaView style={styles.container}>
-      <Text
-        style={{
-          fontSize: 30,
-          height: 50,
+    <ScrollView>
+      <Button
+        colorScheme="primary"
+        onPress={() => {
+          signOut();
         }}
       >
-        Profile page
-        <Pressable
-          onPress={() => {
-            console.log("Profile");
-            navigation.toggleDrawer();
-          }}
-        >
-          <Text>We are here for now</Text>
-        </Pressable>
-      </Text>
-    </SafeAreaView>
+        Sign Out
+      </Button>
+    </ScrollView>
   );
 }
 
 export default React.memo(Profile);
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: colors.secondary,
-  },
-});

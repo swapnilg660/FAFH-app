@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from "react";
 
 import { View, Text, StyleSheet, SafeAreaView } from "react-native";
+import {ScrollView} from "native-base";
 
 function Register({ navigation }) {
   return (
-    <>
-      <SafeAreaView style={styles.container}>
-        <Text>Register page</Text>
-        <Text>Remember me ?</Text>
-      </SafeAreaView>
-    </>
+    <ScrollView>
+      
+    </ScrollView>
   );
 }
 
