@@ -2,6 +2,7 @@ import * as SecureStore from "expo-secure-store";
 
 export const signIn = async (data) => {
   // return firebase token
+  
   const token = `${data?.email}-token`;
   // save it to secure store if user wants to stay logged in
   if (data.stayLoggedIn) {
@@ -23,6 +24,7 @@ export const signOut = async () => {
   await SecureStore.deleteItemAsync("userToken");
   return null;
 };
+
 
 //standalone functions
 export const reducer = (prevState, action) => {

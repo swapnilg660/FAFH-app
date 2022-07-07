@@ -25,6 +25,7 @@ export default function App() {
     isLoading: true,
     isSignedOut: false,
     userToken: null,
+    // ...
   });
   const contextData = useMemo(
     () => ({
