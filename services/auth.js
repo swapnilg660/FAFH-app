@@ -1,30 +1,108 @@
 import * as SecureStore from "expo-secure-store";
+import firebase from "firebase";
+// import "react-toastify/dist/ReactToastify.css";
 
+function WriteData(userId, Fname, Sname, Email, Photo) {
+  firebase.firestore().collection("Users").doc(userId).set({
+    // store the user data in the database firestore
+  });
+}
+
+//SignIn using email and address
 export const signIn = async (data) => {
-  // return firebase token
-  
-  const token = `${data?.email}-token`;
-  // save it to secure store if user wants to stay logged in
-  if (data.stayLoggedIn) {
-    await SecureStore.setItemAsync("userToken", token);
-    console.log("data:", data);
-    console.log("token saved");
+  var token = null;
+  try {
+    await firebase
+      .auth()
+      .signInWithEmailAndPassword(data?.email, data?.password)
+      .then(async (res) => {
+        token = res.user.uid;
+        alert("Sign In Successful");
+        // WriteData(userId, Fname, Sname, Email, Photo)
+        if (data.stayLoggedIn) {
+          await SecureStore.setItemAsync("userToken", res.user.uid);
+        }
+      })
+      .catch((error) => {
+        //will write code for error
+        if (error.code === "auth/user-not-found") {
+          alert("User not found");
+        } else if (error.code === "auth/wrong-password") {
+          alert("Wrong password");
+        } else {
+          console.log("Something went wrong", error);
+          alert("Something went wrong", error);
+        }
+      });
+  } catch (e) {
+    console.log("This is the eeror:", e);
+    alert("Error!", e);
   }
+
   return token;
 };
+
 export const signUp = async (data) => {
   //register user and sign them in then
-  const token = `${data?.username}-token`;
+  var token = null;
+  try {
+    await firebase
+      .auth()
+      .createUserWithEmailAndPassword(data?.email, data?.password)
+      .then(async (res) => {
+        token = res.user.uid;
+        alert("Sign Up Successful");
+        // WriteData(userId, Fname, Sname, Email, Photo)
+        if (data.stayLoggedIn) {
+          await SecureStore.setItemAsync("userToken", res.user.uid);
+        }
+      })
+      .catch((error) => {
+        //will write code for error
+        if (error.code === "auth/email-already-in-use") {
+          alert("Email already in use");
+        } else if (error.code === "auth/weak-password") {
+          alert("Weak password");
+        } else {
+          console.log("Something went wrong", error);
+          alert("Something went wrong", error);
+        }
+      });
+  } catch (e) {
+    console.log("This is the eeror:", e);
+    alert("Error!", e);
+  }
+
   // save it to secure store if user wants to stay logged in
-  if (data.stayLoggedIn) await SecureStore.setItemAsync("userToken", token);
   return token;
 };
+
 export const signOut = async () => {
   //sign out
-  await SecureStore.deleteItemAsync("userToken");
+  try {
+    await firebase.auth().signOut();
+    await SecureStore.deleteItemAsync("userToken");
+  } catch (e) {
+    alert("Error!", e.message);
+  }
   return null;
 };
 
+export const googleSignIn = async () => {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  provider.addScope('profile');
+    provider.addScope('https://www.googleapis.com/auth/drive');
+  try {
+    await firebase.auth().signInWithRedirect(provider);
+    firebase.auth().getRedirectResult().then(function(authData) {
+        console.log(authData);
+    }).catch(function(error) {
+        console.log(error);
+    });
+  } catch (e) {
+    console.log(e);
+  }
+};
 
 //standalone functions
 export const reducer = (prevState, action) => {
@@ -35,7 +113,19 @@ export const reducer = (prevState, action) => {
         userToken: action.token,
         isLoading: false,
       };
+    case "SIGN_UP":
+      return {
+        ...prevState,
+        isSignedOut: false,
+        userToken: action.token,
+      };
     case "SIGN_IN":
+      return {
+        ...prevState,
+        isSignedOut: false,
+        userToken: action.token,
+      };
+    case "GOOGLE_SIGN_IN":
       return {
         ...prevState,
         isSignedOut: false,

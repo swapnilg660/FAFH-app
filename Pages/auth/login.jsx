@@ -13,6 +13,7 @@ import {
 import InputText from "../../Components/InputText";
 import colors from "../../assets/colors/colors";
 import AnimatedCheckbox from "react-native-checkbox-reanimated";
+import { googleSignIn } from "../../services/auth";
 
 function Login({ navigation }) {
   //get signIn function from context
@@ -29,7 +30,6 @@ function Login({ navigation }) {
   return (
     <SafeAreaView>
       <View style={styles.container}>
-        {console.log("app loaded")}
         <Text style={styles.title}>Login</Text>
         <View style={styles.loginInputContainer}>
           <InputText
@@ -37,12 +37,14 @@ function Login({ navigation }) {
             placeholder="example@email.com"
             setValue={setEmail}
             value={email}
+            required={true}
             type="email"
           />
           <InputText
             label="Password"
             placeholder="Password"
             setValue={setPassword}
+            required={true}
             value={password}
             type="password"
           />
@@ -73,7 +75,7 @@ function Login({ navigation }) {
               onPress={() => {
                 //Login code
                 //Add form validation before submitting
-                signIn({ email, password, stayLoggedIn: rememberMe });
+                signIn({ email, password, stayLoggedIn: rememberMe});
               }}
             >
               <Text style={styles.loginText}>{"Login"}</Text>
@@ -99,7 +101,7 @@ function Login({ navigation }) {
               style={styles.socialLoginContainer}
               onPress={() => {
                 //Login code
-                console.log("Google Login");
+                googleSignIn();
               }}
             >
               <GoogleIcon width="70" />
