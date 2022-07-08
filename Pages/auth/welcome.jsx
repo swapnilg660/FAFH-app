@@ -2,8 +2,11 @@ import * as SplashScreen from "expo-splash-screen";
 import { View, Text, StyleSheet, Pressable, SafeAreaView } from "react-native";
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import useFonts from "../../hooks/useFonts";
+import { useTheme } from "native-base";
 
 function Welcome({ navigation }) {
+  const { colors } = useTheme();
+  console.log(colors.primary["600"]);
   //loading fonts
   // const [appIsReady, setAppIsReady] = useState(false);
   const appIsReady = useRef(false);
@@ -38,28 +41,33 @@ function Welcome({ navigation }) {
   }
   return (
     // <SafeAreaView>
-      <SafeAreaView
-        onLayout={onLayoutRootView}
-        style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+    <SafeAreaView
+      onLayout={onLayoutRootView}
+      style={{
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+        // backgroundColor: colors.primary["50"],
+      }}
+    >
+      {console.log("app loaded")}
+      <Pressable
+        onPress={() => {
+          console.log("Going to login page");
+          navigation.navigate("Login");
+        }}
       >
-        {console.log("app loaded")}
-        <Pressable
-          onPress={() => {
-            console.log("Going to login page");
-            navigation.navigate("Login");
-          }}
-        >
-          <Text style={styles.buttons}>Login</Text>
-        </Pressable>
-        <Pressable
-          onPress={() => {
-            console.log("Going to register page");
-            navigation.navigate("Register");
-          }}
-        >
-          <Text style={styles.buttons}>Register</Text>
-        </Pressable>
-      </SafeAreaView>
+        <Text style={styles.buttons}>Login</Text>
+      </Pressable>
+      <Pressable
+        onPress={() => {
+          console.log("Going to register page");
+          navigation.navigate("Register");
+        }}
+      >
+        <Text style={styles.buttons}>Register</Text>
+      </Pressable>
+    </SafeAreaView>
     // </SafeAreaView>
   );
 }
