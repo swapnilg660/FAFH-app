@@ -12,6 +12,7 @@ import "./firebase/firebaseConfig";
 import AuthContext from "./hooks/context";
 import { reducer, signIn, signOut } from "./services/auth";
 import { NativeBaseProvider } from "native-base";
+import FAFHTHEME from "./assets/theme/extTheme";
 import AuthStack from "./routes/AuthStack";
 import AppStack from "./routes/AppStack";
 
@@ -21,6 +22,7 @@ export default function App() {
     isLoading: true,
     isSignedOut: false,
     userToken: null,
+    // ...
   });
   const contextData = useMemo(
     () => ({
@@ -39,7 +41,7 @@ export default function App() {
       googleSignIn: async () => {
         const token = await googleSignIn();
         dispatch({ type: "GOOGLE_SIGN_IN", token: token });
-      }
+      },
     }),
     []
   );
@@ -65,7 +67,7 @@ export default function App() {
   }, []);
 
   return (
-    <NativeBaseProvider>
+    <NativeBaseProvider theme={FAFHTHEME}>
       <AuthContext.Provider value={contextData}>
         <NavigationContainer>
           {/* <Toast ref={tosty} /> */}
