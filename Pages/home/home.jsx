@@ -6,20 +6,18 @@ import colors from "../../assets/colors/colors";
 function Home({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
-      <Text
-        style={{
-          fontSize: 30,
-          height: 50,
-        }}
-      >
-        Home page
-      </Text>
-      <Button
-        title="To Another screen"
-        onPress={() => {
-          navigation.navigate("HomeScreen");
-        }}
-      />
+      {/* home title */}
+      <View>
+          <Image style={styles.headerImage} source={require("../../assets/images/FAFH_Logo.png")} />
+          <Text style={styles.title}>Food away from home</Text>
+      </View>
+
+      {/* Daily activities cards */}
+      <View style={styles.dailyActivitiesContainer}>
+
+
+      </View>
+      
     </SafeAreaView>
   );
 }
@@ -33,4 +31,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 10,
   },
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 10,
+  },
+  headerImage: {
+    width: 50,
+    height: 71,
+  },
+  headerTitle: {},
+
+  // Daily activities cards
+  dailyActivitiesContainer: {},
+
 });
