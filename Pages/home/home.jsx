@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
 
   // Activities and tips container
   activitiesAndTipsContainer: {
-    backgroundColor: "rgba(228, 224, 224, 0.7)",
+    backgroundColor: colors.backgroundGrey,
     width: "100%",
     padding: 20,
     height: "100%",
