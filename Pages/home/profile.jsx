@@ -1,13 +1,13 @@
 import { Button, ScrollView } from "native-base";
-import React, { useState, useEffect,useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import AuthContext from "../../hooks/context";
 
 function Profile({ navigation }) {
-  const {signOut} = useContext(AuthContext);
+  const { signOut } = useContext(AuthContext);
   return (
     <ScrollView>
       <Button
-        colorScheme="primary"
+        bg={"secondary.500"}
         onPress={() => {
           signOut();
         }}

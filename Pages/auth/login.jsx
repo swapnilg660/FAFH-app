@@ -16,127 +16,48 @@ import AnimatedCheckbox from "react-native-checkbox-reanimated";
 import { googleSignIn } from "../../services/auth";
 
 function Login({ navigation }) {
-  //get signIn function from context
+  
   const { signIn } = React.useContext(AuthContext);
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
-  const handleCheckboxPress = () => {
-    setRememberMe((prev) => !prev);
-    //Add code to save user's details to local storage On Submit.
+  // Object for error handling
+  const validate = values => {
+    const errors = {};
+  
+    if (!values.firstName) {
+      errors.firstName = 'Required';
+    }
+  
+    return errors;
   };
 
-  return (
-    <SafeAreaView>
-      <View style={styles.container}>
-        <Text style={styles.title}>Login</Text>
-        <View style={styles.loginInputContainer}>
-          <InputText
-            label="Email"
-            placeholder="example@email.com"
-            setValue={setEmail}
-            value={email}
-            required={true}
-            type="email"
-          />
-          <InputText
-            label="Password"
-            placeholder="Password"
-            setValue={setPassword}
-            required={true}
-            value={password}
-            type="password"
-          />
-          <View
-            style={{
-              marginTop: 20,
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-            }}
-          >
-            <Pressable
-              onPress={() => handleCheckboxPress()}
-              style={styles.checkbox}
-            >
-              <AnimatedCheckbox
-                checked={rememberMe}
-                highlightColor={colors.primary}
-                checkmarkColor={colors.secondary}
-                boxOutlineColor={colors.primary}
-              />
-            </Pressable>
-            <Text style={styles.DontHaveAccountText}>Remember Me</Text>
-          </View>
 
-          <View style={styles.buttonWrapper}>
-            <Pressable
-              onPress={() => {
-                //Login code
-                //Add form validation before submitting
-                signIn({ email, password, stayLoggedIn: rememberMe});
-              }}
-            >
-              <Text style={styles.loginText}>{"Login"}</Text>
-            </Pressable>
-          </View>
-          <Pressable
-            onPress={() => {
-              navigation.navigate("ForgotPassword");
-            }}
-          >
-            <Text
-              style={[
-                styles.DontHaveAccountText,
-                { textAlign: "right", marginTop: 20, color: colors.primary },
-              ]}
-            >
-              Forgot Password ?
-            </Text>
-          </Pressable>
-          <Divider withText={true} text="Or" />
-          <View style={styles.SocialContainer}>
-            <Pressable
-              style={styles.socialLoginContainer}
-              onPress={() => {
-                //Login code
-                googleSignIn();
-              }}
-            >
-              <GoogleIcon width="70" />
-            </Pressable>
-            <Pressable
-              style={styles.socialLoginContainer}
-              onPress={() => {
-                //Login code
-                console.log("Fb Login");
-              }}
-            >
-              <FacebookIcon width="70" />
-            </Pressable>
-          </View>
-          <View style={styles.DontHaveAccount}>
-            <Text style={styles.DontHaveAccountText}>
-              Don't have an account ?
-            </Text>
-            <Pressable
-              onPress={() => {
-                console.log("Go to register page");
-                navigation.navigate("Register");
-              }}
-            >
-              <Text style={styles.DontHaveAccountLink}>Register</Text>
-            </Pressable>
-          </View>
-        </View>
-      </View>
-    </SafeAreaView>
+
+
+
+// onSubmit handler with Formik
+  const onSubmit = data => {
+    console.log('submiting with ', data);
+  };
+  // -------------------------------------------
+  //get signIn function from context
+
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
+  // const [rememberMe, setRememberMe] = useState(false);
+  // const handleCheckboxPress = () => {
+  //   setRememberMe((prev) => !prev);
+    //Add code to save user's details to local storage On Submit.
+  // };
+
+  return (
+    <></>
   );
 }
 
 export default React.memo(Login);
 
+
+// Old CSS
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.background,
@@ -241,3 +162,109 @@ function Divider({ text, withText }) {
     </View>
   );
 }
+
+// Old code
+{/* <SafeAreaView>
+      <View style={styles.container}>
+        <Text style={styles.title}>Login</Text>
+        <View style={styles.loginInputContainer}>
+          <InputText
+            label="Email"
+            placeholder="example@email.com"
+            setValue={setEmail}
+            value={email}
+            required={true}
+            type="email"
+          />
+          <InputText
+            label="Password"
+            placeholder="Password"
+            setValue={setPassword}
+            required={true}
+            value={password}
+            type="password"
+          />
+          <View
+            style={{
+              marginTop: 20,
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <Pressable
+              onPress={() => handleCheckboxPress()}
+              style={styles.checkbox}
+            >
+              <AnimatedCheckbox
+                checked={rememberMe}
+                highlightColor={colors.primary}
+                checkmarkColor={colors.secondary}
+                boxOutlineColor={colors.primary}
+              />
+            </Pressable>
+            <Text style={styles.DontHaveAccountText}>Remember Me</Text>
+          </View>
+
+          <View style={styles.buttonWrapper}>
+            <Pressable
+              onPress={() => {
+                //Login code
+                //Add form validation before submitting
+                signIn({ email, password, stayLoggedIn: rememberMe});
+              }}
+            >
+              <Text style={styles.loginText}>{"Login"}</Text>
+            </Pressable>
+          </View>
+          <Pressable
+            onPress={() => {
+              navigation.navigate("ForgotPassword");
+            }}
+          >
+            <Text
+              style={[
+                styles.DontHaveAccountText,
+                { textAlign: "right", marginTop: 20, color: colors.primary },
+              ]}
+            >
+              Forgot Password ?
+            </Text>
+          </Pressable>
+          <Divider withText={true} text="Or" />
+          <View style={styles.SocialContainer}>
+            <Pressable
+              style={styles.socialLoginContainer}
+              onPress={() => {
+                //Login code
+                googleSignIn();
+              }}
+            >
+              <GoogleIcon width="70" />
+            </Pressable>
+            <Pressable
+              style={styles.socialLoginContainer}
+              onPress={() => {
+                //Login code
+                console.log("Fb Login");
+              }}
+            >
+              <FacebookIcon width="70" />
+            </Pressable>
+          </View>
+          <View style={styles.DontHaveAccount}>
+            <Text style={styles.DontHaveAccountText}>
+              Don't have an account ?
+            </Text>
+            <Pressable
+              onPress={() => {
+                console.log("Go to register page");
+                navigation.navigate("Register");
+              }}
+            >
+              <Text style={styles.DontHaveAccountLink}>Register</Text>
+            </Pressable>
+          </View>
+        </View>
+      </View>
+    </SafeAreaView> */}
