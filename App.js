@@ -15,8 +15,15 @@ import { NativeBaseProvider } from "native-base";
 import FAFHTHEME from "./assets/theme/extTheme";
 import AuthStack from "./routes/AuthStack";
 import AppStack from "./routes/AppStack";
+import useFonts from "./hooks/useFonts";
 
 export default function App() {
+  //Load fonts
+  const fontsLoaded = useFonts();
+  if (!fontsLoaded) {
+    return null;
+  }
+  
   // user authentication
   const [userData, dispatch] = useReducer(reducer, {
     isLoading: true,
@@ -64,6 +71,8 @@ export default function App() {
   useEffect(() => {
     // Fetch the token from storage then navigate to our appropriate screen
     restoreSavedUser();
+    
+
   }, []);
 
   return (

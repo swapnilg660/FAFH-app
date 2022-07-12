@@ -16,6 +16,9 @@ const colors = {
     background: '#fafafa',
     backgroundDark: '#f0f0f0',
     backgroundLight: '#ffffff',
+    backgroundGreen: "#289B7C",
+    backgroundBlue: "#F2FFFC",
+    backgroundGrey: "#E6E7E4",
     //Text
     text: '#212121',
     textDark: '#757575',
