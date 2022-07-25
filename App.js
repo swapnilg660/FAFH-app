@@ -23,7 +23,7 @@ export default function App() {
   if (!fontsLoaded) {
     return null;
   }
-  
+
   // user authentication
   const [userData, dispatch] = useReducer(reducer, {
     isLoading: true,
@@ -34,8 +34,17 @@ export default function App() {
   const contextData = useMemo(
     () => ({
       signIn: async (data) => {
-        const token = await signIn(data);
-        dispatch({ type: "SIGN_IN", token: token });
+        let token = "";
+        await signIn(data).then((res) => {
+          token = res;
+          console.log("from APP.JS", res);
+        });
+        if (token?.includes("Error")) {
+          return token;
+        } else {
+          dispatch({ type: "SIGN_IN", token });
+          return "Success";
+        }
       },
       signOut: async () => {
         const token = await signOut();
@@ -71,22 +80,13 @@ export default function App() {
   useEffect(() => {
     // Fetch the token from storage then navigate to our appropriate screen
     restoreSavedUser();
-    
-
   }, []);
 
   return (
     <NativeBaseProvider theme={FAFHTHEME}>
       <AuthContext.Provider value={contextData}>
         <NavigationContainer>
-          {/* <Toast ref={tosty} /> */}
-          {userData.userToken == null ? (
-            //if user is not logged in, show auth screens
-            <AuthStack />
-          ) : (
-            //if user is logged in, show home screen
-            <AppStack />
-          )}
+          {userData.userToken == null ? <AuthStack /> : <AppStack />}
         </NavigationContainer>
       </AuthContext.Provider>
     </NativeBaseProvider>

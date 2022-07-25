@@ -17,7 +17,7 @@ export const signIn = async (data) => {
       .signInWithEmailAndPassword(data?.email, data?.password)
       .then(async (res) => {
         token = res.user.uid;
-        alert("Sign In Successful");
+        // alert("Sign In Successful");
         // WriteData(userId, Fname, Sname, Email, Photo)
         if (data.stayLoggedIn) {
           await SecureStore.setItemAsync("userToken", res.user.uid);
@@ -26,16 +26,19 @@ export const signIn = async (data) => {
       .catch((error) => {
         //will write code for error
         if (error.code === "auth/user-not-found") {
-          alert("User not found");
+          // alert("User not found");
+          token = "Error: User not found";
         } else if (error.code === "auth/wrong-password") {
-          alert("Wrong password");
+          // alert("Wrong password");
+          token = "Error: Wrong password";
         } else {
           console.log("Something went wrong", error);
-          alert("Something went wrong", error);
+          // alert("Something went wrong", error);
+          token = `${error}`;
         }
       });
   } catch (e) {
-    console.log("This is the eeror:", e);
+    console.log("This is the error:", e);
     alert("Error!", e);
   }
 

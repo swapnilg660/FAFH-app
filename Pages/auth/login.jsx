@@ -1,69 +1,295 @@
 import React, { useState, useContext } from "react";
 import { GoogleIcon, FacebookIcon } from "../../Components/customSvgIcon";
 import AuthContext from "../../hooks/context";
+import { MaterialIcons } from "@expo/vector-icons";
 
-import {
-  Text,
-  StyleSheet,
-  View,
-  Pressable,
-  Button,
-  SafeAreaView,
-} from "react-native";
-import InputText from "../../Components/InputText";
-import colors from "../../assets/colors/colors";
+import { StyleSheet, View, SafeAreaView } from "react-native";
 import AnimatedCheckbox from "react-native-checkbox-reanimated";
 import { googleSignIn } from "../../services/auth";
+import {
+  Box,
+  Center,
+  FormControl,
+  Heading,
+  Input,
+  ScrollView,
+  useToast,
+  Button,
+  Divider,
+  Text,
+  Icon,
+  Pressable,
+  Row,
+  useTheme,
+  Checkbox,
+  Spinner,
+} from "native-base";
+import { Formik } from "formik";
+import * as Yup from "yup";
+import ToastComponent from "../../services/CustomToast";
 
 function Login({ navigation }) {
-  
   const { signIn } = React.useContext(AuthContext);
 
+  // UI utilities
+  const [show, setShow] = useState(true);
+  const { colors } = useTheme();
+  const [linkColor, setLinkColor] = useState(colors["black"][500]);
+  const [feedback, setFeedback] = useState(null);
+  const toast = useToast();
+
+  //form states
+  const initialValues = {
+    email: "",
+    password: "",
+  };
+  const [checked, setChecked] = useState(true);
+
+  const handleCheckboxPress = () => {
+    setChecked((prev) => {
+      return !prev;
+    });
+  };
+
+  const handleSubmit = (data, formikActions) => {
+    signIn({
+      ...data,
+      stayLoggedIn: checked,
+    }).then((res) => {
+      formikActions.setSubmitting(false);
+      setFeedback(res);
+      toast.show({
+        placement: "top",
+        render: () => (
+          <ToastComponent
+            state={res === "Success" ? "Success" : "Error"}
+            message={res === "Success" ? "Logged in Successfully" : res}
+          />
+        ),
+      });
+    });
+  };
+
   // Object for error handling
-  const validate = values => {
-    const errors = {};
-  
-    if (!values.firstName) {
-      errors.firstName = 'Required';
-    }
-  
-    return errors;
-  };
-
-
-
-
-
-// onSubmit handler with Formik
-  const onSubmit = data => {
-    console.log('submiting with ', data);
-  };
-  // -------------------------------------------
-  //get signIn function from context
-
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
-  // const [rememberMe, setRememberMe] = useState(false);
-  // const handleCheckboxPress = () => {
-  //   setRememberMe((prev) => !prev);
-    //Add code to save user's details to local storage On Submit.
-  // };
+  const validationSchema = Yup.object({
+    email: Yup.string().trim().email("Invalid email").required("Required"),
+    password: Yup.string()
+      .trim()
+      .min(6, "Must be at least 6 characters")
+      .required("Required"),
+  });
 
   return (
-    <></>
+    <ScrollView border="2" bg={"primary.100"} safeAreaTop pt={10}>
+      <Center mt={20} mb={10}>
+        <Heading
+          style={{ fontFamily: "Poppins-Medium" }}
+          fontSize={"2xl"}
+          fontStyle="italic"
+          color={"darkText"}
+        >
+          Login to your account
+        </Heading>
+      </Center>
+      <Box mx="5" bg="white" p="4" rounded="lg">
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={(values, formikActions) => {
+            handleSubmit(values, formikActions);
+          }}
+        >
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            touched,
+            errors,
+            isSubmitting,
+          }) => {
+            const { email, password } = values;
+            return (
+              <>
+                <FormControl
+                  isRequired
+                  isInvalid={touched.email && errors.email}
+                >
+                  <FormControl.Label>
+                    <Text
+                      color={"black"}
+                      style={{ fontFamily: "Poppins-Regular" }}
+                    >
+                      Email
+                    </Text>
+                  </FormControl.Label>
+                  <Input
+                    value={email}
+                    onChangeText={handleChange("email")}
+                    onBlur={handleBlur("email")}
+                    p={2}
+                    placeholder="example@gmail.com"
+                    placeholderTextColor="gray.400"
+                    _input={{ color: "black" }}
+                    style={{ fontFamily: "Poppins-Regular" }}
+                    fontSize={"md"}
+                  />
+                  <FormControl.ErrorMessage>
+                    {touched.email && errors.email}
+                  </FormControl.ErrorMessage>
+                </FormControl>
+                <FormControl
+                  isRequired
+                  isInvalid={touched.password && errors.password}
+                >
+                  <FormControl.Label>
+                    <Text
+                      color={"black"}
+                      style={{ fontFamily: "Poppins-Regular" }}
+                    >
+                      Password
+                    </Text>
+                  </FormControl.Label>
+                  <Input
+                    value={password}
+                    onChangeText={handleChange("password")}
+                    onBlur={handleBlur("password")}
+                    secureTextEntry={show}
+                    p={2}
+                    placeholder="password"
+                    placeholderTextColor="gray.400"
+                    _input={{ color: "black" }}
+                    style={{ fontFamily: "Poppins-Regular" }}
+                    fontSize={"md"}
+                    InputRightElement={
+                      <Icon
+                        as={
+                          <MaterialIcons
+                            name={show ? "visibility" : "visibility-off"}
+                          />
+                        }
+                        size={5}
+                        mr="2"
+                        color="muted.400"
+                        onPress={() => setShow(!show)}
+                      />
+                    }
+                  />
+                  <FormControl.ErrorMessage>
+                    {touched.password && errors.password}
+                  </FormControl.ErrorMessage>
+                </FormControl>
+
+                <Pressable
+                  onPress={handleCheckboxPress}
+                  w="40%"
+                  my={2}
+                  display="flex"
+                >
+                  <Row alignItems={"center"}>
+                    <Center w={5} h={5} m={1}>
+                      <AnimatedCheckbox
+                        checked={checked}
+                        highlightColor={colors["primary"][100]}
+                        checkmarkColor={colors["secondary"][500]}
+                        boxOutlineColor={colors["secondary"][500]}
+                      />
+                    </Center>
+
+                    <Text
+                      color={"black"}
+                      style={{ fontFamily: "Poppins-Regular" }}
+                    >
+                      Remember Me
+                    </Text>
+                  </Row>
+                </Pressable>
+
+                <Button
+                  shadow={3}
+                  _text={{
+                    style: {
+                      fontFamily: "Poppins-SemiBold",
+                    },
+                    fontSize: "xl",
+                  }}
+                  size="sm"
+                  colorScheme="secondary"
+                  my={5}
+                  onPress={!isSubmitting ? handleSubmit : null}
+                >
+                  {isSubmitting ? (
+                    <Spinner size="sm" color={"white"} />
+                  ) : (
+                    "LOGIN"
+                  )}
+                </Button>
+                <Pressable
+                  onPress={() => {
+                    navigation.navigate("ForgotPassword");
+                  }}
+                  onPressIn={() => {
+                    setLinkColor(colors["secondary"][500]);
+                  }}
+                >
+                  <Text
+                    textAlign="right"
+                    style={{ fontFamily: "Poppins-Regular", color: linkColor }}
+                  >
+                    Forgot Password
+                  </Text>
+                </Pressable>
+                <Divider my={7} bg="gray.500" />
+                <Row space="md" justifyContent={"center"} alignItems="center">
+                  <Pressable
+                    onPress={() => {
+                      googleSignIn();
+                    }}
+                  >
+                    <GoogleIcon width="70" />
+                  </Pressable>
+                  <Pressable
+                    onPress={() => {
+                      //Login code
+                      console.log("Fb Login");
+                    }}
+                  >
+                    <FacebookIcon width="70" />
+                  </Pressable>
+                </Row>
+
+                <Row space="2" justifyContent={"center"} alignItems="center">
+                  <Text style={{ fontFamily: "Poppins-SemiBold" }}>
+                    Don't have an account ?
+                  </Text>
+                  <Pressable
+                    onPress={() => {
+                      console.log("Go to register page");
+                      navigation.navigate("Register");
+                    }}
+                  >
+                    <Text
+                      color={"secondary.500"}
+                      my="5"
+                      style={{ fontFamily: "Poppins-SemiBold" }}
+                    >
+                      Register
+                    </Text>
+                  </Pressable>
+                </Row>
+              </>
+            );
+          }}
+        </Formik>
+      </Box>
+    </ScrollView>
   );
 }
 
 export default React.memo(Login);
 
-
 // Old CSS
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: colors.background,
-    height: "100%",
-    padding: 15,
-  },
   title: {
     fontSize: 50,
     marginLeft: 20,
@@ -84,17 +310,6 @@ const styles = StyleSheet.create({
     marginTop: 30,
     width: "100%",
     alignItems: "center",
-  },
-  loginText: {
-    fontSize: 18,
-    fontFamily: "Inter-ExtraLight",
-    borderRadius: 7,
-    width: 180,
-    textAlign: "center",
-    padding: 10,
-    backgroundColor: colors.primary,
-    color: colors.textLight,
-    elevation: 10,
   },
   SocialContainer: {
     display: "flex",
@@ -122,11 +337,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginHorizontal: 10,
   },
-  DontHaveAccountLink: {
-    fontSize: 15,
-    fontFamily: "Inter-SemiBold",
-    color: colors.primary,
-  },
 
   //divider style
   mainContainer: {
@@ -138,33 +348,21 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
-  divider: {
-    height: 1,
-    flex: 4,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.divider,
-  },
-  text: {
-    fontFamily: "Inter-ExtraLight",
-    fontSize: 18,
-    color: colors.textDark,
-    height: 20,
-    marginHorizontal: 10,
-  },
 });
 
-function Divider({ text, withText }) {
-  return (
-    <View style={styles.mainContainer}>
-      <View style={styles.divider}></View>
-      {withText ? <Text style={styles.text}>{text}</Text> : null}
-      {withText ? <View style={styles.divider}></View> : null}
-    </View>
-  );
-}
+// function Divider({ text, withText }) {
+//   return (
+//     <View style={styles.mainContainer}>
+//       <View style={styles.divider}></View>
+//       {withText ? <Text style={styles.text}>{text}</Text> : null}
+//       {withText ? <View style={styles.divider}></View> : null}
+//     </View>
+//   );
+// }
 
 // Old code
-{/* <SafeAreaView>
+{
+  /* <SafeAreaView>
       <View style={styles.container}>
         <Text style={styles.title}>Login</Text>
         <View style={styles.loginInputContainer}>
@@ -211,7 +409,7 @@ function Divider({ text, withText }) {
               onPress={() => {
                 //Login code
                 //Add form validation before submitting
-                signIn({ email, password, stayLoggedIn: rememberMe});
+                signIn({ email, password, stayLoggedIn: rememberMe });
               }}
             >
               <Text style={styles.loginText}>{"Login"}</Text>
@@ -267,4 +465,5 @@ function Divider({ text, withText }) {
           </View>
         </View>
       </View>
-    </SafeAreaView> */}
+    </SafeAreaView> */
+}
