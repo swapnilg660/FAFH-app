@@ -17,7 +17,7 @@ function Profile({ navigation }) {
   const { signOut } = useContext(AuthContext);
   return (
     <SafeAreaView>
-      <View style={styles.pageContaner}>
+      <ScrollView style={styles.pageContainer}>
         <View style={styles.nameContainer}>
           <Text style={styles.logoutButtonText}>Hi, Priya</Text>
           <MaterialIcons name="more-vert" size={25} color={colors.textLight} />
@@ -129,7 +129,7 @@ function Profile({ navigation }) {
             </Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -137,7 +137,7 @@ function Profile({ navigation }) {
 export default React.memo(Profile);
 
 const styles = StyleSheet.create({
-  pageContaner: {
+  pageContainer: {
     backgroundColor: colors.backgroundGreen,
   },
   nameContainer: {
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   cardDarkText: {
-    fontFamily: "Poppins-SemiBold",
+    // fontFamily: "Poppins-SemiBold",
     fontSize: 16,
     color: colors.text,
   },
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
   },
   logoutButtonText: {
     color: colors.textLight,
-    fontFamily: "Poppins-SemiBold",
+    // fontFamily: "Poppins-SemiBold",
     fontSize: 20,
   },
 });

@@ -1,11 +1,10 @@
 import React from "react";
-import {createNativeStackNavigator} from "@react-navigation/native-stack";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import colors from "../assets/colors/colors";
 import Welcome from "../Pages/auth/welcome";
 import Login from "../Pages/auth/login";
 import Register from "../Pages/auth/register";
 import ForgotPassword from "../Pages/auth/forgotPassword";
-
 
 const Stack = createNativeStackNavigator();
 function AuthStack() {
@@ -30,7 +29,11 @@ function AuthStack() {
         }}
         component={Login}
       />
-      <Stack.Screen name="Register" component={Register} />
+      <Stack.Screen
+        name="Register"
+        component={Register}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
     </Stack.Navigator>
   );
