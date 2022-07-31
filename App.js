@@ -10,7 +10,7 @@ import * as SecureStore from "expo-secure-store";
 import "./firebase/firebaseConfig";
 
 import AuthContext from "./hooks/context";
-import { reducer, signIn, signOut } from "./services/auth";
+import { reducer, signIn, signOut, signUp } from "./services/auth";
 import { NativeBaseProvider } from "native-base";
 import FAFHTHEME from "./assets/theme/extTheme";
 import AuthStack from "./routes/AuthStack";
@@ -37,7 +37,6 @@ export default function App() {
         let token = "";
         await signIn(data).then((res) => {
           token = res;
-          console.log("from APP.JS", res);
         });
         if (token?.includes("Error")) {
           return token;
@@ -51,8 +50,16 @@ export default function App() {
         dispatch({ type: "SIGN_OUT", token: token });
       },
       signUp: async (data) => {
-        const token = await signUp(data);
-        dispatch({ type: "SIGN_UP", token: token });
+        let token = "";
+        await signUp(data).then((res) => {
+          token = res;
+        });
+        if (token?.includes("Error")) {
+          return token;
+        } else {
+          dispatch({ type: "SIGN_UP", token });
+          return "Success";
+        }
       },
       googleSignIn: async () => {
         const token = await googleSignIn();
@@ -80,6 +87,10 @@ export default function App() {
   useEffect(() => {
     // Fetch the token from storage then navigate to our appropriate screen
     restoreSavedUser();
+    //fix memory leak
+    return () => {
+      //
+    };
   }, []);
 
   return (

@@ -35,9 +35,9 @@ const FAFHTHEME = extendTheme({
   },
   fontConfig: {
     Poppins: {
-      50:{
-        normal:"Poppins-Thin",
-        italic:"Poppins-ThinItalic",
+      50: {
+        normal: "Poppins-Thin",
+        italic: "Poppins-ThinItalic",
       },
       100: {
         normal: "Poppins-ExtraLight",
@@ -64,9 +64,9 @@ const FAFHTHEME = extendTheme({
 
   // Make sure values below matches any of the keys in `fontConfig`
   fonts: {
-    heading: 'Poppins',
-    body: 'Poppins',
-    mono: 'Poppins',
+    heading: "Poppins",
+    body: "Poppins",
+    mono: "Poppins",
   },
 });
 

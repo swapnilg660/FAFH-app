@@ -47,6 +47,7 @@ export const signIn = async (data) => {
 
 export const signUp = async (data) => {
   //register user and sign them in then
+  // alert(data);
   var token = null;
   try {
     await firebase
@@ -54,7 +55,7 @@ export const signUp = async (data) => {
       .createUserWithEmailAndPassword(data?.email, data?.password)
       .then(async (res) => {
         token = res.user.uid;
-        alert("Sign Up Successful");
+        // alert("Sign Up Successful");
         // WriteData(userId, Fname, Sname, Email, Photo)
         if (data.stayLoggedIn) {
           await SecureStore.setItemAsync("userToken", res.user.uid);
@@ -63,16 +64,19 @@ export const signUp = async (data) => {
       .catch((error) => {
         //will write code for error
         if (error.code === "auth/email-already-in-use") {
-          alert("Email already in use");
+          // alert("Email already in use");
+          token = "Error: Email already in use";
         } else if (error.code === "auth/weak-password") {
-          alert("Weak password");
+          // alert("Weak password");
+          token = "Error: Weak password";
         } else {
           console.log("Something went wrong", error);
-          alert("Something went wrong", error);
+          // alert("Something went wrong", error);
+          token = `${error}`;
         }
       });
   } catch (e) {
-    console.log("This is the eeror:", e);
+    console.log("This is the error:", e);
     alert("Error!", e);
   }
 
