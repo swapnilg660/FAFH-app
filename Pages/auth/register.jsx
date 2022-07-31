@@ -21,6 +21,10 @@ import {
   Spinner,
   StatusBar,
   View,
+  Select,
+  CheckIcon,
+  WarningOutlineIcon,
+  VStack,
 } from "native-base";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -35,7 +39,7 @@ function Register({ navigation }) {
   //Animations
   const popInAnimation = useRef(new Animated.Value(500)).current;
 
-  const { signIn } = React.useContext(AuthContext);
+  const { signUp } = React.useContext(AuthContext);
 
   // UI utilities
   const [show, setShow] = useState(true);
@@ -53,12 +57,16 @@ function Register({ navigation }) {
     doB: moment().format("MMMM Do YYYY"),
     gender: "",
     height: "",
+    heightUnit: "cm",
     weight: "",
+    weightUnit: "kg",
   };
 
   const handleSubmit = (data, formikActions) => {
-    signIn({
+    console.log("SUBMITTED:", data);
+    signUp({
       ...data,
+      stayLoggedIn: true,
     }).then((res) => {
       formikActions.setSubmitting(false);
       setFeedback(res);
@@ -89,12 +97,15 @@ function Register({ navigation }) {
       .trim()
       .required("Required")
       .oneOf([Yup.ref("password"), null], "Passwords must match"),
-    cell: Yup.string().matches(new RegExp("[0-9]{10}"), "Invalid Cell Number"),
-    doB: Yup.date()
-      .default(function () {
-        return new Date();
-      })
-      .required("Required"),
+    // cell: Yup.string().matches(new RegExp("[0-9]{10}"), "Invalid Cell Number"),
+    cell: Yup.string().required("Required"),
+    doB: Yup.string().required("Required"),
+    height: Yup.number()
+      .typeError("The Height must be a number")
+      .min(1, "Must be at least 1"),
+    weight: Yup.number()
+      .typeError("The Weight must be a number")
+      .min(1, "Must be at least 1"),
   });
 
   useEffect(() => {
@@ -109,28 +120,14 @@ function Register({ navigation }) {
       <StatusBar />
       <ScrollView bg="primary.50">
         <Center mt={10} mb={10}>
-          <Heading
-            style={{ fontFamily: "Poppins-Medium" }}
-            fontSize={"xl"}
-            fontStyle="italic"
-            color={"darkText"}
-          >
+          <Heading fontSize={"xl"} fontStyle="italic" color={"darkText"}>
             Hello!
           </Heading>
 
-          <Text
-            style={{ fontFamily: "Poppins-Light" }}
-            color={"darkText"}
-            m={4}
-          >
+          <Text fontWeight={"200"} color={"darkText"} m={4}>
             Welcome to Food Away From Home.
           </Text>
-          <Heading
-            style={{ fontFamily: "Poppins-Medium" }}
-            fontSize={"2xl"}
-            fontStyle="italic"
-            color={"darkText"}
-          >
+          <Heading fontWeight={"400"} fontSize={"2xl"} color={"darkText"}>
             Register an Account
           </Heading>
         </Center>
@@ -153,8 +150,17 @@ function Register({ navigation }) {
                 errors,
                 isSubmitting,
               }) => {
-                const { name, email, password, confirmPassword, cell, doB } =
-                  values;
+                const {
+                  name,
+                  email,
+                  password,
+                  confirmPassword,
+                  cell,
+                  doB,
+                  weight,
+                  height,
+                  gender,
+                } = values;
                 return (
                   <>
                     <FormControl
@@ -162,12 +168,7 @@ function Register({ navigation }) {
                       isInvalid={touched.name && errors.name}
                     >
                       <FormControl.Label>
-                        <Text
-                          color={"black"}
-                          style={{ fontFamily: "Poppins-Regular" }}
-                        >
-                          Name & Surname
-                        </Text>
+                        <Text color={"black"}>Name & Surname</Text>
                       </FormControl.Label>
                       <Input
                         value={name}
@@ -177,7 +178,7 @@ function Register({ navigation }) {
                         placeholder="Heritier Kaumbu"
                         placeholderTextColor="gray.400"
                         _input={{ color: "black" }}
-                        style={{ fontFamily: "Poppins-Regular" }}
+                        fontWeight={"300"}
                         fontSize={"md"}
                       />
                       <FormControl.ErrorMessage>
@@ -189,12 +190,7 @@ function Register({ navigation }) {
                       isInvalid={touched.email && errors.email}
                     >
                       <FormControl.Label>
-                        <Text
-                          color={"black"}
-                          style={{ fontFamily: "Poppins-Regular" }}
-                        >
-                          Email
-                        </Text>
+                        <Text color={"black"}>Email</Text>
                       </FormControl.Label>
                       <Input
                         value={email}
@@ -204,7 +200,7 @@ function Register({ navigation }) {
                         placeholder="email@example.com"
                         placeholderTextColor="gray.400"
                         _input={{ color: "black" }}
-                        style={{ fontFamily: "Poppins-Regular" }}
+                        fontWeight={"300"}
                         fontSize={"md"}
                       />
                       <FormControl.ErrorMessage>
@@ -216,12 +212,7 @@ function Register({ navigation }) {
                       isInvalid={touched.password && errors.password}
                     >
                       <FormControl.Label>
-                        <Text
-                          color={"black"}
-                          style={{ fontFamily: "Poppins-Regular" }}
-                        >
-                          Password
-                        </Text>
+                        <Text color={"black"}>Password</Text>
                       </FormControl.Label>
                       <Input
                         value={password}
@@ -232,7 +223,7 @@ function Register({ navigation }) {
                         placeholder="password"
                         placeholderTextColor="gray.400"
                         _input={{ color: "black" }}
-                        style={{ fontFamily: "Poppins-Regular" }}
+                        fontWeight={"300"}
                         fontSize={"md"}
                         InputRightElement={
                           <Icon
@@ -259,12 +250,7 @@ function Register({ navigation }) {
                       }
                     >
                       <FormControl.Label>
-                        <Text
-                          color={"black"}
-                          style={{ fontFamily: "Poppins-Regular" }}
-                        >
-                          Confirm Password
-                        </Text>
+                        <Text color={"black"}>Confirm Password</Text>
                       </FormControl.Label>
                       <Input
                         value={confirmPassword}
@@ -275,7 +261,7 @@ function Register({ navigation }) {
                         placeholder="confirmPassword"
                         placeholderTextColor="gray.400"
                         _input={{ color: "black" }}
-                        style={{ fontFamily: "Poppins-Regular" }}
+                        fontWeight={"300"}
                         fontSize={"md"}
                         InputRightElement={
                           <Icon
@@ -300,12 +286,7 @@ function Register({ navigation }) {
                       isInvalid={touched.cell && errors.cell}
                     >
                       <FormControl.Label>
-                        <Text
-                          color={"black"}
-                          style={{ fontFamily: "Poppins-Regular" }}
-                        >
-                          Cell.no
-                        </Text>
+                        <Text color={"black"}>Cell.no</Text>
                       </FormControl.Label>
                       <Input
                         value={cell}
@@ -315,57 +296,183 @@ function Register({ navigation }) {
                         placeholder="0123456789"
                         placeholderTextColor="gray.400"
                         _input={{ color: "black" }}
-                        style={{ fontFamily: "Poppins-Regular" }}
+                        fontWeight={"300"}
                         fontSize={"md"}
                       />
                       <FormControl.ErrorMessage>
                         {touched.cell && errors.cell}
                       </FormControl.ErrorMessage>
                     </FormControl>
-
                     <DatePickerComponent
                       doB={doB}
                       setFieldValue={setFieldValue}
                       handleSubmit={handleSubmit}
                     />
+                    <Row space={2}>
+                      <FormControl
+                        width={"50%"}
+                        isInvalid={touched.weight && errors.weight}
+                      >
+                        <FormControl.Label>
+                          <Text color={"black"}>Weight</Text>
+                        </FormControl.Label>
+                        <Input
+                          value={weight}
+                          onChangeText={handleChange("weight")}
+                          onBlur={handleBlur("weight")}
+                          placeholder="0.0"
+                          fontWeight={"300"}
+                          fontSize={"md"}
+                          rightElement={
+                            <FormControl
+                              backgroundColor={"primary.600"}
+                              w="4/6"
+                              maxW="100"
+                              p={0}
+                            >
+                              <Select
+                                maxWidth="100"
+                                accessibilityLabel="Measurement Unit"
+                                placeholder="Unit"
+                                placeholderTextColor={"white"}
+                                selectedValue={values.weightUnit}
+                                defaultValue={values.weightUnit}
+                                onValueChange={(itemValue) => {
+                                  setFieldValue("weightUnit", itemValue);
+                                }}
+                                onBlur={handleBlur("weightUnit")}
+                                _selectedItem={{
+                                  bg: "primary.100",
+                                  endIcon: <CheckIcon size={5} />,
+                                  borderRadius: "20",
+                                }}
+                                color={"white"}
+                                borderColor={"primary.600"}
+                              >
+                                <Select.Item label="Kg" value="kg" />
+                                <Select.Item label="Pounds" value="P" />
+                              </Select>
+                            </FormControl>
+                          }
+                        />
+                        <FormControl.ErrorMessage>
+                          {touched.weight && errors.weight}
+                        </FormControl.ErrorMessage>
+                      </FormControl>
+                      <FormControl
+                        width={"50%"}
+                        isInvalid={touched.height && errors.height}
+                      >
+                        <FormControl.Label>
+                          <Text color={"black"}>Height</Text>
+                        </FormControl.Label>
+                        <Input
+                          value={height}
+                          onChangeText={handleChange("height")}
+                          onBlur={handleBlur("height")}
+                          placeholder="0.0"
+                          fontWeight={"300"}
+                          fontSize={"md"}
+                          rightElement={
+                            <FormControl
+                              backgroundColor={"primary.600"}
+                              w="4/6"
+                              maxW="120"
+                              p={0}
+                            >
+                              <Select
+                                maxWidth="100"
+                                accessibilityLabel="Measurement Unit"
+                                placeholder="Unit"
+                                placeholderTextColor={"white"}
+                                selectedValue={values.heightUnit}
+                                defaultValue={values.heightUnit}
+                                onValueChange={(itemValue) => {
+                                  setFieldValue("heightUnit", itemValue);
+                                }}
+                                onBlur={handleBlur("heightUnit")}
+                                _selectedItem={{
+                                  bg: "primary.100",
+                                  endIcon: <CheckIcon size={5} />,
+                                  borderRadius: "20",
+                                }}
+                                color={"white"}
+                                borderColor={"primary.600"}
+                              >
+                                <Select.Item label="Cm" value="cm" />
+                                <Select.Item label="Feet" value="feet" />
+                              </Select>
+                            </FormControl>
+                          }
+                        />
+                        <FormControl.ErrorMessage>
+                          {touched.height && errors.height}
+                        </FormControl.ErrorMessage>
+                      </FormControl>
+                    </Row>
+                    <FormControl maxW="300" isRequired>
+                      <FormControl.Label fontWeight={"300"}>
+                        <Text color={"black"}>Gender</Text>
+                      </FormControl.Label>
+                      <Select
+                        selectedValue={gender}
+                        minWidth="200"
+                        accessibilityLabel="Choose your gender"
+                        placeholder="Choose your Gender"
+                        fontWeight={"300"}
+                        _selectedItem={{
+                          bg: "primary.100",
+                          endIcon: <CheckIcon size={5} />,
+                          borderRadius: "20",
+                        }}
+                        mt={1}
+                        onValueChange={(itemValue) =>
+                          setFieldValue("gender", itemValue)
+                        }
+                      >
+                        <Select.Item label="Male" value="M" />
+                        <Select.Item label="Female" value="F" />
+                      </Select>
+                      <FormControl.ErrorMessage
+                        leftIcon={<WarningOutlineIcon size="xs" />}
+                      >
+                        Please make a selection!
+                      </FormControl.ErrorMessage>
+                    </FormControl>
                     <Button
-                      shadow={3}
-                      _text={{
-                        style: {
-                          fontFamily: "Poppins-SemiBold",
-                        },
-                        fontSize: "lg",
-                      }}
-                      size="md"
+                      mt={4}
                       colorScheme="secondary"
-                      my={5}
-                      onPress={!isSubmitting ? handleSubmit : null}
+                      onPress={() => {
+                        console.log("hello");
+                      }}
                     >
-                      {isSubmitting ? (
-                        <Spinner size="sm" color={"white"} />
-                      ) : (
-                        "LOGIN"
-                      )}
+                      Next
                     </Button>
+
+                    <VStack space="5">
+                      {[1, 2, 3, 4, 5].map((item, index) => {
+                        return (
+                          <Box key={index}>
+                            <Center bg="primary.400" size="16"></Center>
+                            <Center bg="secondary.400" size="16"></Center>
+                            <Center bg="emerald.400" size="16"></Center>
+                          </Box>
+                        );
+                      })}
+                    </VStack>
+
                     <Row
                       space="2"
                       justifyContent={"center"}
                       alignItems="center"
                     >
-                      <Text style={{ fontFamily: "Poppins-SemiBold" }}>
-                        Already have an account?
-                      </Text>
+                      <Text>Already have an account?</Text>
                       <Pressable
                         onPress={() => {
                           navigation.navigate("Login");
                         }}
                       >
-                        <Text
-                          color={"secondary.500"}
-                          my="5"
-                          // mb={5}
-                          style={{ fontFamily: "Poppins-SemiBold" }}
-                        >
+                        <Text color={"secondary.500"} my="5">
                           Login
                         </Text>
                       </Pressable>
@@ -396,24 +503,15 @@ export const DatePickerComponent = ({ handleSubmit, doB, setFieldValue }) => {
   };
 
   const handleConfirm = (date) => {
-    console.log(
-      "A date has been picked: ",
-      moment(date).format("MMMM Do YYYY")
-    );
     setFieldValue("doB", moment(date).format("MMMM Do YYYY"));
     hideDatePicker();
   };
-  useEffect(() => {
-    console.log(moment());
-  }, []);
 
   return (
     <>
       <FormControl>
         <FormControl.Label>
-          <Text color={"black"} style={{ fontFamily: "Poppins-Regular" }}>
-            Date of Birth
-          </Text>
+          <Text>Date of Birth</Text>
         </FormControl.Label>
         <Row>
           <Input
@@ -421,7 +519,7 @@ export const DatePickerComponent = ({ handleSubmit, doB, setFieldValue }) => {
             value={doB}
             p={2}
             _input={{ color: "black" }}
-            style={{ fontFamily: "Poppins-Regular" }}
+            fontWeight={"300"}
             fontSize={"md"}
             width="80%"
           />
@@ -429,7 +527,6 @@ export const DatePickerComponent = ({ handleSubmit, doB, setFieldValue }) => {
             p="2"
             onPress={() => {
               showDatePicker();
-              console.log("pressed");
             }}
             onPressIn={() => {
               setColor(colors["primary"]["800"]);

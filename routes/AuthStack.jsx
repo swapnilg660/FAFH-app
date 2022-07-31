@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import colors from "../assets/colors/colors";
 import Welcome from "../Pages/auth/welcome";
@@ -8,6 +8,13 @@ import ForgotPassword from "../Pages/auth/forgotPassword";
 
 const Stack = createNativeStackNavigator();
 function AuthStack() {
+  useEffect(() => {
+    //fix memory leak
+    return () => {
+      console.log("unmounting");
+    };
+  }, []);
+
   return (
     <Stack.Navigator
       screenOptions={{

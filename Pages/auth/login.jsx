@@ -55,6 +55,7 @@ function Login({ navigation }) {
   };
 
   const handleSubmit = (data, formikActions) => {
+    
     signIn({
       ...data,
       stayLoggedIn: checked,
@@ -217,12 +218,6 @@ function Login({ navigation }) {
 
                   <Button
                     shadow={3}
-                    _text={{
-                      style: {
-                        fontFamily: "Poppins-SemiBold",
-                      },
-                      fontSize: "xl",
-                    }}
                     size="sm"
                     colorScheme="secondary"
                     my={5}
