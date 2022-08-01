@@ -2,25 +2,31 @@ import { Button, ScrollView } from "native-base";
 import React, { useState, useEffect, useContext } from "react";
 // import styles from "react-native-animated-input/src/AnimatedInput/styles";
 import { SafeAreaView } from "react-native-safe-area-context";
-import AuthContext from "../../hooks/context";
+import AuthContext from "../../../hooks/context";
 import { MaterialIcons } from "@expo/vector-icons";
 import { StyleSheet, View, Text } from "react-native";
-import colors from "../../assets/colors/colors";
+// import colors from assets/colors/colors.js
+import { useTheme } from "native-base";
 import { Avatar } from "react-native-paper";
 import { Card, Title, Paragraph } from "react-native-paper";
 import { Foundation } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { color } from "react-native-reanimated";
 
 function Profile({ navigation }) {
   const { signOut } = useContext(AuthContext);
+  const { colors } = useTheme();
+
   return (
     <SafeAreaView>
       <View style={styles.pageContaner}>
         <View style={styles.nameContainer}>
           <Text style={styles.logoutButtonText}>Hi, Priya</Text>
-          <MaterialIcons name="more-vert" size={25} color={colors.textLight} />
+          <MaterialIcons
+            name="more-vert"
+            size={25}
+            color={colors["light"]["100"]}
+          />
         </View>
 
         {/* secondary container */}
@@ -29,7 +35,7 @@ function Profile({ navigation }) {
           <View style={styles.avatarContainer}>
             <Avatar.Image
               size={120}
-              source={require("../../assets/images/profile.png")}
+              source={require("../../../assets/images/profile.png")}
               style={styles.profileAvatar}
             />
           </View>
@@ -40,7 +46,7 @@ function Profile({ navigation }) {
                 <MaterialIcons
                   name="quick-contacts-mail"
                   size={24}
-                  color={colors.warningDark}
+                  color={colors["warning"]["500"]}
                 />
               </View>
               <View style={{ width: "50%" }}>
@@ -54,7 +60,7 @@ function Profile({ navigation }) {
                 <Foundation
                   name="female-symbol"
                   size={24}
-                  color={colors.warningDark}
+                  color={colors["warning"]["500"]}
                 />
               </View>
             </View>
@@ -67,7 +73,7 @@ function Profile({ navigation }) {
                 <MaterialCommunityIcons
                   name="phone"
                   size={24}
-                  color={colors.warningDark}
+                  color={colors["warning"]["500"]}
                 />
               </View>
               <View style={{ width: "85%" }}>
@@ -89,7 +95,7 @@ function Profile({ navigation }) {
                 <MaterialCommunityIcons
                   name="weight-kilogram"
                   size={24}
-                  color={colors.warningDark}
+                  color={colors["warning"]["500"]}
                 />
               </View>
               <View>
@@ -114,7 +120,7 @@ function Profile({ navigation }) {
                 <MaterialCommunityIcons
                   name="phone"
                   size={24}
-                  color={colors.warningDark}
+                  color={colors["warning"]["500"]}
                 />
               </View>
               <View style={{ width: "85%" }}>
@@ -123,7 +129,10 @@ function Profile({ navigation }) {
               </View>
             </View>
           </Card>
-          <TouchableOpacity style={styles.logoutButton}>
+          <TouchableOpacity
+            onPress={() => signOut()}
+            style={styles.logoutButton}
+          >
             <Text onPress={() => signOut()} style={styles.logoutButtonText}>
               Logout
             </Text>
@@ -138,7 +147,7 @@ export default React.memo(Profile);
 
 const styles = StyleSheet.create({
   pageContaner: {
-    backgroundColor: colors.backgroundGreen,
+    backgroundColor: "white",
   },
   nameContainer: {
     with: "100%",
@@ -161,14 +170,14 @@ const styles = StyleSheet.create({
     padding: 30,
     paddingTop: 0,
     width: "100%",
-    backgroundColor: colors.backgroundGrey,
+    backgroundColor: "lightgrey",
     borderRadius: 30,
     height: "100%",
   },
 
   //cards list
   card: {
-    backgroundColor: colors.backgroundBlue,
+    backgroundColor: "darkblue",
     marginBottom: 20,
   },
   cardContent: {
@@ -180,15 +189,15 @@ const styles = StyleSheet.create({
   cardLightText: {
     fontFamily: "Inter-ExtraLight",
     fontSize: 14,
-    color: colors.text,
+    color: "white",
   },
   cardDarkText: {
     fontFamily: "Poppins-SemiBold",
     fontSize: 16,
-    color: colors.text,
+    color:"white",
   },
   cardOrangeText: {
-    color: colors.warningDark,
+    color: "orange",
     fontSize: 14,
     fontFamily: "Inter-Regular",
   },
@@ -196,14 +205,14 @@ const styles = StyleSheet.create({
   // logout button
   logoutButton: {
     width: "100%",
-    backgroundColor: colors.warningDark,
+    backgroundColor: "orange",
     padding: 10,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 10,
   },
   logoutButtonText: {
-    color: colors.textLight,
+    color: "orange",
     fontFamily: "Poppins-SemiBold",
     fontSize: 20,
   },

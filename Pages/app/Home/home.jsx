@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Button, Image } from "react-native";
+import { View, Text, StyleSheet, Button, Image, Pressable } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
-import colors from "../../assets/colors/colors";
+
+import {
+  Center,
+  FormControl,
+  Input,
+  useTheme,
+  Button as NbButton,
+} from "native-base";
 import { Ionicons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -16,12 +23,30 @@ import {
   StackedBarChart,
 } from "react-native-chart-kit";
 import { useWindowDimensions } from "react-native";
+import { Alert, Modal } from "react-native";
+import AdditionalInformation from "./AdditionalInformation";
+import * as SecureStore from "expo-secure-store";
 
 function Home({ navigation }) {
+  const { colors } = useTheme();
   const { height, width } = useWindowDimensions();
   const data = {
     labels: ["Swim", "Bike", "Run"], // optional
     data: [0.4, 0.6, 0.8],
+  };
+
+  // Additional Information Modal
+  const [modalVisible, setModalVisible] = useState(false);
+  const userFirstTime = async () => {
+    const userFirstTime = JSON.parse(
+      await SecureStore.getItemAsync("userFirstTime")
+    );
+    console.log("useEffect:", userFirstTime);
+
+    if (userFirstTime) {
+      setModalVisible(true);
+      SecureStore.deleteItemAsync("userFirstTime");
+    }
   };
   const chartConfig = {
     fillShadowGradientFrom: "#FFEC19",
@@ -36,14 +61,21 @@ function Home({ navigation }) {
     barPercentage: 0.9,
     // useShadowColorFromDataset: false, // optional
   };
+  useEffect(() => {
+    userFirstTime();
+    return () => {
+      console.log("unmounting");
+    };
+  }, []);
   return (
     <SafeAreaView style={styles.container}>
       {/* home title */}
       <View style={styles.headerContainer}>
-        <Image
+        {/* <Image
           style={styles.headerImage}
-          source={require("../../assets/images/FAFH_Logo.png")}
-        />
+          source={require("../../../assets/images/FAFH_logo.png")}
+        /> */}
+        <Feather name="feather" size={24} color="black" />
         <Text style={styles.headerTitle}>Food away from home</Text>
       </View>
 
@@ -56,7 +88,7 @@ function Home({ navigation }) {
               <TouchableOpacity>
                 <Image
                   style={styles.activitiesImage}
-                  source={require("../../assets/images/steps.png")}
+                  source={require("../../../assets/images/steps.png")}
                 />
                 <Text style={styles.activitiesText}>2500</Text>
               </TouchableOpacity>
@@ -64,7 +96,7 @@ function Home({ navigation }) {
                 <MaterialCommunityIcons
                   name="clock"
                   size={24}
-                  color={colors.warningDark}
+                  color={colors["warning"]["500"]}
                 />
                 <Text style={styles.activitiesText}>30</Text>
               </TouchableOpacity>
@@ -72,7 +104,7 @@ function Home({ navigation }) {
                 <MaterialCommunityIcons
                   name="fire"
                   size={24}
-                  color={colors.warningLight}
+                  color={colors["warning"]["500"]}
                 />
                 <Text style={styles.activitiesText}>150</Text>
               </TouchableOpacity>
@@ -102,12 +134,12 @@ function Home({ navigation }) {
             </View>
             <Image
               style={styles.tipsImage}
-              source={require("../../assets/images/standing.png")}
+              source={require("../../../assets/images/standing.png")}
             />
             <Ionicons
               name="ios-close-circle-sharp"
               size={24}
-              color={colors.warningDark}
+              color={colors["warning"]["500"]}
             />
           </View>
           {/* Indicators container */}
@@ -117,7 +149,7 @@ function Home({ navigation }) {
                 <MaterialCommunityIcons
                   name="clock-check-outline"
                   size={20}
-                  color={colors.warningDark}
+                  color={colors["warning"]["500"]}
                 />{" "}
                 Active time
               </Title>
@@ -140,8 +172,8 @@ function Home({ navigation }) {
                 <Ionicons
                   name="restaurant-outline"
                   size={20}
-                  color={colors.warningDark}
-                />{" "}
+                  color={colors["warning"]["500"]}
+                />
                 Food
               </Title>
               <Card.Content style={styles.cardContent}>
@@ -151,9 +183,15 @@ function Home({ navigation }) {
                   </Text>
                 </View>
                 <View>
-                  <TouchableOpacity style={styles.homeButtons}>
+                  <Pressable
+                    style={styles.homeButtons}
+                    onPress={() => {
+                      // navigation.navigate("AdditionalInformationModal");
+                      setShowModal(true);
+                    }}
+                  >
                     <Text style={styles.homeButtonsText}>Add</Text>
-                  </TouchableOpacity>
+                  </Pressable>
                 </View>
               </Card.Content>
             </Card>
@@ -164,7 +202,7 @@ function Home({ navigation }) {
                   <Ionicons
                     name="bicycle-outline"
                     size={30}
-                    color={colors.warningDark}
+                    color={colors["warning"]["500"]}
                   />{" "}
                   Physical activity
                 </Title>
@@ -178,6 +216,23 @@ function Home({ navigation }) {
           </View>
         </View>
       </View>
+      {/* Additional Information Modal */}
+
+      <Modal
+        animationType="slide"
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <AdditionalInformation setShowModal={setModalVisible} />
+      </Modal>
+      {/* <Pressable
+        style={[styles.button, styles.buttonOpen]}
+        onPress={() => setModalVisible(true)}
+      >
+        <Text style={styles.textStyle}>Show Modal</Text>
+      </Pressable> */}
     </SafeAreaView>
   );
 }
@@ -185,7 +240,7 @@ function Home({ navigation }) {
 export default React.memo(Home);
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.backgroundDark,
+    backgroundColor: "white",
     flex: 1,
   },
 
@@ -249,7 +304,7 @@ const styles = StyleSheet.create({
 
   // Activities and tips container
   activitiesAndTipsContainer: {
-    backgroundColor: colors.backgroundGrey,
+    backgroundColor: "white",
     width: "100%",
     padding: 20,
     height: "100%",
@@ -274,14 +329,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   tipsTitle: {
-    color: colors["textLight"],
+    color: "white",
     fontWeight: "bold",
     fontSize: 16,
     marginBottom: 10,
     fontFamily: "Poppins-SemiBold",
   },
   tipsText: {
-    color: colors["textLight"],
+    color: "white",
     fontFamily: "Poppins-Regular",
   },
 
@@ -300,7 +355,7 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   cardTitle: {
-    color: colors.text,
+    color: "white",
     fontFamily: "Inter-ExtraLight",
     fontSize: 16,
     padding: 10,
@@ -331,5 +386,46 @@ const styles = StyleSheet.create({
   },
   interLight: {
     fontFamily: "Inter-Light",
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
   },
 });

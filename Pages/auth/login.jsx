@@ -88,6 +88,11 @@ function Login({ navigation }) {
       duration: 500,
       useNativeDriver: true,
     }).start();
+    // fix memory leak
+    return () => {
+      popInAnimation.stopAnimation();
+    }
+    
   }, []);
   return (
     <ScrollView border="2" bg={"primary.50"} safeAreaTop pt={10}>

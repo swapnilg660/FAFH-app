@@ -59,6 +59,7 @@ export const signUp = async (data) => {
         // WriteData(userId, Fname, Sname, Email, Photo)
         if (data.stayLoggedIn) {
           await SecureStore.setItemAsync("userToken", res.user.uid);
+          await SecureStore.setItemAsync("userFirstTime", "true");
         }
       })
       .catch((error) => {
@@ -89,6 +90,7 @@ export const signOut = async () => {
   try {
     await firebase.auth().signOut();
     await SecureStore.deleteItemAsync("userToken");
+    await SecureStore.deleteItemAsync("userFirstTime");
   } catch (e) {
     alert("Error!", e.message);
   }
@@ -97,15 +99,19 @@ export const signOut = async () => {
 
 export const googleSignIn = async () => {
   const provider = new firebase.auth.GoogleAuthProvider();
-  provider.addScope('profile');
-    provider.addScope('https://www.googleapis.com/auth/drive');
+  provider.addScope("profile");
+  provider.addScope("https://www.googleapis.com/auth/drive");
   try {
     await firebase.auth().signInWithRedirect(provider);
-    firebase.auth().getRedirectResult().then(function(authData) {
+    firebase
+      .auth()
+      .getRedirectResult()
+      .then(function (authData) {
         console.log(authData);
-    }).catch(function(error) {
+      })
+      .catch(function (error) {
         console.log(error);
-    });
+      });
   } catch (e) {
     console.log(e);
   }

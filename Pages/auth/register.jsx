@@ -17,7 +17,6 @@ import {
   Pressable,
   Row,
   useTheme,
-  Checkbox,
   Spinner,
   StatusBar,
   View,
@@ -26,7 +25,10 @@ import {
   WarningOutlineIcon,
   VStack,
   Image,
+  HStack,
 } from "native-base";
+import CountryFlag from "react-native-country-flag";
+import useCountries from "use-countries";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import moment from "moment";
@@ -35,6 +37,7 @@ import { Foundation } from "@expo/vector-icons";
 
 import ToastComponent from "../../services/CustomToast";
 import { Animated, Button as RnButton } from "react-native";
+import { Item } from "react-native-paper/lib/typescript/components/List/List";
 
 function Register({ navigation }) {
   //Animations
@@ -66,7 +69,6 @@ function Register({ navigation }) {
   const [show, setShow] = useState(true);
   const [feedback, setFeedback] = useState(null);
   const toast = useToast();
-  const { window_height, window_width } = useWindowDimensions();
 
   //form states
   const initialValues = {
@@ -81,10 +83,6 @@ function Register({ navigation }) {
     heightUnit: "cm",
     weight: "",
     weightUnit: "kg",
-    country: "",
-    industry: "",
-    job: "",
-    jobTime: "",
   };
 
   const { signUp } = React.useContext(AuthContext);
@@ -206,10 +204,6 @@ function Register({ navigation }) {
                   weight,
                   height,
                   gender,
-                  country,
-                  jobTime,
-                  job,
-                  industry,
                 } = values;
                 return (
                   <>
@@ -221,6 +215,7 @@ function Register({ navigation }) {
                         <Text color={"black"}>Name & Surname</Text>
                       </FormControl.Label>
                       <Input
+                        borderColor={"primary.100"}
                         value={name}
                         onChangeText={handleChange("name")}
                         onBlur={handleBlur("name")}
@@ -243,6 +238,7 @@ function Register({ navigation }) {
                         <Text color={"black"}>Email</Text>
                       </FormControl.Label>
                       <Input
+                        borderColor={"primary.100"}
                         value={email}
                         onChangeText={handleChange("email")}
                         onBlur={handleBlur("email")}
@@ -348,6 +344,36 @@ function Register({ navigation }) {
                         _input={{ color: "black" }}
                         fontWeight={"300"}
                         fontSize={"md"}
+                        rightElement={
+                          <FormControl
+                            backgroundColor={"primary.600"}
+                            width={"30%"}
+                            p={0}
+                          >
+                            <Select
+                              maxWidth="80"
+                              accessibilityLabel="Country code"
+                              placeholder="Code"
+                              placeholderTextColor={"white"}
+                              // selectedValue={values.weightUnit}
+                              // defaultValue={values.weightUnit}
+                              onValueChange={(itemValue) => {
+                                setFieldValue("weightUnit", itemValue);
+                              }}
+                              onBlur={handleBlur("weightUnit")}
+                              _selectedItem={{
+                                bg: "primary.100",
+                                endIcon: <CheckIcon size={5} />,
+                                borderRadius: "20",
+                              }}
+                              color={"white"}
+                              borderColor={"primary.600"}
+                            >
+                              <Select.Item label="+91" value="India" />
+                              <Select.Item label="+27" value="South Africa" />
+                            </Select>
+                          </FormControl>
+                        }
                       />
                       <FormControl.ErrorMessage>
                         {touched.cell && errors.cell}
@@ -376,8 +402,7 @@ function Register({ navigation }) {
                           rightElement={
                             <FormControl
                               backgroundColor={"primary.600"}
-                              w="4/6"
-                              maxW="100"
+                              width={"50%"}
                               p={0}
                             >
                               <Select
@@ -400,7 +425,7 @@ function Register({ navigation }) {
                                 borderColor={"primary.600"}
                               >
                                 <Select.Item label="Kg" value="kg" />
-                                <Select.Item label="Pounds" value="P" />
+                                <Select.Item label="Ibs" value="Ibs" />
                               </Select>
                             </FormControl>
                           }
@@ -426,8 +451,7 @@ function Register({ navigation }) {
                           rightElement={
                             <FormControl
                               backgroundColor={"primary.600"}
-                              w="4/6"
-                              maxW="120"
+                              width={"50%"}
                               p={0}
                             >
                               <Select
@@ -482,6 +506,8 @@ function Register({ navigation }) {
                       >
                         <Select.Item label="Male" value="M" />
                         <Select.Item label="Female" value="F" />
+                        <Select.Item label="Other" value="O" />
+                        <Select.Item label="Prefer not to say" value="C" />
                       </Select>
                       <FormControl.ErrorMessage
                         leftIcon={<WarningOutlineIcon size="xs" />}
@@ -489,19 +515,6 @@ function Register({ navigation }) {
                         Please make a selection!
                       </FormControl.ErrorMessage>
                     </FormControl>
-                    {/* <Button
-                      shadow={3}
-                      size="md"
-                      colorScheme="secondary"
-                      my={5}
-                      onPress={!isSubmitting ? handleSubmit : null}
-                    >
-                      {isSubmitting ? (
-                        <Spinner size="sm" color={"white"} />
-                      ) : (
-                        "Next"
-                      )}
-                    </Button> */}
                     <Row
                       space="2"
                       justifyContent={"center"}
@@ -518,96 +531,20 @@ function Register({ navigation }) {
                         </Text>
                       </Pressable>
                     </Row>
-                    {!isAdditionalInfoVisible || AdditionalInfoLoading ? (
-                      AdditionalInfoLoading ? (
-                        <Spinner size="sm" color={"primary.500"} />
+                    <Button
+                      shadow={3}
+                      size="md"
+                      colorScheme="secondary"
+                      background={"secondary.400"}
+                      my={5}
+                      onPress={!isSubmitting ? handleSubmit : null}
+                    >
+                      {isSubmitting ? (
+                        <Spinner size="sm" color={"white"} />
                       ) : (
-                        <Button
-                          mt={4}
-                          colorScheme="secondary"
-                          onPress={() => {
-                            showAdditionalInfo();
-                            console.log("Pressed");
-                          }}
-                        >
-                          Next
-                        </Button>
-                      )
-                    ) : null}
-                    {/* Additional Information */}
-                    {isAdditionalInfoVisible && (
-                      <Animated.View style={{ opacity: AdditionalInfoRef }}>
-                        <VStack
-                          space="5"
-                          mt={20}
-                          h={window_height}
-                          borderWidth="1"
-                        >
-                          <Center mt={10} mb={10}>
-                            <Heading
-                              fontWeight={"400"}
-                              fontSize={"2xl"}
-                              color={"darkText"}
-                            >
-                              Additional Information
-                            </Heading>
-                            <Text
-                              fontWeight={"200"}
-                              textAlign={"center"}
-                              color={"darkText"}
-                              m={4}
-                            >
-                              This information is need for the application to
-                              work best for you 😉
-                            </Text>
-                          </Center>
-                          <FormControl maxW="300" isRequired>
-                            <FormControl.Label fontWeight={"300"}>
-                              <Text color={"black"}>
-                                In which country do you reside?
-                              </Text>
-                            </FormControl.Label>
-                            <Select
-                              selectedValue={country}
-                              minWidth="200"
-                              accessibilityLabel="In which country do you reside?"
-                              placeholder="Choose a Country"
-                              fontWeight={"300"}
-                              _selectedItem={{
-                                bg: "primary.100",
-                                endIcon: <CheckIcon size={5} />,
-                                borderRadius: "20",
-                              }}
-                              mt={1}
-                              onValueChange={(itemValue) =>
-                                setFieldValue("gender", itemValue)
-                              }
-                            >
-                              <Select.Item label="Male" value="M" />
-                              <Select.Item label="Female" value="F" />
-                              <Select.Item
-                                label="DRC"
-                                value="DR"
-                                leftIcon={
-                                  <Image
-                                    source={{
-                                      uri: "https://wallpaperaccess.com/full/317501.jpg",
-                                    }}
-                                    alt="Alternate Text"
-                                    size="xs"
-                                  />
-                                }
-                              />
-                            </Select>
-                            <FormControl.ErrorMessage
-                              leftIcon={<WarningOutlineIcon size="xs" />}
-                            >
-                              Please make a selection!
-                            </FormControl.ErrorMessage>
-                          </FormControl>
-                        </VStack>
-                      </Animated.View>
-                    )}
+                        "Register"
+                      )}
+                    </Button>
                   </>
                 );
               }}
