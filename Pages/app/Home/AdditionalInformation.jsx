@@ -12,6 +12,7 @@ import {
   Input,
   ScrollView,
   Select,
+  Slide,
   Spinner,
   Text,
   useToast,
@@ -37,22 +38,39 @@ export default function AdditionalInformation({ navigation, setShowModal }) {
 
   const handleSubmit = (data, formikAction) => {
     console.log(data);
-    saveAdditionalInformation({ ...data }).then((res) => {
-      formikAction.setSubmitting(false);
-      formikAction.resetForm();
-      // close the modal on success
-      toast.show({
-        placement: "top",
-        render: () => (
-          <ToastComponent
-            state={res === "Success" ? "Success" : "Error"}
-            message={res === "Success" ? "Logged in Successfully" : res}
-          />
-        ),
+    saveAdditionalInformation({ ...data })
+      .then((res) => {
+        formikAction.setSubmitting(false);
+        formikAction.resetForm();
+        // close the modal on success
+        toast.show({
+          placement: "top",
+          render: () => (
+            <ToastComponent
+              state={res === "Success" ? "Success" : "Error"}
+              message={res === "Success" ? "Logged in Successfully" : res}
+            />
+          ),
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        formikAction.setSubmitting(false);
+        toast.show({
+          placement: "top",
+          render: () => (
+            <ToastComponent
+              state="Error"
+              message="Something went wrong, please try again"
+            />
+          ),
+        });
+      })
+      .finally(() => {
+        formikAction.setSubmitting(false);
       });
-    });
   };
-  
+
   return (
     <ScrollView px={5} backgroundColor={"primary.50"}>
       <Box p="2" rounded="lg">
@@ -80,12 +98,12 @@ export default function AdditionalInformation({ navigation, setShowModal }) {
                 space="2"
                 h={window_height}
                 backgroundColor={"white"}
-                p={5}
+                p={3}
                 mt={10}
                 borderRadius={20}
                 // borderWidth={1}
               >
-                <Center mb={10}>
+                <Center mb={2}>
                   <Heading
                     fontWeight={"400"}
                     fontSize={"2xl"}
@@ -170,23 +188,37 @@ export default function AdditionalInformation({ navigation, setShowModal }) {
                   <FormControl.Label>
                     How long have you been working?
                   </FormControl.Label>
-                  <Input
+                  <Select
                     borderColor={"primary.100"}
-                    value={job}
-                    onChangeText={handleChange("job")}
-                    onBlur={handleBlur("job")}
-                    p={2}
+                    selectedValue={jobTime}
+                    accessibilityLabel="Choose your industry"
                     fontWeight={"300"}
-                    fontSize={"md"}
-                  />
+                    _selectedItem={{
+                      bg: "primary.100",
+                      endIcon: <CheckIcon size={5} />,
+                      borderRadius: "20",
+                    }}
+                    mt={1}
+                    onValueChange={(itemValue) =>
+                      setFieldValue("jobTime", itemValue)
+                    }
+                    placeholder="Choose a time frame"
+                    minWidth="64"
+                  >
+                    <Select.Item label="1 - 3 years" value="1-3" />
+                    <Select.Item label="3 - 5 years" value="3-5" />
+                    <Select.Item label="5 - 10 years" value="5-10" />
+                    <Select.Item label="10 - 15 years" value="10-15" />
+                    <Select.Item label="15 - 20 years" value="15-20" />
+                    <Select.Item label="20+ years" value="20+" />
+                  </Select>
                 </FormControl>
 
                 <Button
                   shadow={3}
                   size="md"
-                  colorScheme="secondary"
-                  background={"secondary.400"}
-                  my={5}
+                  colorScheme="primary"
+                  mt={5}
                   onPress={!isSubmitting ? handleSubmit : null}
                 >
                   {isSubmitting ? (
@@ -196,7 +228,8 @@ export default function AdditionalInformation({ navigation, setShowModal }) {
                   )}
                 </Button>
                 <Button
-                  colorScheme="primary"
+                  colorScheme="secondary"
+                  backgroundColor={"secondary.400"}
                   onPress={() => {
                     setShowModal(false);
                   }}

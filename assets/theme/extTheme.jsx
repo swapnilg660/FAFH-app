@@ -5,6 +5,7 @@ const FAFHTHEME = extendTheme({
   colors: {
     // Add new color
     primary: {
+      30: "#4CCB7025",
       50: "#F2FFFC",
       100: "#bdf0e3",
       200: "#98e5d1",
@@ -17,6 +18,7 @@ const FAFHTHEME = extendTheme({
       900: "#00160f",
     },
     secondary: {
+      30:"#FF9B2125",
       50: "#fff6da",
       100: "#ffe3ad",
       200: "#ffd17d",

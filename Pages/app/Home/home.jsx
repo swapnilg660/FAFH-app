@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Button, Image, Pressable } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 import {
   Center,
@@ -9,6 +8,10 @@ import {
   Input,
   useTheme,
   Button as NbButton,
+  ScrollView,
+  Box,
+  HStack,
+  Actionsheet,
 } from "native-base";
 import { Ionicons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
@@ -26,6 +29,8 @@ import { useWindowDimensions } from "react-native";
 import { Alert, Modal } from "react-native";
 import AdditionalInformation from "./AdditionalInformation";
 import * as SecureStore from "expo-secure-store";
+import { FAFH_logo, StepsIcon } from "../../../Components/customSvgIcon";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 function Home({ navigation }) {
   const { colors } = useTheme();
@@ -34,6 +39,9 @@ function Home({ navigation }) {
     labels: ["Swim", "Bike", "Run"], // optional
     data: [0.4, 0.6, 0.8],
   };
+
+  // Type of food ActionSheet variables
+  const [actionSheetVisible, setActionSheetVisible] = useState(false);
 
   // Additional Information Modal
   const [modalVisible, setModalVisible] = useState(false);
@@ -68,182 +76,197 @@ function Home({ navigation }) {
     };
   }, []);
   return (
-    <SafeAreaView style={styles.container}>
-      {/* home title */}
-      <View style={styles.headerContainer}>
-        {/* <Image
-          style={styles.headerImage}
-          source={require("../../../assets/images/FAFH_logo.png")}
-        /> */}
-        <Feather name="feather" size={24} color="black" />
-        <Text style={styles.headerTitle}>Food away from home</Text>
-      </View>
+    <SafeAreaView>
+      <ScrollView>
+        <HStack p={2} alignItems={"center"} justifyContent={"space-around"}>
+          <FAFH_logo fill={colors.primary[600]} />
+          <Text style={styles.headerTitle}>Food away from home</Text>
+        </HStack>
 
-      {/* Daily activities cards */}
-      <View style={styles.dailyActivitiesContainer}>
-        <View style={styles.cardContent}>
-          <View style={styles.innerContainer}>
-            <Text style={styles.activitiesTitle}>Daily Activities</Text>
-            <View style={styles.activitiesDetails}>
-              <TouchableOpacity>
-                <Image
-                  style={styles.activitiesImage}
-                  source={require("../../../assets/images/steps.png")}
-                />
-                <Text style={styles.activitiesText}>2500</Text>
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <MaterialCommunityIcons
-                  name="clock"
-                  size={24}
-                  color={colors["warning"]["500"]}
-                />
-                <Text style={styles.activitiesText}>30</Text>
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <MaterialCommunityIcons
-                  name="fire"
-                  size={24}
-                  color={colors["warning"]["500"]}
-                />
-                <Text style={styles.activitiesText}>150</Text>
-              </TouchableOpacity>
+        {/* Daily activities cards */}
+        <View style={styles.dailyActivitiesContainer}>
+          <View style={styles.cardContent}>
+            <View style={styles.innerContainer}>
+              <Text style={styles.activitiesTitle}>Daily Activities</Text>
+              <View style={styles.activitiesDetails}>
+                <TouchableOpacity>
+                  <StepsIcon />
+                  <Text style={styles.activitiesText}>2500</Text>
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <MaterialCommunityIcons
+                    name="clock"
+                    size={24}
+                    color={colors["warning"]["500"]}
+                  />
+                  <Text style={styles.activitiesText}>30</Text>
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <MaterialCommunityIcons
+                    name="fire"
+                    size={24}
+                    color={colors["yellow"]["500"]}
+                  />
+                  <Text style={styles.activitiesText}>150</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View style={{ position: "relative" }}>
+              <ProgressChart
+                data={data}
+                width={width * 0.4}
+                height={height * 0.15}
+                strokeWidth={6}
+                radius={18}
+                chartConfig={chartConfig}
+                hideLegend={true}
+                barPercentage={0}
+              />
             </View>
           </View>
-          <View style={{ position: "relative" }}>
-            <ProgressChart
-              data={data}
-              width={width * 0.4}
-              height={height * 0.15}
-              strokeWidth={6}
-              radius={18}
-              chartConfig={chartConfig}
-              hideLegend={true}
-              barPercentage={0}
-            />
-          </View>
-        </View>
 
-        {/* Activities and tips container */}
-        <View style={styles.activitiesAndTipsContainer}>
-          {/* Tips of the day */}
-          <View style={styles.tipsConatiner}>
-            <View style={styles.messageContainer}>
-              <Text style={styles.tipsTitle}>Tip of the Day!</Text>
-              <Text style={styles.tipsText}>"Drink more water"</Text>
+          {/* Activities and tips container */}
+          <View style={styles.activitiesAndTipsContainer}>
+            {/* Tips of the day */}
+            <View style={styles.tipsConatiner}>
+              <View style={styles.messageContainer}>
+                <Text style={styles.tipsTitle}>Tip of the Day!</Text>
+                <Text style={styles.tipsText}>"Drink more water"</Text>
+              </View>
+              <Image
+                style={styles.tipsImage}
+                source={require("../../../assets/images/standing.png")}
+              />
+              <Ionicons
+                name="ios-close-circle-sharp"
+                size={24}
+                color={colors["warning"]["500"]}
+              />
             </View>
-            <Image
-              style={styles.tipsImage}
-              source={require("../../../assets/images/standing.png")}
-            />
-            <Ionicons
-              name="ios-close-circle-sharp"
-              size={24}
-              color={colors["warning"]["500"]}
-            />
-          </View>
-          {/* Indicators container */}
-          <View style={styles.indicatorsContainer}>
-            <Card style={styles.indicatorCard}>
-              <Title style={styles.cardTitle}>
-                <MaterialCommunityIcons
-                  name="clock-check-outline"
-                  size={20}
-                  color={colors["warning"]["500"]}
-                />{" "}
-                Active time
-              </Title>
-              <Card.Content style={styles.cardContent}>
-                <View>
-                  <Text style={styles.interLight}>
-                    <Title>30</Title>/60mins
-                  </Text>
-                </View>
-                <View>
-                  <Text style={styles.interLight}>
-                    1234 kcal <Title>|</Title> 1.56 km
-                  </Text>
-                </View>
-              </Card.Content>
-            </Card>
-            {/* second card */}
-            <Card style={styles.indicatorCard}>
-              <Title style={styles.cardTitle}>
-                <Ionicons
-                  name="restaurant-outline"
-                  size={20}
-                  color={colors["warning"]["500"]}
-                />
-                Food
-              </Title>
-              <Card.Content style={styles.cardContent}>
-                <View>
-                  <Text>
-                    <Title>0</Title> cal
-                  </Text>
-                </View>
-                <View>
-                  <Pressable
-                    style={styles.homeButtons}
-                    onPress={() => {
-                      // navigation.navigate("AdditionalInformationModal");
-                      setShowModal(true);
-                    }}
-                  >
-                    <Text style={styles.homeButtonsText}>Add</Text>
-                  </Pressable>
-                </View>
-              </Card.Content>
-            </Card>
-            {/* second card */}
-            <Card style={[styles.indicatorCard, { paddingBottom: 30 }]}>
-              <View style={styles.cardContent}>
+            {/* Indicators container */}
+            <View style={styles.indicatorsContainer}>
+              <Card style={styles.indicatorCard}>
                 <Title style={styles.cardTitle}>
-                  <Ionicons
-                    name="bicycle-outline"
-                    size={30}
+                  <MaterialCommunityIcons
+                    name="clock-check-outline"
+                    size={20}
                     color={colors["warning"]["500"]}
                   />{" "}
-                  Physical activity
+                  Active time
                 </Title>
-                <Card.Content>
-                  <TouchableOpacity style={styles.homeButtons}>
-                    <Text style={styles.homeButtonsText}>View history</Text>
-                  </TouchableOpacity>
+                <Card.Content style={styles.cardContent}>
+                  <View>
+                    <Text style={styles.interLight}>
+                      <Title>30</Title>/60mins
+                    </Text>
+                  </View>
+                  <View>
+                    <Text style={styles.interLight}>
+                      1234 kcal <Title>|</Title> 1.56 km
+                    </Text>
+                  </View>
                 </Card.Content>
-              </View>
-            </Card>
+              </Card>
+              {/* second card */}
+              <Card style={styles.indicatorCard}>
+                <Title style={styles.cardTitle}>
+                  <Ionicons
+                    name="restaurant-outline"
+                    size={20}
+                    color={colors["warning"]["500"]}
+                  />
+                  Food
+                </Title>
+                <Card.Content style={styles.cardContent}>
+                  <View>
+                    <Text>
+                      <Title>0</Title> cal
+                    </Text>
+                  </View>
+                  <View>
+                    <Pressable
+                      style={styles.homeButtons}
+                      onPress={() => {
+                        setActionSheetVisible(true);
+                      }}
+                    >
+                      <Text style={styles.homeButtonsText}>Record</Text>
+                    </Pressable>
+                  </View>
+                </Card.Content>
+              </Card>
+              <Actionsheet
+                isOpen={actionSheetVisible}
+                onClose={() => {
+                  setActionSheetVisible(false);
+                }}
+              >
+                <Actionsheet.Content>
+                  {["Breakfast", "Lunch", "Dinner", "Snack", "Drink"].map(
+                    (item) => {
+                      return (
+                        <Actionsheet.Item
+                          key={item}
+                          onPress={() => {
+                            setActionSheetVisible(false);
+                            // navigate to record food screen with params
+                            navigation.navigate("RecordFood", {
+                              foodType: item,
+                              calories: "",
+                              date: "",
+                              time: "",
+                              location: "",
+                              notes: "",
+                            });
+                          }}
+                        >
+                          {item}
+                        </Actionsheet.Item>
+                      );
+                    }
+                  )}
+                </Actionsheet.Content>
+              </Actionsheet>
+
+              {/* second card */}
+              <Card style={[styles.indicatorCard, { paddingBottom: 30 }]}>
+                <View style={styles.cardContent}>
+                  <Title style={styles.cardTitle}>
+                    <Ionicons
+                      name="bicycle-outline"
+                      size={30}
+                      color={colors["warning"]["500"]}
+                    />{" "}
+                    Physical activity
+                  </Title>
+                  <Card.Content>
+                    <TouchableOpacity style={styles.homeButtons}>
+                      <Text style={styles.homeButtonsText}>View history</Text>
+                    </TouchableOpacity>
+                  </Card.Content>
+                </View>
+              </Card>
+            </View>
           </View>
         </View>
-      </View>
-      {/* Additional Information Modal */}
+        {/* Additional Information Modal */}
 
-      <Modal
-        animationType="slide"
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <AdditionalInformation setShowModal={setModalVisible} />
-      </Modal>
-      {/* <Pressable
-        style={[styles.button, styles.buttonOpen]}
-        onPress={() => setModalVisible(true)}
-      >
-        <Text style={styles.textStyle}>Show Modal</Text>
-      </Pressable> */}
+        <Modal
+          animationType="slide"
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(!modalVisible);
+          }}
+        >
+          <AdditionalInformation setShowModal={setModalVisible} />
+        </Modal>
+      </ScrollView>
     </SafeAreaView>
   );
 }
 
 export default React.memo(Home);
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "white",
-    flex: 1,
-  },
-
   // logo and name conainer
   headerContainer: {
     flexDirection: "row",
@@ -355,7 +378,7 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   cardTitle: {
-    color: "white",
+    color: "black",
     fontFamily: "Inter-ExtraLight",
     fontSize: 16,
     padding: 10,
