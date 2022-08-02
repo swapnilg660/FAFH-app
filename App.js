@@ -65,6 +65,7 @@ export default function App() {
         const token = await googleSignIn();
         dispatch({ type: "GOOGLE_SIGN_IN", token: token });
       },
+      
     }),
     []
   );

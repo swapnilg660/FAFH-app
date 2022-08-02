@@ -53,6 +53,7 @@
     "react-native-shadow-2": "^6.0.5",
     "react-native-svg": "^12.3.0",
     "react-native-svg-charts": "^5.4.0",
+    "react-native-swiper-flatlist": "^3.0.17",
     "react-native-toastify": "^0.2.2",
     "react-native-vector-icons": "^9.1.0",
     "react-native-web": "0.17.7",

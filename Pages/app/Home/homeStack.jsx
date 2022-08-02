@@ -3,6 +3,7 @@ import Home from "./home";
 import RecordFood from "./RecordFood";
 import React from "react";
 import AdditionalInformation from "./AdditionalInformation";
+import UploadPicture from "./Camera";
 const Stack = createStackNavigator();
 
 function HomeStack() {
@@ -14,6 +15,7 @@ function HomeStack() {
         component={AdditionalInformation}
       />
       <Stack.Screen name="RecordFood" component={RecordFood} />
+      <Stack.Screen name="UploadPicture" component={UploadPicture} />
     </Stack.Navigator>
   );
 }
