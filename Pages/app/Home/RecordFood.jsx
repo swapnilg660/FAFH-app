@@ -44,6 +44,7 @@ function RecordFood({ navigation, route }) {
   const [alertVisible, setAlertVisible] = useState(false);
 
   const swiperRef = useRef();
+  const searchRef = useRef(null);
 
   const [customMeal, setCustomMeal] = useState("");
 
@@ -94,6 +95,10 @@ function RecordFood({ navigation, route }) {
           </Heading>
         </HStack>
         <Input
+          // ref={SearchRef}
+          getRef={(input) => {
+            searchRef = input;
+          }}
           borderColor={colors["primary"]["30"]}
           bg={colors["primary"]["30"]}
           m={5}
@@ -110,7 +115,16 @@ function RecordFood({ navigation, route }) {
               color={colors["black"]}
             />
           }
+          // on change, query suggested foods
+          onChangeText={(text) => {console.log(text)}}
+          // let them select a food and then add it to the list of selected foods
+          onSubmitEditing={(e) => console.log(e.nativeEvent.text)}
         />
+        {/* {
+          <Box bg="primary.400" p="5" rounded="lg">
+            {JSON.stringify(searchRef)}
+          </Box>
+        } */}
 
         {/* Tab value */}
         <HStack bg="secondary.30" m={3} rounded="full" flexWrap={"nowrap"}>
@@ -353,6 +367,9 @@ function RecordFood({ navigation, route }) {
             }}
           >
             <IconButton
+              onPress={() =>
+                navigation.navigate("AddNewFood", { foodType: foodType })
+              }
               mb="4"
               variant="solid"
               rounded="full"

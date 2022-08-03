@@ -25,7 +25,8 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "app.fafh.uj"
+      "package": "app.fafh.uj",
+      "softwareKeyboardLayoutMode":"pan"
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
