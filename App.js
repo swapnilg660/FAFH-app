@@ -17,6 +17,12 @@ import AuthStack from "./routes/AuthStack";
 import AppStack from "./routes/AppStack";
 import useFonts from "./hooks/useFonts";
 
+// Counter push notification
+import BackgroundFetch from "react-native-background-fetch";
+import Notification from "./Components/pushNotification/generateToken";
+import initBackgroundFetch from "./Components/pushNotification/backgroundActivity";
+import StartBackgroundActivities from "./Components/pushNotification/backgroundActivity";
+
 export default function App() {
   //Load fonts
   const fontsLoaded = useFonts();
@@ -24,6 +30,13 @@ export default function App() {
     return null;
   }
 
+  // steps counter
+  const [steps, setSteps] = useState(0);
+  // Push notification variables
+  const [expoPushToken, setExpoPushToken] = useState("");
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
   // user authentication
   const [userData, dispatch] = useReducer(reducer, {
     isLoading: true,
@@ -65,6 +78,8 @@ export default function App() {
         const token = await googleSignIn();
         dispatch({ type: "GOOGLE_SIGN_IN", token: token });
       },
+      steps,
+      setSteps,
     }),
     []
   );
@@ -87,6 +102,18 @@ export default function App() {
   useEffect(() => {
     // Fetch the token from storage then navigate to our appropriate screen
     restoreSavedUser();
+    // push a notification to the user
+    Notification(
+      steps,
+      expoPushToken,
+      notification,
+      setNotification,
+      setExpoPushToken,
+      notificationListener,
+      responseListener
+    );
+    // Background fetch setup (recommend extracting into separate file)
+    // StartBackgroundActivities();
     //fix memory leak
     return () => {
       //
