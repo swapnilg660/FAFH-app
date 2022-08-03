@@ -4,11 +4,15 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeStack from "../Pages/app/Home/homeStack";
 import Profile from "../Pages/app/Profile/profile";
 import Insights from "../Pages/app/Insight/insights"; //route settings
+import TabBarComponent from "../Components/TabBarComponent";
 const Tab = createBottomTabNavigator();
 
 function AppStack() {
   return (
-    <Tab.Navigator screenOptions={{ headerShown: false }}>
+    <Tab.Navigator
+      tabBar={(props) => <TabBarComponent {...props} />}
+      screenOptions={{ headerShown: false }}
+    >
       <Tab.Screen
         name="HomeStack"
         component={HomeStack}
