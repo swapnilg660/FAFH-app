@@ -11311,13 +11311,6 @@ react-shallow-renderer@16.14.1:
     object-assign "^4.1.1"
     react-is "^16.12.0 || ^17.0.0"
 
-react-toastify@^9.0.5:
-  version "9.0.5"
-  resolved "https://registry.npmjs.org/react-toastify/-/react-toastify-9.0.5.tgz"
-  integrity sha512-dszPCeQINY+Nm6HmsiAXT/7wsazPqv0S/RuhIYLAW+fTKcd3T1iRjZG0XqrN9nvAzqaE5J6uxMaiBrOevxjY8g==
-  dependencies:
-    clsx "^1.1.1"
-
 react-transition-group@^4.4.2:
   version "4.4.2"
   resolved "https://registry.npmjs.org/react-transition-group/-/react-transition-group-4.4.2.tgz"

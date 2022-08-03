@@ -12,6 +12,7 @@ import {
   Stagger,
   Text,
   useTheme,
+  useToast,
   View,
   VStack,
 } from "native-base";
@@ -26,6 +27,8 @@ import { useEffect, useRef, useState } from "react";
 import { Animated, useWindowDimensions } from "react-native";
 import { AddFoodIcon, EmptyPlateIcon } from "../../../Components/customSvgIcon";
 import { SwiperFlatList } from "react-native-swiper-flatlist";
+import AlertComponent from "../../../Components/alert";
+import ToastComponent from "../../../services/CustomToast";
 function RecordFood({ navigation, route }) {
   // Fake data, we need a GET request to get this data
   const fakeCustomMeals = [9, 98, 76];
@@ -35,6 +38,10 @@ function RecordFood({ navigation, route }) {
   const [stagger, setStagger] = useState(false);
   const { height, width } = useWindowDimensions();
   const rotateFab = useRef(new Animated.Value(0)).current;
+  const toast = useToast();
+
+  //   Alert Component Data
+  const [alertVisible, setAlertVisible] = useState(false);
 
   const swiperRef = useRef();
 
@@ -133,6 +140,7 @@ function RecordFood({ navigation, route }) {
             onPress={() => {
               setTabValue("Skip Meal");
               swiperRef.current.scrollToIndex({ index: 1, animated: true });
+              setAlertVisible(true);
             }}
           >
             <Center
@@ -156,6 +164,7 @@ function RecordFood({ navigation, route }) {
           onMomentumScrollEnd={({ index }) => {
             if (index) {
               setTabValue("Skip Meal");
+              setAlertVisible(true);
             } else {
               setTabValue("Custom");
             }
@@ -256,10 +265,46 @@ function RecordFood({ navigation, route }) {
             )}
           </Box>
           <Box width={width} p={5}>
-            <Box mx={10} bg="primary.400" p="12" rounded="lg">
-              {/* Skip meal tab */}
-              Box
-            </Box>
+            <AlertComponent
+              bg={"secondary.30"}
+              setModalVisible={setAlertVisible}
+              modalVisible={alertVisible}
+              message={"Are you sure you want to skip this meal?"}
+              action={[
+                {
+                  label: "Yes, Skip",
+                  onPress: () => {
+                    console.log("Skipped Meal");
+                    // backend code that handles skipping meal
+                    toast.show({
+                      placement: "top",
+                      duration: 1000,
+                      render: () => (
+                        <ToastComponent
+                          state={true ? "Success" : "Error"}
+                          message={true ? "Meal skipped successfully" : "Error"}
+                        />
+                      ),
+                      onCloseComplete: () => {
+                        setAlertVisible(false);
+                        navigation.navigate("Home");
+                      },
+                    });
+                  },
+                },
+                {
+                  label: "No",
+                  onPress: () => {
+                    setAlertVisible(false);
+                    swiperRef.current.scrollToIndex({
+                      index: 0,
+                      animated: true,
+                    });
+                    setTabValue("Custom");
+                  },
+                },
+              ]}
+            />
           </Box>
         </SwiperFlatList>
       </ScrollView>
