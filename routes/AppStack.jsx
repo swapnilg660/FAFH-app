@@ -1,4 +1,5 @@
 import { ScrollView, Text } from "native-base";
+import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 // import Home from "../Pages/app/Home/home";
 import HomeStack from "../Pages/app/Home/homeStack";
