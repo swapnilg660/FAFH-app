@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeStack from "../Pages/app/Home/homeStack";
 import Profile from "../Pages/app/Profile/profile";
 import Insights from "../Pages/app/Insight/insights"; //route settings
+import React from "react";
 const Tab = createBottomTabNavigator();
 
 function AppStack() {

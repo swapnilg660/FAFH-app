@@ -25,6 +25,7 @@ import {
 } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AlertComponent from "../../../Components/alert";
+import { RecognisePlate } from "../../../services/foodApi/recognition.js";
 
 export default function UploadPicture({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
@@ -39,8 +40,11 @@ export default function UploadPicture({ navigation }) {
 
   let takePicture = async () => {
     if (cameraRef) {
-      let options = { quality: 0.5, base64: true, exif: true };
+      let options = { quality: 0.5, exif: true };
       let newPhoto = await cameraRef.current.takePictureAsync(options);
+      console.log(newPhoto);
+      let userToken = "938b6d43d5aa3008bafda72bbb9bb78cbe48f076";
+      RecognisePlate(newPhoto, userToken);
       setPhoto(newPhoto);
     }
   };
@@ -75,7 +79,7 @@ export default function UploadPicture({ navigation }) {
         <SafeAreaView></SafeAreaView>
         <VStack h={winHeight} w={winWidth} flex={1} bg={"secondary.30"}>
           <Image
-            source={{ uri: "data:image/jpeg;base64," + photo.base64 }}
+            source={{ uri: photo.uri }}
             alt="Image Preview"
             style={{
               alignSelf: "stretch",

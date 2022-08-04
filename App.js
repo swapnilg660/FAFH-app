@@ -19,7 +19,7 @@ import useFonts from "./hooks/useFonts";
 
 // Counter push notification
 import BackgroundFetch from "react-native-background-fetch";
-import Notification from "./Components/pushNotification/generateToken";
+import Notification from "./Components/pushNotification/pushNotofication";
 import initBackgroundFetch from "./Components/pushNotification/backgroundActivity";
 import StartBackgroundActivities from "./Components/pushNotification/backgroundActivity";
 
@@ -103,15 +103,15 @@ export default function App() {
     // Fetch the token from storage then navigate to our appropriate screen
     restoreSavedUser();
     // push a notification to the user
-    Notification(
-      steps,
-      expoPushToken,
-      notification,
-      setNotification,
-      setExpoPushToken,
-      notificationListener,
-      responseListener
-    );
+    // Notification(
+    //   steps,
+    //   expoPushToken,
+    //   notification,
+    //   setNotification,
+    //   setExpoPushToken,
+    //   notificationListener,
+    //   responseListener
+    // );
     // Background fetch setup (recommend extracting into separate file)
     // StartBackgroundActivities();
     //fix memory leak

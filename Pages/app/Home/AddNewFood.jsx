@@ -14,6 +14,7 @@ import {
 import { Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons, Ionicons } from "@expo/vector-icons";
+import React from "react";
 
 function AddNewFood({ navigation, route }) {
   //   const { foodType } = route.params;
@@ -92,8 +93,8 @@ function AddNewFood({ navigation, route }) {
           placeholder="Name of Food"
           style={{ fontFamily: "Poppins-Regular" }}
           fontSize={16}
-        //   call search api here
-          onSubmitEditing={(e)=>console.log(e.nativeEvent.text)}
+          //   call search api here
+          onSubmitEditing={(e) => console.log(e.nativeEvent.text)}
         />
         <HStack space="3" px={5} alignItems="center" mb={7}>
           <Input

@@ -37,7 +37,6 @@ import { Foundation } from "@expo/vector-icons";
 
 import ToastComponent from "../../services/CustomToast";
 import { Animated, Button as RnButton } from "react-native";
-import { Item } from "react-native-paper/lib/typescript/components/List/List";
 
 function Register({ navigation }) {
   //Animations
