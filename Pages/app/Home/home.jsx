@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Button, Image, Pressable } from "react-native";
+import { View, StyleSheet, Image } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 import {
-  Center,
-  FormControl,
-  Input,
+  Text,
   useTheme,
-  Button as NbButton,
+  Button,
   ScrollView,
   Box,
   HStack,
   Actionsheet,
+  VStack,
 } from "native-base";
 import { Ionicons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
@@ -29,7 +28,11 @@ import { useWindowDimensions } from "react-native";
 import { Alert, Modal } from "react-native";
 import AdditionalInformation from "./AdditionalInformation";
 import * as SecureStore from "expo-secure-store";
-import { FAFH_logo, StepsIcon } from "../../../Components/customSvgIcon";
+import {
+  FAFH_logo,
+  RecordFoodIcon,
+  StepsIcon,
+} from "../../../Components/customSvgIcon";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 function Home({ navigation }) {
@@ -80,15 +83,17 @@ function Home({ navigation }) {
       <ScrollView>
         <HStack p={2} alignItems={"center"} justifyContent={"space-around"}>
           <FAFH_logo fill={colors.primary[600]} />
-          <Text style={styles.headerTitle}>Food away from home</Text>
+          <Text fontSize={"2xl"} style={{ fontFamily: "Poppins-SemiBold" }}>
+            Food Away From Home
+          </Text>
         </HStack>
 
         {/* Daily activities cards */}
-        <View style={styles.dailyActivitiesContainer}>
-          <View style={styles.cardContent}>
-            <View style={styles.innerContainer}>
+        <Box bg={"primary.30"} style={styles.dailyActivitiesContainer}>
+          <HStack py={2}>
+            <VStack w="60%" ml={7}>
               <Text style={styles.activitiesTitle}>Daily Activities</Text>
-              <View style={styles.activitiesDetails}>
+              <HStack w={"100%"} justifyContent={"space-between"}>
                 <TouchableOpacity>
                   <StepsIcon />
                   <Text style={styles.activitiesText}>2500</Text>
@@ -109,8 +114,8 @@ function Home({ navigation }) {
                   />
                   <Text style={styles.activitiesText}>150</Text>
                 </TouchableOpacity>
-              </View>
-            </View>
+              </HStack>
+            </VStack>
             <View style={{ position: "relative" }}>
               <ProgressChart
                 data={data}
@@ -123,12 +128,12 @@ function Home({ navigation }) {
                 barPercentage={0}
               />
             </View>
-          </View>
+          </HStack>
 
           {/* Activities and tips container */}
           <View style={styles.activitiesAndTipsContainer}>
             {/* Tips of the day */}
-            <View style={styles.tipsConatiner}>
+            <View style={styles.tipsContainer}>
               <View style={styles.messageContainer}>
                 <Text style={styles.tipsTitle}>Tip of the Day!</Text>
                 <Text style={styles.tipsText}>"Drink more water"</Text>
@@ -144,16 +149,18 @@ function Home({ navigation }) {
               />
             </View>
             {/* Indicators container */}
-            <View style={styles.indicatorsContainer}>
-              <Card style={styles.indicatorCard}>
-                <Title style={styles.cardTitle}>
+            <VStack>
+              <Box bg={"primary.50"} shadow={1} p={2} my={5} rounded="md">
+                <HStack space={2} p={3} alignItems="center">
                   <MaterialCommunityIcons
                     name="clock-check-outline"
                     size={20}
-                    color={colors["warning"]["500"]}
-                  />{" "}
-                  Active time
-                </Title>
+                    color={colors["secondary"]["600"]}
+                  />
+                  <Text style={{ fontFamily: "Poppins-Regular" }} fontSize="18">
+                    Active time
+                  </Text>
+                </HStack>
                 <Card.Content style={styles.cardContent}>
                   <View>
                     <Text style={styles.interLight}>
@@ -166,7 +173,7 @@ function Home({ navigation }) {
                     </Text>
                   </View>
                 </Card.Content>
-              </Card>
+              </Box>
               {/* second card */}
               <Card style={styles.indicatorCard}>
                 <Title style={styles.cardTitle}>
@@ -184,14 +191,23 @@ function Home({ navigation }) {
                     </Text>
                   </View>
                   <View>
-                    <Pressable
-                      style={styles.homeButtons}
+                    <Button
+                      borderColor={colors["secondary"]["600"]}
+                      borderWidth={0.5}
+                      // leftIcon={
+                      //   <RecordFoodIcon fill={colors["primary"]["700"]} />
+                      // }
+                      colorScheme="tertiary"
                       onPress={() => {
                         setActionSheetVisible(true);
                       }}
+                      _text={{
+                        style: { fontFamily: "Poppins-Regular" },
+                        color: colors["secondary"]["600"],
+                      }}
                     >
-                      <Text style={styles.homeButtonsText}>Record</Text>
-                    </Pressable>
+                      Record Food
+                    </Button>
                   </View>
                 </Card.Content>
               </Card>
@@ -240,15 +256,45 @@ function Home({ navigation }) {
                     Physical activity
                   </Title>
                   <Card.Content>
-                    <TouchableOpacity style={styles.homeButtons}>
-                      <Text style={styles.homeButtonsText}>View history</Text>
-                    </TouchableOpacity>
+                    <Button
+                      borderColor={colors["secondary"]["600"]}
+                      borderWidth={0.5}
+                      // leftIcon={
+                      //   <RecordFoodIcon fill={colors["primary"]["700"]} />
+                      // }
+                      colorScheme="tertiary"
+                      onPress={() => {
+                        Alert.alert(
+                          "Physical activity",
+                          "Feature coming soon !",
+                          [
+                            {
+                              text: "Cancel",
+                              style: "cancel",
+                            },
+                            {
+                              text: "OK",
+                              onPress: () => {
+                                console.log("OK Pressed");
+                              },
+                            },
+                          ],
+                          { cancelable: false }
+                        );
+                      }}
+                      _text={{
+                        style: { fontFamily: "Poppins-Regular" },
+                        color: colors["secondary"]["600"],
+                      }}
+                    >
+                      View History
+                    </Button>
                   </Card.Content>
                 </View>
               </Card>
-            </View>
+            </VStack>
           </View>
-        </View>
+        </Box>
         {/* Additional Information Modal */}
 
         <Modal
@@ -267,35 +313,15 @@ function Home({ navigation }) {
 
 export default React.memo(Home);
 const styles = StyleSheet.create({
-  // logo and name conainer
-  headerContainer: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    alignItems: "center",
-    marginTop: 20,
-  },
-  headerImage: {
-    width: 45,
-    height: 65,
-  },
-  headerTitle: {
-    fontSize: 21,
-    fontWeight: "600",
-    fontFamily: "Poppins-SemiBold",
-  },
-
   // Daily activities cards
   dailyActivitiesContainer: {
-    backgroundColor: "rgba(76, 203, 112, 0.12);",
+    // backgroundColor: "rgba(76, 203, 112, 0.12);",
     // padding: 30,
     marginTop: 10,
     borderRadius: 30,
   },
   innerContainer: {
-    // flexDirection: "row",
-    // justifyContent: "space-between",
-    // alignItems: "center",
-    // marginTop: 20,
+    borderWidth: 0.5,
     padding: 0,
     width: "60%",
     paddingTop: 0,
@@ -306,6 +332,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     width: "100%",
+    borderWidth:1
   },
   activitiesTitle: {
     fontSize: 18,
@@ -333,7 +360,7 @@ const styles = StyleSheet.create({
     height: "100%",
     borderRadius: 30,
   },
-  tipsConatiner: {
+  tipsContainer: {
     display: "flex",
     flexDirection: "row",
     backgroundColor: "#289B7C",
@@ -364,22 +391,16 @@ const styles = StyleSheet.create({
   },
 
   // Indicators container (card list)
-  indicatorsContainer: {
-    marginTop: 20,
-  },
+
   indicatorCard: {
     backgroundColor: "#F2FFFC",
     marginBottom: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    elevation: 5,
+    elevation: 3,
     padding: 5,
   },
   cardTitle: {
     color: "black",
-    fontFamily: "Inter-ExtraLight",
+    fontFamily: "Poppins-Regular",
     fontSize: 16,
     padding: 10,
   },
@@ -389,66 +410,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
-  homeButtons: {
-    width: 113,
-    backgroundColor: "#FBFBFB",
-    padding: 5,
-    borderRadius: 10,
-    justifyContent: "center",
-    alignItems: "center",
-
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    elevation: 5,
-  },
-  homeButtonsText: {
-    color: "rgba(102, 101, 101, 0.8)",
-    fontFamily: "Inter-Regular",
-  },
   interLight: {
-    fontFamily: "Inter-Light",
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22,
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  buttonOpen: {
-    backgroundColor: "#F194FF",
-  },
-  buttonClose: {
-    backgroundColor: "#2196F3",
-  },
-  textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: "center",
+    fontFamily: "Poppins-Light",
   },
 });
