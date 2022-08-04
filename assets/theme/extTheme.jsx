@@ -18,7 +18,7 @@ const FAFHTHEME = extendTheme({
       900: "#00160f",
     },
     secondary: {
-      30:"#FF9B2125",
+      30: "#FF9B2125",
       50: "#fff6da",
       100: "#ffe3ad",
       200: "#ffd17d",
@@ -29,6 +29,18 @@ const FAFHTHEME = extendTheme({
       700: "#815100",
       800: "#4e3000",
       900: "#1f0f00",
+    },
+    tertiary: {
+      50: "#f2f2f2",
+      100: "#d9d9d9",
+      200: "#bfbfbf",
+      300: "#a6a6a6",
+      400: "#8c8c8c",
+      500: "#737373",
+      600: "#f2f2f2",
+      700: "#d9d9d9",
+      800: "#d9d9d9",
+      900: "#d9d9d9",
     },
   },
   config: {
