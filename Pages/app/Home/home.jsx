@@ -11,6 +11,7 @@ import {
   HStack,
   Actionsheet,
   VStack,
+  Center,
 } from "native-base";
 import { Ionicons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
@@ -91,7 +92,7 @@ function Home({ navigation }) {
         {/* Daily activities cards */}
         <Box bg={"primary.30"} style={styles.dailyActivitiesContainer}>
           <HStack py={2}>
-            <VStack w="60%" ml={7}>
+            <VStack w="55%" ml={7}>
               <Text style={styles.activitiesTitle}>Daily Activities</Text>
               <HStack w={"100%"} justifyContent={"space-between"}>
                 <TouchableOpacity>
@@ -116,7 +117,7 @@ function Home({ navigation }) {
                 </TouchableOpacity>
               </HStack>
             </VStack>
-            <View style={{ position: "relative" }}>
+            <Center >
               <ProgressChart
                 data={data}
                 width={width * 0.4}
@@ -127,7 +128,7 @@ function Home({ navigation }) {
                 hideLegend={true}
                 barPercentage={0}
               />
-            </View>
+            </Center>
           </HStack>
 
           {/* Activities and tips container */}
