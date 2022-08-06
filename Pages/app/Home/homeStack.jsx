@@ -6,21 +6,30 @@ import AdditionalInformation from "./AdditionalInformation";
 import UploadPicture from "./Camera";
 import AddNewFood from "./AddNewFood";
 import ConfirmMeal from "./ConfirmMeal";
+import CapturedMeals from "./CapturedMeals";
+import { HomeContext } from "../../../hooks/context";
 const Stack = createStackNavigator();
 
 function HomeStack() {
+  const [meals, setMeals] = React.useState([
+    { name: "meal1" },
+    { name: "meal2" },
+  ]);
   return (
-    <Stack.Navigator screenOptions={{headerShown:false}}>
-      <Stack.Screen name="Home" component={Home} />
-      <Stack.Screen
-        name="AdditionalInformationModal"
-        component={AdditionalInformation}
-      />
-      <Stack.Screen name="RecordFood" component={RecordFood} />
-      <Stack.Screen name="UploadPicture" component={UploadPicture} />
-      <Stack.Screen name="AddNewFood" component={AddNewFood} />
-      <Stack.Screen name="ConfirmMeal" component={ConfirmMeal} />
-    </Stack.Navigator>
+    <HomeContext.Provider value={{ meals: meals, setMeals: setMeals }}>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen
+          name="AdditionalInformationModal"
+          component={AdditionalInformation}
+        />
+        <Stack.Screen name="RecordFood" component={RecordFood} />
+        <Stack.Screen name="UploadPicture" component={UploadPicture} />
+        <Stack.Screen name="AddNewFood" component={AddNewFood} />
+        <Stack.Screen name="ConfirmMeal" component={ConfirmMeal} />
+        <Stack.Screen name="CapturedMeal" component={CapturedMeals} />
+      </Stack.Navigator>
+    </HomeContext.Provider>
   );
 }
 

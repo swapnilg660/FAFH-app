@@ -6,19 +6,25 @@ import {
   Heading,
   HStack,
   Input,
-  ScrollView,
   Select,
   Text,
   useTheme,
   VStack,
 } from "native-base";
-import { Pressable } from "react-native";
+import { ScrollView, Pressable, Dimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { MaterialIcons, Ionicons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
+import { HomeContext } from "../../../hooks/context";
 
 function AddNewFood({ navigation, route }) {
   const [wasFoodSearched, setWasFoodSearched] = React.useState(false);
-  //   const { foodType } = route.params;
+  const { foodType } = route.params;
+  const { setMeals } = React.useContext(HomeContext);
+
+  // scroll view ref
+  const scrollViewRef = React.useRef();
+
+  const [searchQuery, setSearchQuery] = React.useState("");
 
   const nutritionalInfo = {
     "Calories/ serving": [300, "kcal"],
@@ -39,16 +45,19 @@ function AddNewFood({ navigation, route }) {
     "Dietary Fibre": [10, "g"],
   };
   const { colors } = useTheme();
+
+  React.useEffect(() => {
+    // call search function
+  }, [searchQuery]);
   return (
     <>
       <SafeAreaView></SafeAreaView>
-      <ScrollView>
+      <ScrollView ref={scrollViewRef}>
         <HStack
           space="3"
           alignItems="center"
           justifyContent={"space-between"}
-          my={10}
-          mx={5}
+          m={5}
         >
           <HStack alignItems={"center"}>
             <Pressable
@@ -68,102 +77,184 @@ function AddNewFood({ navigation, route }) {
               Add New Food
             </Heading>
           </HStack>
-          <Button
-            colorScheme="secondary"
-            borderRadius={"2xl"}
-            onPress={() => {
-              console.log("pressed");
-            }}
-            leftIcon={
-              <Ionicons
-                name="checkmark-circle-sharp"
-                size={24}
-                color={colors["white"]}
-              />
-            }
-          >
-            Save
-          </Button>
         </HStack>
-        <Input
-          borderColor={colors["primary"]["30"]}
-          bg={colors["primary"]["30"]}
-          m={5}
-          mt={0}
-          rounded="2xl"
-          placeholder="Name of Food"
-          style={{ fontFamily: "Poppins-Regular" }}
-          fontSize={16}
-        //   call search api here
-          onSubmitEditing={(e)=>console.log(e.nativeEvent.text)}
-        />
-        <HStack space="3" px={5} alignItems="center" mb={7}>
-          <Input
-            borderColor={colors["primary"]["30"]}
-            bg={colors["primary"]["30"]}
-            rounded="2xl"
-            placeholder="Cost"
-            style={{ fontFamily: "Poppins-Regular" }}
-            fontSize={16}
-            w={"50%"}
-            rightElement={
-              // Currency will depend on the country/location
-              <Text fontSize="lg" px={3} color={"muted.400"}>
-                R
-              </Text>
-            }
-          />
-          <Select
-            rounded="2xl"
-            placeholder="Portion Size"
-            style={{ fontFamily: "Poppins-Regular" }}
-            minWidth="45%"
-            fontSize={14}
-            bg={colors["primary"]["30"]}
-            borderColor={colors["primary"]["30"]}
-          >
-            <Select.Item label="Grammes" value="js" />
-            <Select.Item label="Ounce" value="ts" />
-            <Select.Item label="Milliliter" value="c" />
-          </Select>
-        </HStack>
-
-        {wasFoodSearched && <VStack space="5" px={6} pb={10}>
-          {Object.keys(nutritionalInfo).map((item) => {
-            return (
-              <HStack
-                key={item}
-                borderBottomColor={"muted.300"}
-                borderBottomWidth={1}
-                justifyContent={"space-between"}
-                alignItems="center"
+        {/* Search filters */}
+        <>
+          {wasFoodSearched ? (
+            <Center bg="primary.30" py={5} m={3} mx={5} rounded={"xl"}>
+              {/* Should be one of the selected search suggestion we get from autocomplete */}
+              <Heading
+                style={{ fontFamily: "Poppins-Medium" }}
+                color="primary.700"
+                textAlign={"center"}
+                px={2}
               >
-                <Text
-                  style={{ fontFamily: "Poppins-Light" }}
-                  color={"primary.700"}
-                  fontSize="md"
+                {searchQuery}
+                {/* A very long name of the food that we are looking for */}
+              </Heading>
+            </Center>
+          ) : (
+            <>
+              <Input
+                borderColor={colors["primary"]["30"]}
+                bg={colors["primary"]["30"]}
+                m={5}
+                mt={0}
+                rounded="2xl"
+                placeholder="Name of Food"
+                style={{ fontFamily: "Poppins-Regular" }}
+                fontSize={16}
+                //   call search api here
+                onChangeText={(text) => {
+                  setSearchQuery(text);
+                }}
+                onSubmitEditing={(e) => console.log(e.nativeEvent.text)}
+              />
+              <HStack space="3" px={5} alignItems="center" mb={7}>
+                <Input
+                  borderColor={colors["primary"]["30"]}
+                  bg={colors["primary"]["30"]}
+                  rounded="2xl"
+                  placeholder="Cost"
+                  style={{ fontFamily: "Poppins-Regular" }}
+                  fontSize={16}
+                  w={"50%"}
+                  rightElement={
+                    // Currency will depend on the country/location
+                    <Text fontSize="lg" px={3} color={"muted.400"}>
+                      R
+                    </Text>
+                  }
+                />
+                <Select
+                  rounded="2xl"
+                  placeholder="Portion Size"
+                  style={{ fontFamily: "Poppins-Regular" }}
+                  minWidth="45%"
+                  fontSize={14}
+                  bg={colors["primary"]["30"]}
+                  borderColor={colors["primary"]["30"]}
                 >
-                  {item}
-                </Text>
-                <HStack
-                  justifyContent={"space-between"}
-                  alignItems="baseline"
-                  bg="primary.30"
-                  rounded="sm"
-                  px={2}
-                  width={"30%"}
-                >
-                  <Text style={{ fontFamily: "Poppins-Light" }} fontSize="md">
-                    {nutritionalInfo[item][0]}
-                  </Text>
-                  <Text style={{ fontFamily: "Poppins-Light" }}>
-                    {nutritionalInfo[item][1]}
-                  </Text>
-                </HStack>
+                  <Select.Item label="Grammes" value="js" />
+                  <Select.Item label="Ounce" value="ts" />
+                  <Select.Item label="Milliliter" value="c" />
+                </Select>
               </HStack>
-            );
-          })}
-        </VStack>}
+            </>
+          )}
+        </>
+
+        {wasFoodSearched ? (
+          <VStack space="5" px={6} pb={10}>
+            {Object.keys(nutritionalInfo).map((item) => {
+              return (
+                <HStack
+                  key={item}
+                  borderBottomColor={"muted.300"}
+                  borderBottomWidth={1}
+                  justifyContent={"space-between"}
+                  alignItems="center"
+                >
+                  <Text
+                    style={{ fontFamily: "Poppins-Light" }}
+                    color={"primary.700"}
+                    fontSize="md"
+                  >
+                    {item}
+                  </Text>
+                  <HStack
+                    justifyContent={"space-between"}
+                    alignItems="baseline"
+                    bg="primary.30"
+                    rounded="sm"
+                    px={2}
+                    width={"30%"}
+                  >
+                    <Text style={{ fontFamily: "Poppins-Light" }} fontSize="md">
+                      {nutritionalInfo[item][0]}
+                    </Text>
+                    <Text style={{ fontFamily: "Poppins-Light" }}>
+                      {nutritionalInfo[item][1]}
+                    </Text>
+                  </HStack>
+                </HStack>
+              );
+            })}
+          </VStack>
+        ) : (
+          <Center>
+            <Button
+              disabled={!searchQuery.length > 0}
+              onPress={() => {
+                console.log("search query", searchQuery);
+                setWasFoodSearched(true);
+                scrollViewRef?.current?.scrollTo({
+                  animated: true,
+                  y: Dimensions.get("window").height,
+                });
+              }}
+              colorScheme={searchQuery.length > 0 ? "secondary" : "muted"}
+              _text={{ style: { fontFamily: "Poppins-Regular", fontSize: 17 } }}
+              leftIcon={
+                <MaterialIcons name="search" size={30} color={colors.white} />
+              }
+              w={"40%"}
+            >
+              Search
+            </Button>
+          </Center>
+        )}
+        {wasFoodSearched && (
+          <Center p={4}>
+            <Button.Group>
+              <Button
+                onPress={() => {
+                  setWasFoodSearched(false);
+                }}
+                _text={{
+                  style: { fontFamily: "Poppins-Regular", fontSize: 17 },
+                }}
+                leftIcon={
+                  <MaterialIcons
+                    name="youtube-searched-for"
+                    size={30}
+                    color={colors.white}
+                  />
+                }
+                w={"50%"}
+                colorScheme="secondary"
+              >
+                Search again
+              </Button>
+              <Button
+                onPress={() => {
+                  // navigation.navigate("RecordFood");
+                  setMeals((prev) => [
+                    ...prev,
+                    { name: searchQuery, nutritionalInfo: nutritionalInfo },
+                  ]);
+                  navigation.navigate("CapturedMeal", {
+                    occasion: foodType,
+                  });
+                }}
+                colorScheme="primary"
+                _text={{
+                  style: { fontFamily: "Poppins-Regular", fontSize: 17 },
+                }}
+                rightIcon={
+                  <MaterialIcons
+                    name="check-circle"
+                    size={30}
+                    color={colors.white}
+                  />
+                }
+                w={"40%"}
+              >
+                Save
+              </Button>
+            </Button.Group>
+          </Center>
+        )}
       </ScrollView>
     </>
   );

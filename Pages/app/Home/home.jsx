@@ -53,7 +53,6 @@ function Home({ navigation }) {
     const userFirstTime = JSON.parse(
       await SecureStore.getItemAsync("userFirstTime")
     );
-    console.log("useEffect:", userFirstTime);
 
     if (userFirstTime) {
       setModalVisible(true);
