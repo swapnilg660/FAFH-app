@@ -17,6 +17,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons, Ionicons } from "@expo/vector-icons";
 
 function AddNewFood({ navigation, route }) {
+  const [wasFoodSearched, setWasFoodSearched] = React.useState(false);
   //   const { foodType } = route.params;
 
   const nutritionalInfo = {
@@ -101,7 +102,7 @@ function AddNewFood({ navigation, route }) {
             borderColor={colors["primary"]["30"]}
             bg={colors["primary"]["30"]}
             rounded="2xl"
-            placeholder="Price"
+            placeholder="Cost"
             style={{ fontFamily: "Poppins-Regular" }}
             fontSize={16}
             w={"50%"}
@@ -121,13 +122,13 @@ function AddNewFood({ navigation, route }) {
             bg={colors["primary"]["30"]}
             borderColor={colors["primary"]["30"]}
           >
-            <Select.Item label="JavaScript" value="js" />
-            <Select.Item label="TypeScript" value="ts" />
-            <Select.Item label="C" value="c" />
+            <Select.Item label="Grammes" value="js" />
+            <Select.Item label="Ounce" value="ts" />
+            <Select.Item label="Milliliter" value="c" />
           </Select>
         </HStack>
 
-        <VStack space="5" px={6} pb={10}>
+        {wasFoodSearched && <VStack space="5" px={6} pb={10}>
           {Object.keys(nutritionalInfo).map((item) => {
             return (
               <HStack
@@ -162,7 +163,7 @@ function AddNewFood({ navigation, route }) {
               </HStack>
             );
           })}
-        </VStack>
+        </VStack>}
       </ScrollView>
     </>
   );

@@ -24,6 +24,11 @@ function ConfirmMeal({ navigation, route }) {
   const { width, height } = Dimensions.get("window");
 
   //   Food selection
+  //function to get food from the API
+  
+  useEffect(() => {
+  }, []);
+
   let foundFood = ["Chips", "Chicken", "Salad", "Rice", "Other"];
   const [selectedFood, setSelectedFood] = React.useState([]);
 
@@ -78,38 +83,36 @@ function ConfirmMeal({ navigation, route }) {
             >
               {foundFood.map((item, index) => {
                 return (
-                  <>
-                    <Box
-                      key={index}
-                      borderWidth={0.5}
-                      m={1}
-                      p="1"
-                      rounded="lg"
-                      w={"full"}
+                  <Box
+                    key={index}
+                    borderWidth={0.5}
+                    m={1}
+                    p="1"
+                    rounded="lg"
+                    w={"full"}
+                  >
+                    <Checkbox
+                      value={item}
+                      borderColor={"primary.600"}
+                      colorScheme="primary"
+                      style={{
+                        fontFamily: "Poppins-Light",
+                      }}
                     >
-                      <Checkbox
-                        value={item}
-                        borderColor={"primary.600"}
-                        colorScheme="primary"
-                        style={{
-                          fontFamily: "Poppins-Light",
-                        }}
-                      >
-                        {item}
-                      </Checkbox>
-                      {selectedFood.some((item) => item === "Other") &&
-                        item === "Other" && (
-                          <FormControl isRequired mb={5}>
-                            <FormControl.Label></FormControl.Label>
-                            <Input p={2} placeholder="Please specify other" />
+                      {item}
+                    </Checkbox>
+                    {selectedFood.some((item) => item === "Other") &&
+                      item === "Other" && (
+                        <FormControl>
+                          <FormControl.Label></FormControl.Label>
+                          <Input p={2} placeholder="Please specify other" />
 
-                            <FormControl.ErrorMessage>
-                              Something is wrong.
-                            </FormControl.ErrorMessage>
-                          </FormControl>
-                        )}
-                    </Box>
-                  </>
+                          <FormControl.ErrorMessage>
+                            Something is wrong.
+                          </FormControl.ErrorMessage>
+                        </FormControl>
+                      )}
+                  </Box>
                 );
               })}
             </Checkbox.Group>
