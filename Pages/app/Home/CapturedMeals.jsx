@@ -2,9 +2,11 @@ import React from "react";
 import {
   Button,
   Center,
+  FormControl,
   Heading,
   HStack,
   IconButton,
+  Input,
   ScrollView,
   Text,
   useTheme,
@@ -82,6 +84,34 @@ function CapturedMeals({ navigation, route }) {
             }}
           />
         </HStack>
+        <HStack
+          space="3"
+          mt={10}
+          justifyContent={"flex-end"}
+          alignItems="center"
+        >
+          <FormControl>
+            <Input
+              borderColor={colors["primary"]["30"]}
+              bg={colors["primary"]["30"]}
+              rounded="2xl"
+              placeholder="Total Cost"
+              style={{ fontFamily: "Poppins-Regular" }}
+              fontSize={16}
+              w={"50%"}
+              rightElement={
+                <Text px={5} pb={2} color={"muted.400"} fontSize="xl">
+                  R
+                </Text>
+              }
+            />
+            <FormControl.HelperText>
+              {
+                "This helps you track your expenses blablabla.\nWe'll keep this between us."
+              }
+            </FormControl.HelperText>
+          </FormControl>
+        </HStack>
         <Center pt={10}>
           <Button.Group>
             <Button
@@ -119,6 +149,7 @@ function CapturedMeals({ navigation, route }) {
               }}
               onPress={() => {
                 //toast meal submitted successfully
+                console.log("Food Submitted");
               }}
               colorScheme="primary"
             >

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -7,6 +7,7 @@ import {
   HStack,
   Input,
   Select,
+  Skeleton,
   Text,
   useTheme,
   VStack,
@@ -15,17 +16,22 @@ import { ScrollView, Pressable, Dimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
 import { HomeContext } from "../../../hooks/context";
+import Collapsible from "react-native-collapsible";
+import { object } from "yup";
 
 function AddNewFood({ navigation, route }) {
   const [wasFoodSearched, setWasFoodSearched] = React.useState(false);
   const { foodType } = route.params;
   const { setMeals } = React.useContext(HomeContext);
 
-  // scroll view ref
+  //display controllers
   const scrollViewRef = React.useRef();
+  const [isCollapsed, setIsCollapsed] = React.useState(true);
 
+  // food search skeleton controller
+  const [isNutritionalInfoLoaded, setIsNutritionalInfoLoaded] = useState(true);
   const [searchQuery, setSearchQuery] = React.useState("");
-
+  // dummy nutritional info data
   const nutritionalInfo = {
     "Calories/ serving": [300, "kcal"],
     Protein: [130, "g"],
@@ -44,6 +50,8 @@ function AddNewFood({ navigation, route }) {
     "Trans Fat": [10, "g"],
     "Dietary Fibre": [10, "g"],
   };
+
+  // theme settings
   const { colors } = useTheme();
 
   React.useEffect(() => {
@@ -94,12 +102,11 @@ function AddNewFood({ navigation, route }) {
               </Heading>
             </Center>
           ) : (
-            <>
+            <VStack px={5}>
               <Input
                 borderColor={colors["primary"]["30"]}
                 bg={colors["primary"]["30"]}
-                m={5}
-                mt={0}
+                my={5}
                 rounded="2xl"
                 placeholder="Name of Food"
                 style={{ fontFamily: "Poppins-Regular" }}
@@ -110,25 +117,19 @@ function AddNewFood({ navigation, route }) {
                 }}
                 onSubmitEditing={(e) => console.log(e.nativeEvent.text)}
               />
-              <HStack space="3" px={5} alignItems="center" mb={7}>
+              <HStack space="3" alignItems="center" mb={7}>
                 <Input
                   borderColor={colors["primary"]["30"]}
                   bg={colors["primary"]["30"]}
                   rounded="2xl"
-                  placeholder="Cost"
+                  placeholder="Portion Size"
                   style={{ fontFamily: "Poppins-Regular" }}
                   fontSize={16}
                   w={"50%"}
-                  rightElement={
-                    // Currency will depend on the country/location
-                    <Text fontSize="lg" px={3} color={"muted.400"}>
-                      R
-                    </Text>
-                  }
                 />
                 <Select
                   rounded="2xl"
-                  placeholder="Portion Size"
+                  placeholder="Portion Unit"
                   style={{ fontFamily: "Poppins-Regular" }}
                   minWidth="45%"
                   fontSize={14}
@@ -140,46 +141,125 @@ function AddNewFood({ navigation, route }) {
                   <Select.Item label="Milliliter" value="c" />
                 </Select>
               </HStack>
-            </>
+              <Text style={{ fontFamily: "Poppins-Light" }} fontSize="md">
+                More Search parameters
+              </Text>
+            </VStack>
           )}
         </>
 
         {wasFoodSearched ? (
-          <VStack space="5" px={6} pb={10}>
-            {Object.keys(nutritionalInfo).map((item) => {
-              return (
-                <HStack
-                  key={item}
-                  borderBottomColor={"muted.300"}
-                  borderBottomWidth={1}
-                  justifyContent={"space-between"}
-                  alignItems="center"
-                >
-                  <Text
-                    style={{ fontFamily: "Poppins-Light" }}
-                    color={"primary.700"}
-                    fontSize="md"
-                  >
-                    {item}
-                  </Text>
+          <VStack space="2" px={6} pb={10}>
+            {/* Basic nutritional information */}
+            <Heading color={"secondary.700"} style={{ fontFamily: "Poppins-Regular" }}>
+              Basic nutritional information
+            </Heading>
+
+            {isCollapsed && Object.keys(nutritionalInfo)
+              .slice(0, 5)
+              .map((item, index) => {
+                return (
                   <HStack
+                    key={index}
+                    borderBottomColor={"muted.300"}
+                    borderBottomWidth={isNutritionalInfoLoaded ? 1 : 0}
                     justifyContent={"space-between"}
-                    alignItems="baseline"
-                    bg="primary.30"
-                    rounded="sm"
-                    px={2}
-                    width={"30%"}
+                    alignItems="center"
                   >
-                    <Text style={{ fontFamily: "Poppins-Light" }} fontSize="md">
-                      {nutritionalInfo[item][0]}
+                    <Text
+                      style={{ fontFamily: "Poppins-Light" }}
+                      color={"primary.700"}
+                      fontSize="md"
+                    >
+                      {item}
                     </Text>
-                    <Text style={{ fontFamily: "Poppins-Light" }}>
-                      {nutritionalInfo[item][1]}
-                    </Text>
+                    <HStack
+                      justifyContent={"space-between"}
+                      alignItems="baseline"
+                      bg="primary.30"
+                      rounded="sm"
+                      px={2}
+                      width={"30%"}
+                    >
+                      <Text
+                        style={{ fontFamily: "Poppins-Light" }}
+                        fontSize="md"
+                      >
+                        {nutritionalInfo[item][0]}
+                      </Text>
+                      <Text style={{ fontFamily: "Poppins-Light" }}>
+                        {nutritionalInfo[item][1]}
+                      </Text>
+                    </HStack>
                   </HStack>
-                </HStack>
-              );
-            })}
+                );
+              })}
+
+            {/* Collapsible controller */}
+            <Button
+              _text={{ style: { fontFamily: "Poppins-Regular" } }}
+              colorScheme="primary"
+              onPress={() => {
+                setIsCollapsed((prev) => !prev);
+              }}
+              rightIcon={
+                <MaterialIcons
+                  name={isCollapsed ? "arrow-right" : "arrow-drop-down"}
+                  size={24}
+                  color={colors["primary"]["300"]}
+                />
+              }
+            >
+              Show All Nutritional information
+            </Button>
+
+            <Collapsible collapsed={isCollapsed}>
+              {Object.keys(nutritionalInfo).map((item) => {
+                return (
+                  <HStack
+                    key={item}
+                    borderBottomColor={"muted.300"}
+                    borderBottomWidth={isNutritionalInfoLoaded ? 1 : 0}
+                    justifyContent={"space-between"}
+                    alignItems="center"
+                  >
+                    <Skeleton
+                      isLoaded={isNutritionalInfoLoaded}
+                      my={1}
+                      h={5}
+                      rounded="md"
+                      startColor="secondary.30"
+                    >
+                      <Text
+                        style={{ fontFamily: "Poppins-Light" }}
+                        color={"primary.700"}
+                        fontSize="md"
+                      >
+                        {item}
+                      </Text>
+                    </Skeleton>
+                    <HStack
+                      justifyContent={"space-between"}
+                      alignItems="baseline"
+                      bg="primary.30"
+                      rounded="sm"
+                      px={2}
+                      width={"30%"}
+                    >
+                      <Text
+                        style={{ fontFamily: "Poppins-Light" }}
+                        fontSize="md"
+                      >
+                        {nutritionalInfo[item][0]}
+                      </Text>
+                      <Text style={{ fontFamily: "Poppins-Light" }}>
+                        {nutritionalInfo[item][1]}
+                      </Text>
+                    </HStack>
+                  </HStack>
+                );
+              })}
+            </Collapsible>
           </VStack>
         ) : (
           <Center>
