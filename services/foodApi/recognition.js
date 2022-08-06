@@ -2,30 +2,34 @@ import axios from "axios";
 
 // Gives possible food items from the image
 export const RecognisePlate = async (image, userToken) => {
-  var axios = require("axios");
-  var FormData = require("form-data");
-  // var fs = require("fs");
-  var data = new FormData();
-  data.append("image", image);
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "multipart/form-data");
+  myHeaders.append("Accept", "application/json");
+  myHeaders.append(
+    "Authorization",
+    "Bearer 58559af7a8010b3c325b79302fb1c2796ca86d73"
+  );
 
-  var config = {
-    method: "post",
-    url: "https://api.logmeal.es/v2/image/recognition/complete/v1.0?skip_types=[1,3]&language=nld",
-    headers: {
-      "Content-Type": "multipart/form-data",
-      Accept: "application/json",
-      Authorization: "Bearer 938b6d43d5aa3008bafda72bbb9bb78cbe48f076",
-    },
-    data: data,
+  var formdata = new FormData();
+  formdata.append("image", image, image.uri);
+
+  var requestOptions = {
+    method: "POST",
+    headers: myHeaders,
+    body: formdata,
+    redirect: "follow",
   };
 
-  await axios(config)
-    .then(function (response) {
-      console.log(JSON.stringify(response.data));
+  fetch(
+    "https://api.logmeal.es/v2/image/recognition/type/v1.0?skip_types=[1,3]&language=eng",
+    requestOptions
+  )
+    .then((response) => response.text())
+    .then((result) => {
+      alert(sucess);
+      alert(result);
     })
-    .catch(function (error) {
-      console.log("error getting plate: ", error);
-    });
+    .catch((error) => alert(error));
 };
 
 // When user confirms actual ingridients

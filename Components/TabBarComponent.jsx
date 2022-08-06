@@ -3,6 +3,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { HomeIcon, InsightsIcon, ProfileIcon } from "./customSvgIcon";
 import { Box, HStack, Text, useTheme } from "native-base";
+import React from "react";
 
 const IconSelector = ({ route, isFocused }) => {
   const { colors } = useTheme();
