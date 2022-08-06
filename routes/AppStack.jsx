@@ -3,8 +3,8 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 // import Home from "../Pages/app/Home/home";
 import HomeStack from "../Pages/app/Home/homeStack";
-import Profile from "../Pages/app/Profile/profile";
-import Insights from "../Pages/app/Insight/insights"; //route settings
+import InsightsStack from "../Pages/app/Insight/insightStack";
+import Profile from "../Pages/app/Profile/profile"; //route settings
 import TabBarComponent from "../Components/TabBarComponent";
 const Tab = createBottomTabNavigator();
 
@@ -19,7 +19,11 @@ function AppStack() {
         component={HomeStack}
         options={{ title: "Home" }}
       />
-      <Tab.Screen name="Insights" component={Insights} />
+      <Tab.Screen
+        name="InsightsStack"
+        component={InsightsStack}
+        options={{ title: "Insights" }}
+      />
       <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
   );

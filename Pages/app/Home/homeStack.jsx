@@ -5,6 +5,7 @@ import React from "react";
 import AdditionalInformation from "./AdditionalInformation";
 import UploadPicture from "./Camera";
 import AddNewFood from "./AddNewFood";
+import ConfirmMeal from "./ConfirmMeal";
 const Stack = createStackNavigator();
 
 function HomeStack() {
@@ -18,6 +19,7 @@ function HomeStack() {
       <Stack.Screen name="RecordFood" component={RecordFood} />
       <Stack.Screen name="UploadPicture" component={UploadPicture} />
       <Stack.Screen name="AddNewFood" component={AddNewFood} />
+      <Stack.Screen name="ConfirmMeal" component={ConfirmMeal} />
     </Stack.Navigator>
   );
 }

@@ -13,7 +13,7 @@ const IconSelector = ({ route, isFocused }) => {
   switch (route.name) {
     case "HomeStack":
       return <HomeIcon fill={color} reduceDimensions={reduceDimensions} />;
-    case "Insights":
+    case "InsightsStack":
       return <InsightsIcon fill={color} reduceDimensions={reduceDimensions} />;
     case "Profile":
       return <ProfileIcon fill={color} reduceDimensions={reduceDimensions} />;
@@ -26,7 +26,7 @@ function TabBarComponent({ state, descriptors, navigation }) {
   return (
     <HStack
       bg={"primary.50"}
-      borderTopWidth={0.5}
+      borderTopWidth={0.1}
       rounded={"xs"}
       p={1}
       borderTopColor={"primary.600"}

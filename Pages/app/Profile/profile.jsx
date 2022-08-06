@@ -1,205 +1,257 @@
-import { Button, ScrollView } from "native-base";
+import {
+  Box,
+  Button,
+  ScrollView,
+  VStack,
+  Text,
+  HStack,
+  Center,
+} from "native-base";
 import React, { useState, useEffect, useContext } from "react";
 // import styles from "react-native-animated-input/src/AnimatedInput/styles";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AuthContext from "../../../hooks/context";
-import { MaterialIcons } from "@expo/vector-icons";
-import { StyleSheet, View, Text } from "react-native";
+import {
+  MaterialIcons,
+  Foundation,
+  MaterialCommunityIcons,
+  Feather,
+  AntDesign,
+} from "@expo/vector-icons";
+import { Platform, StyleSheet, View } from "react-native";
 // import colors from assets/colors/colors.js
 import { useTheme } from "native-base";
 import { Avatar } from "react-native-paper";
 import { Card, Title, Paragraph } from "react-native-paper";
-import { Foundation } from "@expo/vector-icons";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { WeightIcon } from "../../../Components/customSvgIcon";
 
 function Profile({ navigation }) {
   const { signOut } = useContext(AuthContext);
   const { colors } = useTheme();
 
   return (
-    <SafeAreaView>
-      <View style={styles.pageContaner}>
-        <View style={styles.nameContainer}>
-          <Text style={styles.logoutButtonText}>Hi, Priya</Text>
-          <MaterialIcons
-            name="more-vert"
-            size={25}
-            color={colors["light"]["100"]}
-          />
-        </View>
-
-        {/* secondary container */}
-
-        <View style={styles.secondaryContainer}>
-          <View style={styles.avatarContainer}>
-            <Avatar.Image
-              size={120}
-              source={require("../../../assets/images/profile.png")}
-              style={styles.profileAvatar}
+    <>
+      {Platform.OS === "ios" && <SafeAreaView style={{backgroundColor:colors["primary"]["600"]}}></SafeAreaView>}
+      <ScrollView background={"primary.600"} flex={1} pt={1}>
+        <VStack space="5" m={0}>
+          <HStack
+            alignItems={"center"}
+            m={"20px"}
+            mb={"80px"}
+            justifyContent={"space-between"}
+          >
+            <Text
+              style={{ fontFamily: "Poppins-SemiBold" }}
+              color={"white"}
+              fontSize="20"
+            >
+              Hi, Priya
+            </Text>
+            <MaterialIcons
+              name="more-vert"
+              size={25}
+              color={colors["light"]["100"]}
             />
-          </View>
-          {/* First card */}
-          <Card style={styles.card}>
-            <View style={styles.cardContent}>
-              <View style={{ justifyContent: "center" }}>
-                <MaterialIcons
-                  name="quick-contacts-mail"
+          </HStack>
+
+          {/* secondary container */}
+
+          <VStack bg={"white"} height="full" p={2} borderTopRadius="3xl">
+            <View style={styles.avatarContainer}>
+              <Avatar.Image
+                size={120}
+                source={require("../../../assets/images/profile.png")}
+                style={styles.profileAvatar}
+              />
+            </View>
+            {/* First card */}
+            <HStack
+              justifyContent={"space-between"}
+              alignItems={"flex-start"}
+              p={5}
+              bg={"primary.50"}
+              shadow={2}
+              rounded={"lg"}
+              mb={5}
+            >
+              <Center>
+                <MaterialCommunityIcons
+                  name="card-account-details-outline"
                   size={24}
-                  color={colors["warning"]["500"]}
+                  color={colors["secondary"]["500"]}
                 />
-              </View>
-              <View style={{ width: "50%" }}>
-                <Text style={styles.cardLightText}>Full name</Text>
-                <Text style={styles.cardDarkText}>Priya Sing</Text>
-              </View>
-              <View
-                style={{ justifyContent: "flex-end", alignItems: "flex-end" }}
-              >
-                <Text style={styles.cardOrangeText}>05/07/1990</Text>
+              </Center>
+              <Box style={{ width: "50%" }}>
+                <Text style={{ fontFamily: "Poppins-ExtraLight" }}>
+                  Full name
+                </Text>
+                <Text style={{ fontFamily: "Poppins-Medium" }}>Priya Sing</Text>
+              </Box>
+              <VStack alignItems={"flex-end"}>
+                <Text style={{ fontFamily: "Poppins-Regular" }}>
+                  05/07/1990
+                </Text>
                 <Foundation
                   name="female-symbol"
                   size={24}
-                  color={colors["warning"]["500"]}
+                  color={colors["secondary"]["500"]}
                 />
-              </View>
-            </View>
-          </Card>
+              </VStack>
+            </HStack>
 
-          {/* second card */}
-          <Card style={styles.card}>
-            <View style={styles.cardContent}>
-              <View style={{ justifyContent: "center" }}>
+            {/* second card */}
+            <HStack
+              justifyContent={"space-between"}
+              alignItems={"flex-start"}
+              p={5}
+              bg={"primary.50"}
+              shadow={2}
+              rounded={"lg"}
+              mb={5}
+            >
+              <Center>
                 <MaterialCommunityIcons
                   name="phone"
                   size={24}
-                  color={colors["warning"]["500"]}
+                  color={colors["secondary"]["500"]}
                 />
-              </View>
-              <View style={{ width: "85%" }}>
-                <View
-                  style={{ justifyContent: "flex-end", alignItems: "flex-end" }}
+              </Center>
+              <Box /* style={{ width: "50%" }} */>
+                <Text style={{ fontFamily: "Poppins-ExtraLight" }}>
+                  Contact
+                </Text>
+                <Text style={{ fontFamily: "Poppins-Medium" }}>
+                  +27 76 255 7667
+                </Text>
+              </Box>
+              <VStack alignItems={"flex-end"}>
+                <Text style={{ fontFamily: "Poppins-Regular" }}>
+                  priyasing@gmail.com
+                </Text>
+                <Feather
+                  name="mail"
+                  size={24}
+                  color={colors["secondary"]["500"]}
+                />
+              </VStack>
+            </HStack>
+
+            {/* Third card */}
+            <HStack
+              justifyContent={"space-between"}
+              alignItems={"flex-start"}
+              p={5}
+              bg={"primary.50"}
+              shadow={2}
+              rounded={"lg"}
+              mb={5}
+            >
+              <Center>
+                <WeightIcon fill={colors["secondary"]["500"]} />
+              </Center>
+              <Box>
+                <Text style={{ fontFamily: "Poppins-ExtraLight" }}>Weight</Text>
+                <Text style={{ fontFamily: "Poppins-Medium" }}>52kg</Text>
+              </Box>
+              <Box>
+                <Text style={{ fontFamily: "Poppins-ExtraLight" }}>Height</Text>
+                <Text style={{ fontFamily: "Poppins-Medium" }}>160cm</Text>
+              </Box>
+              <VStack alignItems={"flex-end"}>
+                <Text
+                  color={"secondary.500"}
+                  style={{ fontFamily: "Poppins-Regular" }}
                 >
-                  <Text style={styles.cardOrangeText}>priyasing@gmail.com</Text>
-                </View>
-                <Text style={styles.cardLightText}>Contact</Text>
-                <Text style={styles.cardDarkText}>082 048 8989</Text>
-              </View>
-            </View>
-          </Card>
-
-          {/* Third card */}
-          <Card style={styles.card}>
-            <View style={styles.cardContent}>
-              <View style={{ justifyContent: "center" }}>
-                <MaterialCommunityIcons
-                  name="weight-kilogram"
-                  size={24}
-                  color={colors["warning"]["500"]}
+                  BMI
+                </Text>
+                <Text
+                  color={"secondary.500"}
+                  style={{ fontFamily: "Poppins-Regular" }}
+                >
+                  20.3
+                </Text>
+              </VStack>
+            </HStack>
+            {/* Fourth Card */}
+            <HStack
+              justifyContent={"flex-start"}
+              space={10}
+              alignItems={"flex-start"}
+              p={5}
+              bg={"primary.50"}
+              shadow={2}
+              rounded={"lg"}
+              mb={5}
+            >
+              <Center>
+                <MaterialIcons
+                  name="work"
+                  size={28}
+                  color={colors["secondary"]["500"]}
                 />
-              </View>
-              <View>
-                <Text style={styles.cardLightText}>Weight</Text>
-                <Text style={styles.cardDarkText}>50Kg</Text>
-              </View>
-              <View>
-                <Text style={styles.cardLightText}>Height</Text>
-                <Text style={styles.cardDarkText}>160 cm</Text>
-              </View>
-              <View>
-                <Text style={styles.cardOrangeText}>Height</Text>
-                <Text style={styles.cardOrangeText}>160 cm</Text>
-              </View>
-            </View>
-          </Card>
+              </Center>
+              <Box>
+                <Text style={{ fontFamily: "Poppins-ExtraLight" }}>
+                  Industry
+                </Text>
+                <Text style={{ fontFamily: "Poppins-Medium" }}>
+                  Information Technology
+                </Text>
+              </Box>
+            </HStack>
+            <Center>
+              <Button
+                mb={20}
+                colorScheme="danger"
+                onPress={() => signOut()}
+                rightIcon={
+                  <AntDesign name="logout" size={24} color={colors["white"]} />
+                }
+              >
+                Log out
+              </Button>
+            </Center>
+            <Button
+              colorScheme="primary"
+              onPress={ async () => {
+                var myHeaders = new Headers();
+                myHeaders.append("accept", "text/plain");
 
-          {/* Fourth Card */}
-          <Card style={styles.card}>
-            <View style={styles.cardContent}>
-              <View style={{ justifyContent: "center" }}>
-                <MaterialCommunityIcons
-                  name="phone"
-                  size={24}
-                  color={colors["warning"]["500"]}
-                />
-              </View>
-              <View style={{ width: "85%" }}>
-                <Text style={styles.cardLightText}>Blood type</Text>
-                <Text style={styles.cardDarkText}>A+</Text>
-              </View>
-            </View>
-          </Card>
-          <TouchableOpacity
-            onPress={() => signOut()}
-            style={styles.logoutButton}
-          >
-            <Text onPress={() => signOut()} style={styles.logoutButtonText}>
-              Logout
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </SafeAreaView>
+                var requestOptions = {
+                  method: "GET",
+                  headers: myHeaders,
+                  redirect: "follow",
+                };
+
+                await fetch("https://fafh-backend.herokuapp.com/fafh", requestOptions)
+                  .then((response) => response.text())
+                  .then((result) => console.log(result))
+                  .catch((error) => console.log("error", error));
+              }}
+            >
+              Primary
+            </Button>
+
+            <Center>
+              <Text color={"muted.300"} style={{ fontFamily: "Poppins-Light" }}>
+                ©4IR Pioneers 2022
+              </Text>
+            </Center>
+          </VStack>
+        </VStack>
+      </ScrollView>
+    </>
   );
 }
 
 export default React.memo(Profile);
 
 const styles = StyleSheet.create({
-  pageContaner: {
-    backgroundColor: "white",
-  },
-  nameContainer: {
-    with: "100%",
-    margin: 20,
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 80,
-  },
   avatarContainer: {
     justifyContent: "center",
     alignItems: "center",
-    positition: "relative",
     top: -50,
-  },
-  profileAvatar: {},
-
-  // secondary container
-  secondaryContainer: {
-    padding: 30,
-    paddingTop: 0,
-    width: "100%",
-    backgroundColor: "lightgrey",
-    borderRadius: 30,
-    height: "100%",
-  },
-
-  //cards list
-  card: {
-    backgroundColor: "darkblue",
-    marginBottom: 20,
-  },
-  cardContent: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    padding: 10,
-  },
-  cardLightText: {
-    fontFamily: "Inter-ExtraLight",
-    fontSize: 14,
-    color: "white",
-  },
-  cardDarkText: {
-    fontFamily: "Poppins-SemiBold",
-    fontSize: 16,
-    color:"white",
-  },
-  cardOrangeText: {
-    color: "orange",
-    fontSize: 14,
-    fontFamily: "Inter-Regular",
   },
 
   // logout button
@@ -217,3 +269,25 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
 });
+
+const clientId = "566fc69429f04271b1a6486bce4b3dae";
+const clientSecret = "d89cebc2727e4a6085e6d51978ea88bf";
+const authorize = () => {
+  let formData = new FormData();
+  formData.append("grant_type", "client_credentials");
+  formData.append("user", clientId);
+  formData.append("password", clientSecret);
+  formData.append("scope", "basic");
+
+  fetch("https://oauth.fatsecret.com/connect/token", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: formData,
+  })
+    .then((response) => response.json())
+    .then((responseData) => {
+      console.log(responseData);
+    });
+};

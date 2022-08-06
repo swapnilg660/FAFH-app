@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Box,
   Button,
@@ -116,7 +117,9 @@ function RecordFood({ navigation, route }) {
             />
           }
           // on change, query suggested foods
-          onChangeText={(text) => {console.log(text)}}
+          onChangeText={(text) => {
+            console.log(text);
+          }}
           // let them select a food and then add it to the list of selected foods
           onSubmitEditing={(e) => console.log(e.nativeEvent.text)}
         />
@@ -213,7 +216,11 @@ function RecordFood({ navigation, route }) {
                           p="2"
                           w={"100%"}
                         >
-                          <Radio value={item}>
+                          <Radio
+                            value={item}
+                            borderColor={"secondary.500"}
+                            colorScheme="secondary"
+                          >
                             <VStack>
                               <Heading
                                 color={colors["secondary"]["600"]}
@@ -376,7 +383,9 @@ function RecordFood({ navigation, route }) {
               icon={<AddFoodIcon />}
             />
             <IconButton
-              onPress={() => navigation.navigate("UploadPicture")}
+              onPress={() =>
+                navigation.navigate("UploadPicture", { foodType: foodType })
+              }
               mb="4"
               variant="solid"
               rounded="full"

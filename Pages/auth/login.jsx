@@ -23,6 +23,7 @@ import {
   useTheme,
   Checkbox,
   Spinner,
+  VStack,
 } from "native-base";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -37,7 +38,6 @@ function Login({ navigation }) {
   // UI utilities
   const [show, setShow] = useState(true);
   const { colors } = useTheme();
-  const [linkColor, setLinkColor] = useState(colors["black"][500]);
   const [feedback, setFeedback] = useState(null);
   const toast = useToast();
 
@@ -55,7 +55,6 @@ function Login({ navigation }) {
   };
 
   const handleSubmit = (data, formikActions) => {
-    
     signIn({
       ...data,
       stayLoggedIn: checked,
@@ -91,8 +90,7 @@ function Login({ navigation }) {
     // fix memory leak
     return () => {
       popInAnimation.stopAnimation();
-    }
-    
+    };
   }, []);
   return (
     <ScrollView border="2" bg={"primary.50"} safeAreaTop pt={10}>
@@ -221,37 +219,37 @@ function Login({ navigation }) {
                     </Row>
                   </Pressable>
 
-                  <Button
-                    shadow={3}
-                    size="sm"
-                    colorScheme="secondary"
-                    my={5}
-                    onPress={!isSubmitting ? handleSubmit : null}
-                  >
-                    {isSubmitting ? (
-                      <Spinner size="sm" color={"white"} />
-                    ) : (
-                      "LOGIN"
-                    )}
-                  </Button>
-                  <Pressable
-                    onPress={() => {
-                      navigation.navigate("ForgotPassword");
-                    }}
-                    onPressIn={() => {
-                      setLinkColor(colors["secondary"][500]);
-                    }}
-                  >
-                    <Text
-                      textAlign="right"
-                      style={{
-                        fontFamily: "Poppins-Regular",
-                        color: linkColor,
+                  <Center>
+                    <Button
+                      shadow={3}
+                      width="60%"
+                      colorScheme="secondary"
+                      my={5}
+                      onPress={!isSubmitting ? handleSubmit : null}
+                    >
+                      {isSubmitting ? (
+                        <Spinner size="sm" color={"white"} />
+                      ) : (
+                        "LOGIN"
+                      )}
+                    </Button>
+                  </Center>
+
+                  <Center textAlign={"right"} alignItems={"flex-end"}>
+                    <Button
+                      width={"50%"}
+                      px={0}
+                      textAlign={"right"}
+                      variant={"link"}
+                      colorScheme="secondary"
+                      onPress={() => {
+                        navigation.navigate("ForgotPassword");
                       }}
                     >
                       Forgot Password
-                    </Text>
-                  </Pressable>
+                    </Button>
+                  </Center>
+
                   <Divider my={7} bg="gray.500" />
                   <Row space="md" justifyContent={"center"} alignItems="center">
                     <Pressable

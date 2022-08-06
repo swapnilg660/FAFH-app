@@ -1,3 +1,4 @@
+import React from "react";
 import { useWindowDimensions } from "react-native";
 import { Formik } from "formik";
 import {
@@ -24,8 +25,10 @@ import ToastComponent from "../../../services/CustomToast";
 import useCountries from "use-countries";
 import CountryFlag from "react-native-country-flag";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
+import AuthContext from "../../../hooks/context";
 
 export default function AdditionalInformation({ navigation, setShowModal }) {
+  const {saveAdditionalInformation} = useContext(AuthContext);
   const { window_height } = useWindowDimensions();
   const toast = useToast();
   const initialValues = {

@@ -1,6 +1,6 @@
 import { Row, Text } from "native-base";
 import { AntDesign } from "@expo/vector-icons";
-
+import React from "react";
 function ToastComponent({ state, message }) {
   return (
     <Row

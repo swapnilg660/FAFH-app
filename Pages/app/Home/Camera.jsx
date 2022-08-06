@@ -26,7 +26,8 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import AlertComponent from "../../../Components/alert";
 
-export default function UploadPicture({ navigation }) {
+export default function UploadPicture({ navigation, route }) {
+  const { foodType } = route.params;
   const [hasPermission, setHasPermission] = useState(null);
   const cameraRef = useRef();
   const { colors } = useTheme();
@@ -127,7 +128,7 @@ export default function UploadPicture({ navigation }) {
               label: "Okay",
               onPress: () => {
                 setTimeout(() => {
-                  navigation.goBack();
+                  navigation.navigate("ConfirmMeal", { foodType: foodType,photo:photo });
                 }, 500);
               },
             },
@@ -179,7 +180,6 @@ export default function UploadPicture({ navigation }) {
                 setCurrentRatio((prev) =>
                   prev + 1 < ratio.length ? prev + 1 : 0
                 );
-                console.log(ratio[currentRatio]);
               }}
             />
           </Center>
