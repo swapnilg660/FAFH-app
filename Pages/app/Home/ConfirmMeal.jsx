@@ -76,7 +76,6 @@ function ConfirmMeal({ navigation, route }) {
             <Checkbox.Group
               defaultValue={selectedFood}
               onChange={(value) => {
-                console.log(value);
                 setSelectedFood(value);
               }}
               px={2}
