@@ -17,7 +17,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
 import { HomeContext } from "../../../hooks/context";
 import Collapsible from "react-native-collapsible";
-import { object } from "yup";
 
 function AddNewFood({ navigation, route }) {
   const [wasFoodSearched, setWasFoodSearched] = React.useState(false);

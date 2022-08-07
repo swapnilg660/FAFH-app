@@ -212,7 +212,7 @@ function Profile({ navigation }) {
                 Log out
               </Button>
             </Center>
-            <Button
+            {/* <Button
               colorScheme="primary"
               onPress={ async () => {
                 var myHeaders = new Headers();
@@ -231,7 +231,7 @@ function Profile({ navigation }) {
               }}
             >
               Primary
-            </Button>
+            </Button> */}
 
             <Center>
               <Text color={"muted.300"} style={{ fontFamily: "Poppins-Light" }}>
