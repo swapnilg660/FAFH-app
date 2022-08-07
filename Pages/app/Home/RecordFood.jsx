@@ -25,11 +25,15 @@ import {
 } from "@expo/vector-icons";
 import { Octicons } from "@expo/vector-icons";
 import { useEffect, useRef, useState } from "react";
-import { Animated, useWindowDimensions } from "react-native";
+import { Animated, StyleSheet, useWindowDimensions } from "react-native";
 import { AddFoodIcon, EmptyPlateIcon } from "../../../Components/customSvgIcon";
 import { SwiperFlatList } from "react-native-swiper-flatlist";
 import AlertComponent from "../../../Components/alert";
 import ToastComponent from "../../../services/CustomToast";
+import {
+  getFood,
+  getSuggestions,
+} from "../../../services/foodDatabase/FoodDatabase";
 function RecordFood({ navigation, route }) {
   // Fake data, we need a GET request to get this data
   const fakeCustomMeals = [9, 98, 76];
@@ -46,6 +50,10 @@ function RecordFood({ navigation, route }) {
 
   const swiperRef = useRef();
   const searchRef = useRef(null);
+  const [searchValue, setSearchValue] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+  const [food, setFood] = useState([]);
+  const [isSearch, setIsSearch] = useState(false);
 
   const [customMeal, setCustomMeal] = useState("");
 
@@ -95,6 +103,7 @@ function RecordFood({ navigation, route }) {
             {foodType}
           </Heading>
         </HStack>
+
         <Input
           // ref={SearchRef}
           getRef={(input) => {
@@ -105,7 +114,7 @@ function RecordFood({ navigation, route }) {
           m={5}
           mt={0}
           rounded="2xl"
-          placeholder="Search food/restaurant"
+          placeholder="Search food"
           style={{ fontFamily: "Poppins-Regular" }}
           fontSize={16}
           leftElement={
@@ -118,16 +127,11 @@ function RecordFood({ navigation, route }) {
           }
           // on change, query suggested foods
           onChangeText={(text) => {
-            console.log(text);
+            handleSuggest(text);
           }}
           // let them select a food and then add it to the list of selected foods
-          onSubmitEditing={(e) => console.log(e.nativeEvent.text)}
+          onSubmitEditing={(e) => handleSearch(e.nativeEvent.text)}
         />
-        {/* {
-          <Box bg="primary.400" p="5" rounded="lg">
-            {JSON.stringify(searchRef)}
-          </Box>
-        } */}
 
         {/* Tab value */}
         <HStack bg="secondary.30" m={3} rounded="full" flexWrap={"nowrap"}>
@@ -195,7 +199,9 @@ function RecordFood({ navigation, route }) {
                 fontSize={"lg"}
                 ml={-4}
               >
-                Custom Meals
+                {!isSearch
+                  ? "Custom Meals"
+                  : `Showing results for '${searchValue}'`}
               </Heading>
               {fakeCustomMeals ? (
                 <ScrollView showsVerticalScrollIndicator={false}>
@@ -206,11 +212,11 @@ function RecordFood({ navigation, route }) {
                       setCustomMeal(e);
                     }}
                   >
-                    {fakeCustomMeals.map((item) => {
+                    {fakeCustomMeals.map((item, index) => {
                       return (
                         <HStack
                           rounded={"lg"}
-                          key={item}
+                          key={index}
                           bg={colors["secondary"]["30"]}
                           mt={1}
                           p="2"
@@ -227,10 +233,10 @@ function RecordFood({ navigation, route }) {
                                 style={{ fontFamily: "Poppins-Regular" }}
                                 fontSize={"lg"}
                               >
-                                Big Bacon King Steer
+                                Burger king
                               </Heading>
                               <Text fontSize="xs" color={"muted.500"}>
-                                839 kcal, Big Bacon King Steer(Steers)
+                                I forgot what you had here
                               </Text>
                             </VStack>
                           </Radio>
@@ -265,7 +271,7 @@ function RecordFood({ navigation, route }) {
                   w={"100px"}
                   colorScheme="primary"
                   onPress={() => {
-                    console.log(customMeal);
+                    alert("Done");
                   }}
                   rounded={"lg"}
                 >
@@ -276,7 +282,7 @@ function RecordFood({ navigation, route }) {
                   rounded={"lg"}
                   colorScheme="danger"
                   onPress={() => {
-                    console.log("Canceling");
+                    alert("Canceling");
                     setCustomMeal(null);
                   }}
                 >
@@ -295,7 +301,6 @@ function RecordFood({ navigation, route }) {
                 {
                   label: "Yes, Skip",
                   onPress: () => {
-                    console.log("Skipped Meal");
                     // backend code that handles skipping meal
                     toast.show({
                       placement: "top",
