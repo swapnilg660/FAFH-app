@@ -25,6 +25,7 @@ import {
 } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AlertComponent from "../../../Components/alert";
+import { recogniseFood } from "../../../services/foodDatabase/FoodDatabase";
 
 export default function UploadPicture({ navigation, route }) {
   const { foodType } = route.params;
@@ -32,6 +33,7 @@ export default function UploadPicture({ navigation, route }) {
   const cameraRef = useRef();
   const { colors } = useTheme();
   const { winHeight, winWidth } = useWindowDimensions();
+  const [food, setFood] = useState([]);
 
   const ratio = ["16:9", "1:1", "4:3"];
   const [currentRatio, setCurrentRatio] = useState(0);
@@ -40,8 +42,15 @@ export default function UploadPicture({ navigation, route }) {
 
   let takePicture = async () => {
     if (cameraRef) {
-      let options = { quality: 0.5, base64: true, exif: true };
+      let options = {
+        quality: 0.5,
+        base64: true,
+        imageType: "jpg",
+        copyToCacheDirectory: false,
+      };
       let newPhoto = await cameraRef.current.takePictureAsync(options);
+      console.log("photo", newPhoto);
+      recogniseFood(newPhoto, setFood);
       setPhoto(newPhoto);
     }
   };
@@ -128,7 +137,10 @@ export default function UploadPicture({ navigation, route }) {
               label: "Okay",
               onPress: () => {
                 setTimeout(() => {
-                  navigation.navigate("ConfirmMeal", { foodType: foodType,photo:photo });
+                  navigation.navigate("ConfirmMeal", {
+                    foodType: foodType,
+                    photo: photo,
+                  });
                 }, 500);
               },
             },

@@ -1,6 +1,10 @@
+import mime from "mime";
+
+// Edamam api query details: https://developer.edamam.com/edamam-docs-recipe-api
 const apiId = "0ecfa796";
 const apiKey = "%206f49fee3718084681eaf706314748108";
 
+// get suggestions from Edamam api while typing in the search bar
 export const getSuggestions = (word, setSuggestions) => {
   var myHeaders = new Headers();
   myHeaders.append("Accept", "application/json");
@@ -22,6 +26,7 @@ export const getSuggestions = (word, setSuggestions) => {
     .catch((error) => console.log("error", error));
 };
 
+// get more forrd from Edamam api based on the search query
 export const getFood = (word, setFood) => {
   var myHeaders = new Headers();
   myHeaders.append("Accept", "application/json");
@@ -57,6 +62,7 @@ export const getFood = (word, setFood) => {
     .catch((error) => console.log("search error", error));
 };
 
+// get food nutritrition for the selected meal
 export const getNutrition = (params, setNutrition) => {
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
@@ -79,4 +85,23 @@ export const getNutrition = (params, setNutrition) => {
     .then((response) => response.json())
     .then((result) => setNutrition(result.totalNutrients))
     .catch((error) => console.log("error", error));
+};
+
+// recognise the food from the image
+export const recogniseFood = async (image, setFood) => {
+  const url = "http://www.dbaretna.com/api/base64/img";
+  return fetch(url, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      img: image,
+    }),
+  })
+    .then((data) => console.log("successfully sent", data))
+    .catch((error) => {
+      console.warn(error);
+    });
 };
