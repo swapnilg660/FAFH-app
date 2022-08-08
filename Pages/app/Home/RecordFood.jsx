@@ -122,7 +122,7 @@ function RecordFood({ navigation, route }) {
               style={{ paddingLeft: 10 }}
               name="search"
               size={24}
-              color={colors["black"]}
+              color={colors.muted["400"]}
             />
           }
           // on change, query suggested foods
@@ -378,6 +378,22 @@ function RecordFood({ navigation, route }) {
               },
             }}
           >
+            {/* Still need to decide */}
+            <IconButton
+              onPress={() =>
+                navigation.navigate("UploadPicture", { foodType: foodType })
+              }
+              mb="4"
+              variant="solid"
+              rounded="full"
+              icon={
+                <MaterialCommunityIcons
+                  name="barcode-scan"
+                  size={24}
+                  color={colors.white}
+                />
+              }
+            />
             <IconButton
               onPress={() =>
                 navigation.navigate("AddNewFood", { foodType: foodType })
