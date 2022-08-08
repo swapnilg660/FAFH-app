@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Image } from "react-native";
+import { View, StyleSheet, Image, Dimensions } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-
+import * as Progress from "react-native-progress";
 import {
   Text,
   useTheme,
@@ -12,8 +12,10 @@ import {
   Actionsheet,
   VStack,
   Center,
+  IconButton,
+  Heading,
 } from "native-base";
-import { Ionicons } from "@expo/vector-icons";
+import { AntDesign, Entypo, Ionicons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Avatar, Card, Title, Paragraph } from "react-native-paper";
@@ -33,6 +35,7 @@ import {
   FAFH_logo,
   RecordFoodIcon,
   StepsIcon,
+  WeightIcon,
 } from "../../../Components/customSvgIcon";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -43,6 +46,11 @@ function Home({ navigation }) {
     labels: ["Swim", "Bike", "Run"], // optional
     data: [0.4, 0.6, 0.8],
   };
+  const [waterIntake, setWaterIntake] = useState({ current: 2, goal: 5 });
+  const [stepsCounter, setStepsCounter] = useState({
+    current: waterIntake.current * 360,
+    goal: 6000,
+  });
 
   // Type of food ActionSheet variables
   const [actionSheetVisible, setActionSheetVisible] = useState(false);
@@ -74,22 +82,43 @@ function Home({ navigation }) {
   };
   useEffect(() => {
     userFirstTime();
+
     return () => {
       console.log("unmounting");
     };
   }, []);
   return (
-    <SafeAreaView>
-      <ScrollView>
-        <HStack p={2} alignItems={"center"} justifyContent={"space-around"}>
-          <FAFH_logo fill={colors.primary[600]} />
-          <Text fontSize={"2xl"} style={{ fontFamily: "Poppins-SemiBold" }}>
-            Food Away From Home
-          </Text>
-        </HStack>
+    <SafeAreaView style={{ position: "relative" }}>
+      <HStack
+        bg={"white"}
+        height={height * 0.15}
+        safeArea
+        p={2}
+        alignItems={"center"}
+        justifyContent={"space-around"}
+        position={"absolute"}
+        top={0}
+        zIndex={10}
+        width={"full"}
+        borderBottomRadius="3xl"
+        shadow={5}
+      >
+        <FAFH_logo fill={colors.primary[600]} />
+        <Text
+          color={"primary.700"}
+          fontSize={"2xl"}
+          style={{ fontFamily: "Poppins-SemiBold" }}
+        >
+          Food Away From Home
+        </Text>
+      </HStack>
+      {/* <Box position={"absolute"} top={0} bg="primary.600" width={"full"} zIndex={10} p="12" borderBottomRadius="3xl">
+        Box
+      </Box> */}
 
+      <ScrollView bg={"primary.30"} pt={height * 0.14}>
         {/* Daily activities cards */}
-        <Box bg={"primary.30"} style={styles.dailyActivitiesContainer}>
+        <Box style={styles.dailyActivitiesContainer}>
           <HStack py={2}>
             <VStack w="55%" ml={7}>
               <Text style={styles.activitiesTitle}>Daily Activities</Text>
@@ -102,7 +131,7 @@ function Home({ navigation }) {
                   <MaterialCommunityIcons
                     name="clock"
                     size={24}
-                    color={colors["warning"]["500"]}
+                    color={colors["secondary"]["500"]}
                   />
                   <Text style={styles.activitiesText}>30</Text>
                 </TouchableOpacity>
@@ -116,7 +145,7 @@ function Home({ navigation }) {
                 </TouchableOpacity>
               </HStack>
             </VStack>
-            <Center >
+            <Center>
               <ProgressChart
                 data={data}
                 width={width * 0.4}
@@ -145,7 +174,7 @@ function Home({ navigation }) {
               <Ionicons
                 name="ios-close-circle-sharp"
                 size={24}
-                color={colors["warning"]["500"]}
+                color={colors["secondary"]["500"]}
               />
             </View>
             {/* Indicators container */}
@@ -174,13 +203,53 @@ function Home({ navigation }) {
                   </View>
                 </Card.Content>
               </Box>
-              {/* second card */}
+              {/* Steps counter */}
+              <HStack
+                justifyContent={"space-between"}
+                style={{ elevation: 3 }}
+                rounded={"md"}
+                bg={"primary.50"}
+                p={2}
+                pt={3}
+                pl={3}
+                mb={5}
+              >
+                <VStack space={2} justifyContent={"space-between"}>
+                  <HStack>
+                    <StepsIcon fill={colors.secondary["500"]} />
+                    <Text
+                      style={{ fontFamily: "Poppins-Regular" }}
+                      fontSize={"16"}
+                      pl={2}
+                    >
+                      Steps counter
+                    </Text>
+                  </HStack>
+                  <Text ml={2} pt={1} style={{ fontFamily: "Poppins-Light" }}>
+                    <Heading>{stepsCounter.current}/</Heading>
+                    {stepsCounter.goal}
+                  </Text>
+                </VStack>
+                <Center mr={5}>
+                  <Progress.Circle
+                    strokeCap={"round"}
+                    showsText={true}
+                    color={colors.primary["600"]}
+                    progress={stepsCounter.current / stepsCounter.goal}
+                    size={50}
+                    formatText={(percentage) =>
+                      `${(percentage * 100).toString().substring(0, 3)}%`
+                    }
+                    textStyle={{ fontSize: 16 }}
+                  />
+                </Center>
+              </HStack>
               <Card style={styles.indicatorCard}>
                 <Title style={styles.cardTitle}>
                   <Ionicons
                     name="restaurant-outline"
                     size={20}
-                    color={colors["warning"]["500"]}
+                    color={colors["secondary"]["500"]}
                   />
                   Food
                 </Title>
@@ -244,14 +313,109 @@ function Home({ navigation }) {
                 </Actionsheet.Content>
               </Actionsheet>
 
-              {/* second card */}
+              {/* Water intake */}
+              <VStack
+                space={2}
+                style={{ elevation: 3 }}
+                rounded={"md"}
+                bg={"primary.50"}
+                p={2}
+                pt={3}
+                pl={3}
+                mb={5}
+              >
+                <HStack
+                  space={2}
+                  justifyContent={"space-between"}
+                  alignItems={"center"}
+                >
+                  <HStack>
+                    <Entypo
+                      name="cup"
+                      size={24}
+                      color={colors.secondary[500]}
+                    />
+                    <Text
+                      style={{ fontFamily: "Poppins-Regular" }}
+                      fontSize={"16"}
+                    >
+                      Water Intake
+                    </Text>
+                  </HStack>
+                  <HStack>
+                    <Button.Group>
+                      <IconButton
+                        size={"8"}
+                        rounded="full"
+                        variant="solid"
+                        icon={
+                          <AntDesign name="minus" size={24} color="white" />
+                        }
+                        onPress={() => {
+                          if (waterIntake.current > 0) {
+                            setWaterIntake({
+                              ...waterIntake,
+                              current: waterIntake.current - 1,
+                            });
+
+                            // to be removed
+                            setStepsCounter({
+                              ...stepsCounter,
+                              current: (stepsCounter.current / 2).toFixed(0),
+                            });
+                          }
+                        }}
+                      />
+                      <IconButton
+                        size={"8"}
+                        rounded="full"
+                        variant="solid"
+                        icon={<AntDesign name="plus" size={24} color="white" />}
+                        onPress={() => {
+                          if (waterIntake.current < waterIntake.goal) {
+                            setWaterIntake({
+                              ...waterIntake,
+                              current: waterIntake.current + 1,
+                            });
+
+                            // to be removed
+                            setStepsCounter({
+                              ...stepsCounter,
+                              current: stepsCounter.current * 2,
+                            });
+                          }
+                        }}
+                      />
+                    </Button.Group>
+                  </HStack>
+                </HStack>
+                <HStack justifyContent={"space-between"} alignItems={"center"}>
+                  <Text ml={2} pt={1} style={{ fontFamily: "Poppins-Light" }}>
+                    <Heading>
+                      {waterIntake.current}/{waterIntake.goal}
+                    </Heading>{" "}
+                    Glasses
+                  </Text>
+                  <View>
+                    <Progress.Bar
+                      progress={waterIntake.current / waterIntake.goal}
+                      width={120}
+                      height={8}
+                      color={colors.secondary[500]}
+                      unfilledColor={colors.secondary[100]}
+                      borderWidth={0}
+                    />
+                  </View>
+                </HStack>
+              </VStack>
+              {/* Physical activities */}
               <Card style={[styles.indicatorCard, { paddingBottom: 30 }]}>
                 <View style={styles.cardContent}>
                   <Title style={styles.cardTitle}>
                     <Ionicons
                       name="bicycle-outline"
                       size={30}
-                      color={colors["warning"]["500"]}
+                      color={colors["secondary"]["500"]}
                     />{" "}
                     Physical activity
                   </Title>
@@ -259,9 +423,6 @@ function Home({ navigation }) {
                     <Button
                       borderColor={colors["secondary"]["600"]}
                       borderWidth={0.5}
-                      // leftIcon={
-                      //   <RecordFoodIcon fill={colors["primary"]["700"]} />
-                      // }
                       colorScheme="tertiary"
                       onPress={() => {
                         Alert.alert(
@@ -292,11 +453,92 @@ function Home({ navigation }) {
                   </Card.Content>
                 </View>
               </Card>
+              {/* Body Composition */}
+              <VStack
+                space={2}
+                style={{ elevation: 3 }}
+                rounded={"md"}
+                bg={"primary.50"}
+                p={2}
+                pt={3}
+                pl={3}
+                mb={5}
+              >
+                <HStack
+                  space={2}
+                  justifyContent={"space-between"}
+                  alignItems={"center"}
+                >
+                  <HStack>
+                    <WeightIcon fill={colors["secondary"]["500"]} />
+                    <Text
+                      style={{ fontFamily: "Poppins-Regular" }}
+                      fontSize={"16"}
+                      ml={3}
+                    >
+                      Body Composition
+                    </Text>
+                  </HStack>
+                  {/* Action */}
+                  {/* <HStack>
+                    <Button.Group>
+                      <IconButton
+                        size={"8"}
+                        rounded="full"
+                        variant="solid"
+                        icon={
+                          <AntDesign name="minus" size={24} color="white" />
+                        }
+                        onPress={() => {
+                          if (waterIntake.current > 0) {
+                            setWaterIntake({
+                              ...waterIntake,
+                              current: waterIntake.current - 1,
+                            });
+
+                            // to be removed
+                            setStepsCounter({
+                              ...stepsCounter,
+                              current: (stepsCounter.current / 2).toFixed(0),
+                            });
+                          }
+                        }}
+                      />
+                      <IconButton
+                        size={"8"}
+                        rounded="full"
+                        variant="solid"
+                        icon={<AntDesign name="plus" size={24} color="white" />}
+                        onPress={() => {
+                          if (waterIntake.current < waterIntake.goal) {
+                            setWaterIntake({
+                              ...waterIntake,
+                              current: waterIntake.current + 1,
+                            });
+
+                            // to be removed
+                            setStepsCounter({
+                              ...stepsCounter,
+                              current: stepsCounter.current * 2,
+                            });
+                          }
+                        }}
+                      />
+                    </Button.Group>
+                  </HStack> */}
+                </HStack>
+                <HStack justifyContent={"space-between"} alignItems={"center"}>
+                  <Text ml={2} pt={1} style={{ fontFamily: "Poppins-Light" }}>
+                    <Heading>52 </Heading>
+                    kg
+                  </Text>
+                </HStack>
+              </VStack>
             </VStack>
           </View>
         </Box>
-        {/* Additional Information Modal */}
 
+        {/* Additional Information Modal */}
         <Modal
           animationType="slide"
           visible={modalVisible}
@@ -332,7 +574,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     width: "100%",
-    borderWidth:1
+    borderWidth: 1,
   },
   activitiesTitle: {
     fontSize: 18,

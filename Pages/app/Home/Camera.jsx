@@ -61,7 +61,6 @@ export default function UploadPicture({ navigation, route }) {
       setHasPermission(status === "granted");
     })();
 
-    console.log(ratio);
     return () => {};
   }, []);
 
