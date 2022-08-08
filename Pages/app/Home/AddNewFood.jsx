@@ -12,7 +12,7 @@ import {
   useTheme,
   VStack,
 } from "native-base";
-import { ScrollView, Pressable, Dimensions } from "react-native";
+import { ScrollView, Pressable, Dimensions,StyleSheet, useWindowDimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
 import { HomeContext } from "../../../hooks/context";
@@ -22,6 +22,7 @@ import {
   getSuggestions,
 } from "../../../services/foodDatabase/FoodDatabase";
 import { round } from "react-native-reanimated";
+import Collapsible from "react-native-collapsible";
 
 function AddNewFood({ navigation, route }) {
   const [wasFoodSearched, setWasFoodSearched] = React.useState(false);

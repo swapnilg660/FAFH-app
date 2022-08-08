@@ -127,10 +127,10 @@ function RecordFood({ navigation, route }) {
           }
           // on change, query suggested foods
           onChangeText={(text) => {
-            handleSuggest(text);
+            // handleSuggest(text);
           }}
           // let them select a food and then add it to the list of selected foods
-          onSubmitEditing={(e) => handleSearch(e.nativeEvent.text)}
+          // onSubmitEditing={(e) => handleSearch(e.nativeEvent.text)}
         />
 
         {/* Tab value */}
