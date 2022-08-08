@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import {
   Box,
   Button,
   Center,
-  Checkbox,
+  // Checkbox,
   Container,
   FormControl,
   Heading,
@@ -16,6 +16,7 @@ import {
   useTheme,
   VStack,
 } from "native-base";
+import Checkbox from "expo-checkbox";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Dimensions, Image, useWindowDimensions } from "react-native";
@@ -31,23 +32,16 @@ function ConfirmMeal({ navigation, route }) {
   //function to get food from the API
 
   let foundFood = ["Chips", "Chicken", "Salad", "Rice", "Other"];
-  let [selectedFood, setSelectedFood] = useState(
-    foundFood.reduce((o, key) => ({ ...o, [key]: "" }), {})
+
+  const [selectedFood, setSelectedFood] = useState(
+    foundFood.reduce((o, key) => ({ ...o, [key]: false }), {})
   );
+  // const [selectedFood, setSelectedFood] = useState({});
   const [userSuggestion, setUserSuggestion] = React.useState("");
   const [isSuggestedFoodLoaded, setIsSuggestedFoodLoaded] = useState(true);
   const [isOtherInvalid, setIsOtherInvalid] = useState(false);
 
-  /*ADDRESS THIS ISSUE */
-  const updateSelectedFood = (key, value) => {
-    const newSelectedFood = { ...selectedFood, [key]: value };
-    setSelectedFood(newSelectedFood);
-    // setSelectedFood(prev => ({ ...prev, [key]: value }));
-  };
-
   const handleAddMeal = () => {
-    console.log("Selected food changed [Confirm Meal]:", selectedFood);
-    // If other is selected, userSuggestion can't be null
 
     if (selectedFood.Other === true && userSuggestion === "") {
       setIsOtherInvalid(true);
@@ -60,7 +54,7 @@ function ConfirmMeal({ navigation, route }) {
       ...prev,
       {
         photo: photo,
-        name: `meal from AI ${Math.random().toString().substring(2,5)}`,
+        name: `meal from AI ${Math.random().toString().substring(2, 5)}`,
         nutritionalInfo: "nutritionalInfo we get from AI",
       },
     ]);
@@ -71,7 +65,8 @@ function ConfirmMeal({ navigation, route }) {
   };
 
   useEffect(() => {
-    console.log("[Confirm Meal] Selected Food:", selectedFood);
+    // console.log("[Confirm Meal] Selected Food:", selectedFood);
+    console.log("[Confirm Meal] selectedFood:", selectedFood);
   }, [selectedFood]);
 
   return (
@@ -122,66 +117,78 @@ function ConfirmMeal({ navigation, route }) {
             {/* Check box container */}
             <VStack alignItems={"center"} space={2}>
               {foundFood.map((item, index) => {
+                // console.log(`selectedFood[${item}]:`, selectedFood[item]);
                 return (
-                  <Box key={`${item}${index}`}>
-                    {isSuggestedFoodLoaded ? (
-                      <Box
-                        key={index}
-                        bg={"primary.30"}
-                        p={3}
-                        rounded="lg"
-                        w={width - width / 8}
-                      >
-                        <Checkbox
-                          checked={selectedFood[item] === "true"}
-                          id={item}
-                          onChange={(value) => {
-                            updateSelectedFood(item, value);
-                          }}
-                          value={item}
-                          borderColor={"primary.600"}
-                          colorScheme="primary"
-                          _text={{
-                            style: {
-                              fontFamily: "Poppins-Light",
-                            },
-                          }}
+                  <Pressable
+                    _pressed={{
+                      bg: colors.primary["100"],
+
+                      rounded: "lg",
+                    }}
+                    key={index}
+                    onPress={() =>
+                      setSelectedFood({
+                        ...selectedFood,
+                        [item]: !selectedFood[item],
+                      })
+                    }
+                  >
+                    <Box key={`${item}${index}`}>
+                      {isSuggestedFoodLoaded ? (
+                        <Box
+                          key={index}
+                          bg={"primary.30"}
+                          p={3}
+                          rounded="lg"
+                          w={width - width / 8}
                         >
-                          {item}
-                        </Checkbox>
-                        {selectedFood?.Other && item === "Other" && (
-                          <FormControl isInvalid={isOtherInvalid}>
-                            <Input
-                              value={userSuggestion}
-                              borderColor={"primary.30"}
-                              p={2}
-                              mt={2}
-                              placeholder="Please specify"
-                              fontSize={"md"}
-                              bg={"white"}
-                              onChangeText={(text) => {
-                                console.log(text);
-                                setUserSuggestion(text);
-                              }}
+                          <HStack space="3" alignItems="center">
+                            <Checkbox
+                              style={{ borderColor: colors.primary["600"] }}
+                              key={index}
+                              value={selectedFood[item]}
+                              color={
+                                selectedFood[item]
+                                  ? colors.primary["600"]
+                                  : undefined
+                              }
                             />
-                            <FormControl.ErrorMessage>
-                              <Text fontSize="xs">
-                                This can't be empty if other is checked
-                              </Text>
-                            </FormControl.ErrorMessage>
-                          </FormControl>
-                        )}
-                      </Box>
-                    ) : (
-                      <Skeleton
-                        my={1}
-                        h={10}
-                        width={(9 / 10) * width}
-                        startColor={"primary.30"}
-                        rounded="lg"
-                      />
-                    )}
-                  </Box>
+                            <Text>{item}</Text>
+                          </HStack>
+
+                          {selectedFood?.Other && item === "Other" && (
+                            <FormControl isInvalid={isOtherInvalid}>
+                              <Input
+                                value={userSuggestion}
+                                borderColor={"primary.30"}
+                                p={2}
+                                mt={2}
+                                placeholder="Please specify"
+                                fontSize={"md"}
+                                bg={"white"}
+                                onChangeText={(text) => {
+                                  setUserSuggestion(text);
+                                }}
+                              />
+                              <FormControl.ErrorMessage>
+                                <Text fontSize="xs">
+                                  This can't be empty if other is checked
+                                </Text>
+                              </FormControl.ErrorMessage>
+                            </FormControl>
+                          )}
+                        </Box>
+                      ) : (
+                        <Skeleton
+                          my={1}
+                          h={10}
+                          width={(9 / 10) * width}
+                          startColor={"primary.30"}
+                          rounded="lg"
+                        />
+                      )}
+                    </Box>
+                  </Pressable>
                 );
               })}
             </VStack>
