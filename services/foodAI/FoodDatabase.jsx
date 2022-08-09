@@ -1,12 +1,14 @@
 import mime from "mime";
 
 // Edamam api query details: https://developer.edamam.com/edamam-docs-recipe-api
-
-const apiId = "0ecfa796";
-const apiKey = "%206f49fee3718084681eaf706314748108";
+const apiId = "5568";
+const apiKey = "b2a2844668782439964f566b239de98f633e1bcf";
 
 // heroku hosting link
 const dbUrl = "https://glacial-refuge-38575.herokuapp.com";
+
+// const logmeal userToken <-- will be auto generated when user logs in
+const userToken = "03b115b63a0e62ad4133c8f51ef3e9396fcdccc3";
 
 // get suggestions from Edamam api while typing in the search bar
 export const getSuggestions = (word, setSuggestions) => {
@@ -93,6 +95,7 @@ export const getNutrition = (params, setNutrition) => {
 
 // recognise the food from the image
 export const recogniseFood = async (image, setFood) => {
+  // <-- pass another parameter for user token
   var formdata = new FormData();
   formdata.append("pic", {
     // originagl data to pass
@@ -103,6 +106,7 @@ export const recogniseFood = async (image, setFood) => {
     filepath: image.uri,
     originalFilename: image.uri.split("/").pop(),
   });
+  formdata.append("userToken", userToken);
 
   var requestOptions = {
     method: "POST",
