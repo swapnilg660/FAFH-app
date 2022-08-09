@@ -32,8 +32,8 @@ function Profile({ navigation }) {
 
   return (
     <>
-      {Platform.OS === "ios" && <SafeAreaView style={{backgroundColor:colors["primary"]["600"]}}></SafeAreaView>}
-      <ScrollView background={"primary.600"} flex={1} pt={1}>
+      {/* {Platform.OS === "ios" && <SafeAreaView style={{backgroundColor:colors["primary"]["600"]}}></SafeAreaView>} */}
+      <ScrollView background={"primary.600"} flex={1} pt={6}>
         <VStack space="5" m={0}>
           <HStack
             alignItems={"center"}
