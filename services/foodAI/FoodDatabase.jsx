@@ -1,6 +1,7 @@
 import mime from "mime";
 
 // Edamam api query details: https://developer.edamam.com/edamam-docs-recipe-api
+
 const apiId = "0ecfa796";
 const apiKey = "%206f49fee3718084681eaf706314748108";
 
