@@ -4,6 +4,9 @@ import mime from "mime";
 const apiId = "0ecfa796";
 const apiKey = "%206f49fee3718084681eaf706314748108";
 
+// heroku hosting link
+const dbUrl = "https://glacial-refuge-38575.herokuapp.com";
+
 // get suggestions from Edamam api while typing in the search bar
 export const getSuggestions = (word, setSuggestions) => {
   var myHeaders = new Headers();
@@ -89,19 +92,25 @@ export const getNutrition = (params, setNutrition) => {
 
 // recognise the food from the image
 export const recogniseFood = async (image, setFood) => {
-  const url = "http://www.dbaretna.com/api/base64/img";
-  return fetch(url, {
+  var formdata = new FormData();
+  formdata.append("pic", {
+    // originagl data to pass
+    uri: image.uri,
+    name: image.uri.split("/").pop(),
+    type: mime.getType(image.uri),
+    // customize data for FAFH backend
+    filepath: image.uri,
+    originalFilename: image.uri.split("/").pop(),
+  });
+
+  var requestOptions = {
     method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      img: image,
-    }),
-  })
-    .then((data) => console.log("successfully sent", data))
-    .catch((error) => {
-      console.warn(error);
-    });
+    body: formdata,
+    redirect: "follow",
+  };
+
+  fetch(`${dbUrl}/recogniseImage`, requestOptions)
+    .then((response) => response.json())
+    .then((result) => setFood(result.recognition_results))
+    .catch((error) => console.log("error", error));
 };

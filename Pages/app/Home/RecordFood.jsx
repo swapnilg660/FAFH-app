@@ -33,7 +33,12 @@ import ToastComponent from "../../../services/CustomToast";
 import {
   getFood,
   getSuggestions,
-} from "../../../services/foodDatabase/FoodDatabase";
+} from "../../../services/foodAI/FoodDatabase";
+import {
+  createTable,
+  getCustomMeal,
+  getDBConnection,
+} from "../../../services/localDB/localDB";
 function RecordFood({ navigation, route }) {
   // Fake data, we need a GET request to get this data
   const fakeCustomMeals = [9, 98, 76];
@@ -74,12 +79,18 @@ function RecordFood({ navigation, route }) {
 
   const { colors } = useTheme();
 
+  const getCustiomMeals = async () => {
+    // get custome meals from  db
+    
+  };
+
   useEffect(() => {
     if (stagger) {
       rotateFabForward();
     } else {
       rotateFabBackward();
     }
+    getCustiomMeals();
   }, [stagger]);
   return (
     <>

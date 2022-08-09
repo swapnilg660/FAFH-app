@@ -25,14 +25,14 @@ import { HomeContext } from "../../../hooks/context";
 function ConfirmMeal({ navigation, route }) {
   const { foodType, photo } = route.params;
   const { colors } = useTheme();
-  const { setMeals } = useContext(HomeContext);
+  const { setMeals, foundFood } = useContext(HomeContext);
   const { width, height } = Dimensions.get("window");
 
   //   Food selection
   //function to get food from the API
 
-  let foundFood = ["Chips", "Chicken", "Salad", "Rice", "Other"];
-
+  // let foundFood = ["Chips", "Chicken", "Salad", "Rice", "Other"];
+  //  i have no idea whats happening here
   const [selectedFood, setSelectedFood] = useState(
     foundFood.reduce((o, key) => ({ ...o, [key]: false }), {})
   );
@@ -42,7 +42,6 @@ function ConfirmMeal({ navigation, route }) {
   const [isOtherInvalid, setIsOtherInvalid] = useState(false);
 
   const handleAddMeal = () => {
-
     if (selectedFood.Other === true && userSuggestion === "") {
       setIsOtherInvalid(true);
       alert("Please specify the food");
@@ -96,7 +95,7 @@ function ConfirmMeal({ navigation, route }) {
         <VStack space="2" px={2}>
           <Box w={"full"} h={height / 3}>
             <Image
-              source={{ uri: "data:image/jpeg;base64," + photo.base64 }}
+              source={{ uri: photo }}
               alt="Image Preview"
               style={{
                 alignSelf: "stretch",
@@ -127,13 +126,14 @@ function ConfirmMeal({ navigation, route }) {
                     }}
                     key={index}
                     onPress={() =>
+                      // can we discuss this part of code please, i need to know how it works
                       setSelectedFood({
                         ...selectedFood,
                         [item]: !selectedFood[item],
                       })
                     }
                   >
-                    <Box key={`${item}${index}`}>
+                    <Box key={`${item.id}`}>
                       {isSuggestedFoodLoaded ? (
                         <Box
                           key={index}
@@ -142,19 +142,41 @@ function ConfirmMeal({ navigation, route }) {
                           rounded="lg"
                           w={width - width / 8}
                         >
-                          <HStack space="3" alignItems="center">
-                            <Checkbox
-                              style={{ borderColor: colors.primary["600"] }}
-                              key={index}
-                              value={selectedFood[item]}
-                              color={
-                                selectedFood[item]
-                                  ? colors.primary["600"]
-                                  : undefined
-                              }
-                            />
-                            <Text>{item}</Text>
-                          </HStack>
+                          {item.subclasses ? (
+                            item.subclasses.map((subclass, index) => (
+                              <HStack space="3" alignItems="center">
+                                <Checkbox
+                                  style={{
+                                    borderColor: colors.primary["600"],
+                                  }}
+                                  key={index}
+                                  value={selectedFood[item]}
+                                  color={
+                                    selectedFood[item]
+                                      ? colors.primary["600"]
+                                      : undefined
+                                  }
+                                />
+                                <Text>{subclass.name}</Text>
+                              </HStack>
+                            ))
+                          ) : (
+                            <HStack space="3" alignItems="center">
+                              <Checkbox
+                                style={{
+                                  borderColor: colors.primary["600"],
+                                }}
+                                key={index}
+                                value={selectedFood[item]}
+                                color={
+                                  selectedFood[item]
+                                    ? colors.primary["600"]
+                                    : undefined
+                                }
+                              />
+                              <Text>{item.name}</Text>
+                            </HStack>
+                          )}
 
                           {selectedFood?.Other && item === "Other" && (
                             <FormControl isInvalid={isOtherInvalid}>

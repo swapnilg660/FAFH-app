@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import {
   Image,
   StyleSheet,
@@ -25,7 +25,8 @@ import {
 } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AlertComponent from "../../../Components/alert";
-import { recogniseFood } from "../../../services/foodDatabase/FoodDatabase";
+import { recogniseFood } from "../../../services/foodAI/FoodDatabase";
+import { HomeContext } from "../../../hooks/context";
 
 export default function UploadPicture({ navigation, route }) {
   const { foodType } = route.params;
@@ -33,7 +34,7 @@ export default function UploadPicture({ navigation, route }) {
   const cameraRef = useRef();
   const { colors } = useTheme();
   const { winHeight, winWidth } = useWindowDimensions();
-  const [food, setFood] = useState([]);
+  const { setFoundFood } = useContext(HomeContext);
 
   const ratio = ["16:9", "1:1", "4:3"];
   const [currentRatio, setCurrentRatio] = useState(0);
@@ -44,14 +45,14 @@ export default function UploadPicture({ navigation, route }) {
     if (cameraRef) {
       let options = {
         quality: 0.5,
-        base64: true,
+        exif: true,
         imageType: "jpg",
         copyToCacheDirectory: false,
       };
       let newPhoto = await cameraRef.current.takePictureAsync(options);
       console.log("photo", newPhoto);
-      recogniseFood(newPhoto, setFood);
-      setPhoto(newPhoto);
+      recogniseFood(newPhoto, setFoundFood);
+      setPhoto(newPhoto.uri);
     }
   };
 
@@ -84,7 +85,7 @@ export default function UploadPicture({ navigation, route }) {
         <SafeAreaView></SafeAreaView>
         <VStack h={winHeight} w={winWidth} flex={1} bg={"secondary.30"}>
           <Image
-            source={{ uri: "data:image/jpeg;base64," + photo.base64 }}
+            source={{ uri: photo }}
             alt="Image Preview"
             style={{
               alignSelf: "stretch",
