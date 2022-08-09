@@ -1,6 +1,13 @@
+import mime from "mime";
+
+// Edamam api query details: https://developer.edamam.com/edamam-docs-recipe-api
 const apiId = "0ecfa796";
 const apiKey = "%206f49fee3718084681eaf706314748108";
 
+// heroku hosting link
+const dbUrl = "https://glacial-refuge-38575.herokuapp.com";
+
+// get suggestions from Edamam api while typing in the search bar
 export const getSuggestions = (word, setSuggestions) => {
   var myHeaders = new Headers();
   myHeaders.append("Accept", "application/json");
@@ -22,6 +29,7 @@ export const getSuggestions = (word, setSuggestions) => {
     .catch((error) => console.log("error", error));
 };
 
+// get more forrd from Edamam api based on the search query
 export const getFood = (word, setFood) => {
   var myHeaders = new Headers();
   myHeaders.append("Accept", "application/json");
@@ -57,6 +65,7 @@ export const getFood = (word, setFood) => {
     .catch((error) => console.log("search error", error));
 };
 
+// get food nutritrition for the selected meal
 export const getNutrition = (params, setNutrition) => {
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
@@ -78,5 +87,30 @@ export const getNutrition = (params, setNutrition) => {
   )
     .then((response) => response.json())
     .then((result) => setNutrition(result.totalNutrients))
+    .catch((error) => console.log("error", error));
+};
+
+// recognise the food from the image
+export const recogniseFood = async (image, setFood) => {
+  var formdata = new FormData();
+  formdata.append("pic", {
+    // originagl data to pass
+    uri: image.uri,
+    name: image.uri.split("/").pop(),
+    type: mime.getType(image.uri),
+    // customize data for FAFH backend
+    filepath: image.uri,
+    originalFilename: image.uri.split("/").pop(),
+  });
+
+  var requestOptions = {
+    method: "POST",
+    body: formdata,
+    redirect: "follow",
+  };
+
+  fetch(`${dbUrl}/recogniseImage`, requestOptions)
+    .then((response) => response.json())
+    .then((result) => setFood(result.recognition_results))
     .catch((error) => console.log("error", error));
 };

@@ -12,7 +12,13 @@ import {
   useTheme,
   VStack,
 } from "native-base";
-import { ScrollView, Pressable, Dimensions,StyleSheet, useWindowDimensions } from "react-native";
+import {
+  ScrollView,
+  Pressable,
+  Dimensions,
+  StyleSheet,
+  useWindowDimensions,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
 import { HomeContext } from "../../../hooks/context";
@@ -20,9 +26,15 @@ import {
   getFood,
   getNutrition,
   getSuggestions,
-} from "../../../services/foodDatabase/FoodDatabase";
+} from "../../../services/foodAI/FoodDatabase";
 import { round } from "react-native-reanimated";
 import Collapsible from "react-native-collapsible";
+import {
+  createTable,
+  getDBConnection,
+  saveMeals,
+} from "../../../services/localDB/localDB";
+import { storeCustomMeals } from "../../../services/mongoDB/foodStorage";
 
 function AddNewFood({ navigation, route }) {
   const [wasFoodSearched, setWasFoodSearched] = React.useState(false);
@@ -107,8 +119,25 @@ function AddNewFood({ navigation, route }) {
     return num.toFixed(2);
   };
 
-  React.useEffect(() => {
-  }, [searchQuery]);
+  const handleSaveMeal = () => {
+    console.log("saving meal");
+    // navigation.navigate("RecordFood");
+    setMeals((prev) => [
+      ...prev,
+      {
+        name:
+          selectedTitle.length > 30
+            ? selectedTitle.slice(0, 30) + "..."
+            : selectedTitle,
+        nutritionalInfo: nutrition,
+      },
+    ]);
+
+    // save custom meal to db
+    storeCustomMeals("Tadaa012", selectedTitle, nutrition);
+  };
+
+  React.useEffect(() => {}, [searchQuery]);
   return (
     <>
       <SafeAreaView></SafeAreaView>
@@ -297,49 +326,53 @@ function AddNewFood({ navigation, route }) {
         {wasFoodSearched ? (
           <VStack space="2" px={6} pb={10}>
             {/* Basic nutritional information */}
-            <Heading color={"secondary.700"} style={{ fontFamily: "Poppins-Regular" }}>
+            <Heading
+              color={"secondary.700"}
+              style={{ fontFamily: "Poppins-Regular" }}
+            >
               Basic nutritional information
             </Heading>
 
-            {isCollapsed && Object.keys(nutrition)
-              .slice(0, 5)
-              .map((item, index) => {
-                return (
-                  <HStack
-                    key={index}
-                    borderBottomColor={"muted.300"}
-                    borderBottomWidth={isNutritionalInfoLoaded ? 1 : 0}
-                    justifyContent={"space-between"}
-                    alignItems="center"
-                  >
-                    <Text
-                      style={{ fontFamily: "Poppins-Light" }}
-                      color={"primary.700"}
-                      fontSize="md"
-                    >
-                      {nutrition[item].label.split(",")[0]}
-                    </Text>
+            {isCollapsed &&
+              Object.keys(nutrition)
+                .slice(0, 5)
+                .map((item, index) => {
+                  return (
                     <HStack
+                      key={index}
+                      borderBottomColor={"muted.300"}
+                      borderBottomWidth={isNutritionalInfoLoaded ? 1 : 0}
                       justifyContent={"space-between"}
-                      alignItems="baseline"
-                      bg="primary.30"
-                      rounded="sm"
-                      px={2}
-                      width={"30%"}
+                      alignItems="center"
                     >
                       <Text
                         style={{ fontFamily: "Poppins-Light" }}
+                        color={"primary.700"}
                         fontSize="md"
                       >
-                        {roundToTen(nutrition[item].quantity)}
+                        {nutrition[item].label.split(",")[0]}
                       </Text>
-                      <Text style={{ fontFamily: "Poppins-Light" }}>
-                      {nutrition[item].unit}
-                      </Text>
+                      <HStack
+                        justifyContent={"space-between"}
+                        alignItems="baseline"
+                        bg="primary.30"
+                        rounded="sm"
+                        px={2}
+                        width={"30%"}
+                      >
+                        <Text
+                          style={{ fontFamily: "Poppins-Light" }}
+                          fontSize="md"
+                        >
+                          {roundToTen(nutrition[item].quantity)}
+                        </Text>
+                        <Text style={{ fontFamily: "Poppins-Light" }}>
+                          {nutrition[item].unit}
+                        </Text>
+                      </HStack>
                     </HStack>
-                  </HStack>
-                );
-              })}
+                  );
+                })}
 
             {/* Collapsible controller */}
             <Button
@@ -399,7 +432,7 @@ function AddNewFood({ navigation, route }) {
                         {roundToTen(nutrition[item].quantity)}
                       </Text>
                       <Text style={{ fontFamily: "Poppins-Light" }}>
-                      {nutrition[item].unit}
+                        {nutrition[item].unit}
                       </Text>
                     </HStack>
                   </HStack>
@@ -453,22 +486,7 @@ function AddNewFood({ navigation, route }) {
                 Search again
               </Button>
               <Button
-                onPress={() => {
-                  // navigation.navigate("RecordFood");
-                  setMeals((prev) => [
-                    ...prev,
-                    {
-                      name:
-                        selectedTitle.length > 30
-                          ? selectedTitle.slice(0, 30) + "..."
-                          : selectedTitle,
-                      nutritionalInfo: nutrition,
-                    },
-                  ]);
-                  navigation.navigate("CapturedMeal", {
-                    occasion: foodType,
-                  });
-                }}
+                onPress={() => handleSaveMeal()}
                 colorScheme="primary"
                 _text={{
                   style: { fontFamily: "Poppins-Regular", fontSize: 17 },
