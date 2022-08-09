@@ -244,6 +244,8 @@ function Home({ navigation }) {
                   />
                 </Center>
               </HStack>
+
+              {/* Record Food */}
               <Card style={styles.indicatorCard}>
                 <Title style={styles.cardTitle}>
                   <Ionicons
@@ -462,7 +464,7 @@ function Home({ navigation }) {
                 p={2}
                 pt={3}
                 pl={3}
-                mb={5}
+                mb={height * 0.2}
               >
                 <HStack
                   space={2}
