@@ -52,7 +52,7 @@ function CapturedMeals({ navigation, route }) {
                   {meal.photo ? (
                     <Image
                       source={{
-                        uri: "data:image/jpeg;base64," + meal.photo.base64,
+                        uri: meal.photo,
                       }}
                       alt="Image Preview"
                       style={{
@@ -110,7 +110,7 @@ function CapturedMeals({ navigation, route }) {
                 }}
               />
             </HStack>
-          );
+          )
         })}
         <HStack
           pl={3}
@@ -118,7 +118,7 @@ function CapturedMeals({ navigation, route }) {
           rounded="lg"
           justifyContent={"space-between"}
           alignItems={"center"}
-          my={1}
+          my={1} 
         >
           <Text style={{ fontFamily: "Poppins-Light" }}>Add More...</Text>
           <IconButton
@@ -199,6 +199,7 @@ function CapturedMeals({ navigation, route }) {
               }}
               onPress={() => {
                 //toast meal submitted successfully
+                
                 console.log("Food Submitted");
               }}
               colorScheme="primary"

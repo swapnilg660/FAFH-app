@@ -25,20 +25,16 @@ import { HomeContext } from "../../../hooks/context";
 function ConfirmMeal({ navigation, route }) {
   const { foodType, photo } = route.params;
   const { colors } = useTheme();
-  const { setMeals, foundFood } = useContext(HomeContext);
+  const { setMeals, foundFood, homeError } = useContext(HomeContext);
   const { width, height } = Dimensions.get("window");
 
+  const [displayedFood, setDisplayedFood] = useState([]);
   //   Food selection
-  //function to get food from the API
-
-  // let foundFood = ["Chips", "Chicken", "Salad", "Rice", "Other"];
   //  i have no idea whats happening here
-  const [selectedFood, setSelectedFood] = useState(
-    foundFood.reduce((o, key) => ({ ...o, [key]: false }), {})
-  );
+  const [selectedFood, setSelectedFood] = useState();
   // const [selectedFood, setSelectedFood] = useState({});
   const [userSuggestion, setUserSuggestion] = React.useState("");
-  const [isSuggestedFoodLoaded, setIsSuggestedFoodLoaded] = useState(false);
+  const [isSuggestedFoodLoaded, setIsSuggestedFoodLoaded] = useState(true);
   const [isOtherInvalid, setIsOtherInvalid] = useState(false);
 
   const handleAddMeal = () => {
@@ -53,25 +49,58 @@ function ConfirmMeal({ navigation, route }) {
       ...prev,
       {
         photo: photo,
-        name: `meal from AI ${Math.random().toString().substring(2, 5)}`,
+        name: `Meal from AI ${Math.random().toString().substring(2, 5)}`,
         nutritionalInfo: "nutritionalInfo we get from AI",
       },
     ]);
     navigation.navigate("CapturedMeal", {
       occasion: foodType,
-      photo: photo,
     });
   };
 
-  useEffect(() => {
-    // console.log("[Confirm Meal] Selected Food:", selectedFood);
-    if (foundFood.length > 0) {
+  const getFood = (foundFood) => {
+    if (foundFood?.length > 0) {
+      let newFoundFood = foundFood.slice(0, 3);
+      let subclasses = [];
+
+      var toDisplayFood = newFoundFood.map((item) => {
+        if (!item.subclasses.length > 0) {
+          return item.name;
+        } else {
+          subclasses = [
+            ...subclasses,
+            ...item.subclasses.map((subitem) => subitem.name),
+          ];
+          return item.name;
+        }
+      });
+
+      toDisplayFood = [...toDisplayFood, ...subclasses, "Other"].filter(
+        (item) => item !== undefined
+      );
+      // Capitalize all the food names
+      toDisplayFood = toDisplayFood.map(
+        (item) => item.charAt(0).toUpperCase() + item.slice(1)
+      );
+      // console.log("[ConfirmMeal.jsx] toDisplayFood: ", toDisplayFood);
+      setDisplayedFood(toDisplayFood);
+      setSelectedFood(
+        toDisplayFood.reduce((o, key) => ({ ...o, [key]: false }), {})
+      );
       setIsSuggestedFoodLoaded(true);
     } else {
-      console.log("[Confirm Meal] No suggested food found");
+      console.log("[ConfirmMeal.jsx] getFood", "no food found");
+      setIsSuggestedFoodLoaded(false);
     }
-    console.log("[ConfirmMeals.jsx] foundFood:", foundFood[0]);
-  }, [foundFood]);
+  };
+
+  useEffect(() => {
+    getFood(foundFood);
+    return () => {
+      setDisplayedFood([]);
+      setSelectedFood([]);
+    };
+  }, [foundFood, homeError]);
 
   return (
     <>
@@ -122,69 +151,50 @@ function ConfirmMeal({ navigation, route }) {
 
             {/* Check box container */}
             <VStack alignItems={"center"} space={2}>
-              {foundFood.map((item, index) => {
-                // console.log(`selectedFood[${item}]:`, selectedFood[item]);
-                return (
-                  <Pressable
-                    _pressed={{
-                      bg: colors.primary["100"],
+              {isSuggestedFoodLoaded &&
+                displayedFood.map((item, index) => {
+                  console.log(
+                    `\n${index}selectedFood[${item}]:`,
+                    selectedFood[item]
+                  );
+                  return (
+                    <Pressable
+                      _pressed={{
+                        bg: colors.primary["100"],
 
-                      rounded: "lg",
-                    }}
-                    key={index}
-                    onPress={() =>
-                      // can we discuss this part of code please, i need to know how it works
-                      setSelectedFood({
-                        ...selectedFood,
-                        [item]: !selectedFood[item],
-                      })
-                    }
-                  >
-                    <Box key={`${item.id}`}>
-                      {isSuggestedFoodLoaded ? (
+                        rounded: "lg",
+                      }}
+                      key={`${index}${index}`}
+                      onPress={() =>
+                        // can we discuss this part of code please, i need to know how it works
+                        setSelectedFood({
+                          ...selectedFood,
+                          [item]: !selectedFood[item],
+                        })
+                      }
+                    >
+                      <Box>
                         <Box
-                          key={index}
                           bg={"primary.30"}
                           p={3}
                           rounded="lg"
                           w={width - width / 8}
                         >
-                          {item.subclasses ? (
-                            item.subclasses.map((subclass, index) => (
-                              <HStack space="3" alignItems="center">
-                                <Checkbox
-                                  style={{
-                                    borderColor: colors.primary["600"],
-                                  }}
-                                  key={index}
-                                  value={selectedFood[item]}
-                                  color={
-                                    selectedFood[item]
-                                      ? colors.primary["600"]
-                                      : undefined
-                                  }
-                                />
-                                <Text>{subclass.name}</Text>
-                              </HStack>
-                            ))
-                          ) : (
-                            <HStack space="3" alignItems="center">
-                              <Checkbox
-                                style={{
-                                  borderColor: colors.primary["600"],
-                                }}
-                                key={index}
-                                value={selectedFood[item]}
-                                color={
-                                  selectedFood[item]
-                                    ? colors.primary["600"]
-                                    : undefined
-                                }
-                              />
-                              <Text>{item.name}</Text>
-                            </HStack>
-                          )}
-
+                          <HStack space="3" alignItems="center">
+                            <Checkbox
+                              style={{
+                                borderColor: colors.primary["600"],
+                              }}
+                              key={index}
+                              value={selectedFood[item]}
+                              color={
+                                selectedFood[item]
+                                  ? colors.primary["600"]
+                                  : undefined
+                              }
+                            />
+                            <Text>{item}</Text>
+                          </HStack>
                           {selectedFood?.Other && item === "Other" && (
                             <FormControl isInvalid={isOtherInvalid}>
                               <Input
@@ -207,25 +217,33 @@ function ConfirmMeal({ navigation, route }) {
                             </FormControl>
                           )}
                         </Box>
-                      ) : (
-                        <Skeleton
-                          my={1}
-                          h={10}
-                          width={(9 / 10) * width}
-                          startColor={"primary.30"}
-                          rounded="lg"
-                        />
-                      )}
-                    </Box>
-                  </Pressable>
-                );
-              })}
+                      </Box>
+                    </Pressable>
+                  );
+                })}
+              {!isSuggestedFoodLoaded &&
+                [1, 2, 3, 4].map((item, index) => (
+                  <Skeleton
+                    key={index}
+                    my={1}
+                    h={10}
+                    width={(9 / 10) * width}
+                    startColor={"primary.30"}
+                    rounded="lg"
+                  />
+                ))}
+              {homeError?.recError && <Text >Something went wrong !</Text>}
             </VStack>
-            
 
             <Center mb={5}>
               <Button.Group>
-                <Button width={"40%"} colorScheme="danger">
+                <Button
+                  onPress={() => {
+                    navigation.goBack();
+                  }}
+                  width={"40%"}
+                  colorScheme="danger"
+                >
                   Cancel
                 </Button>
                 <Button

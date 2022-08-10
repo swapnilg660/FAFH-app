@@ -16,8 +16,11 @@ function HomeStack() {
     { name: "meal2" },
   ]);
   const [foundFood, setFoundFood] = React.useState([]);
+  const [homeError, setError] = React.useState({});
   return (
-    <HomeContext.Provider value={{ meals, setMeals, foundFood, setFoundFood }}>
+    <HomeContext.Provider
+      value={{ meals, setMeals, foundFood, setFoundFood, homeError, setError }}
+    >
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen

@@ -1,14 +1,14 @@
 import mime from "mime";
+import { Platform } from "react-native";
 
 // Edamam api query details: https://developer.edamam.com/edamam-docs-recipe-api
-const apiId = "5568";
-const apiKey = "b2a2844668782439964f566b239de98f633e1bcf";
-
+const apiId = "0ecfa796";
+const apiKey = "6f49fee3718084681eaf706314748108";
 // heroku hosting link
 const dbUrl = "https://glacial-refuge-38575.herokuapp.com";
 
 // const logmeal userToken <-- will be auto generated when user logs in
-const userToken = "03b115b63a0e62ad4133c8f51ef3e9396fcdccc3";
+const userToken = "cbae9560dffdd395d2fd75b0b31fbe598cd350ec";
 
 // get suggestions from Edamam api while typing in the search bar
 export const getSuggestions = (word, setSuggestions) => {
@@ -32,7 +32,7 @@ export const getSuggestions = (word, setSuggestions) => {
     .catch((error) => console.log("error", error));
 };
 
-// get more forrd from Edamam api based on the search query
+// get more food from Edamam api based on the search query
 export const getFood = (word, setFood) => {
   var myHeaders = new Headers();
   myHeaders.append("Accept", "application/json");
@@ -55,7 +55,7 @@ export const getFood = (word, setFood) => {
       hints.map((hint) => {
         let store = {};
         store["id"] = hint.food.foodId;
-        store["label"] = hint.food.label.split(",")[0];
+        store["label"] = hint.food.label;
         store["energy"] = hint.food.nutrients.ENERC_KCAL + " kcal";
         store["protein"] = hint.food.nutrients.PROCNT + " g";
         store["fat"] = hint.food.nutrients.FAT + " g";
@@ -94,14 +94,16 @@ export const getNutrition = (params, setNutrition) => {
 };
 
 // recognise the food from the image
-export const recogniseFood = async (image, setFood) => {
+export const recogniseFood = async (image, setFood, setError) => {
+  // get current platform
+  const platform = Platform.OS;
   // <-- pass another parameter for user token
   var formdata = new FormData();
   formdata.append("pic", {
     // originagl data to pass
     uri: image.uri,
     name: image.uri.split("/").pop(),
-    type: mime.getType(image.uri),
+    type: platform === "android" ? mime.getType(image.uri) : "jpeg",
     // customize data for FAFH backend
     filepath: image.uri,
     originalFilename: image.uri.split("/").pop(),
@@ -117,5 +119,8 @@ export const recogniseFood = async (image, setFood) => {
   fetch(`${dbUrl}/recogniseImage`, requestOptions)
     .then((response) => response.json())
     .then((result) => setFood(result.recognition_results))
-    .catch((error) => console.log("error", error));
+    .catch((error) => {
+      console.log("[FoodDatabase.jsx] recogniseFoodError:", error);
+      setError({ recError: "Error in recognizing food !" });
+    });
 };
