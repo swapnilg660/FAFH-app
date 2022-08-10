@@ -98,6 +98,7 @@ export default function App() {
   return (
     <NativeBaseProvider theme={FAFHTHEME}>
       <AuthContext.Provider value={contextData}>
+        
         <NavigationContainer>
           {userData.userToken == null ? <AuthStack /> : <AppStack />}
         </NavigationContainer>

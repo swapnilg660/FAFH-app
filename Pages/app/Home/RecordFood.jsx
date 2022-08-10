@@ -25,15 +25,13 @@ import {
 } from "@expo/vector-icons";
 import { Octicons } from "@expo/vector-icons";
 import { useEffect, useRef, useState } from "react";
-import { Animated, StyleSheet, useWindowDimensions } from "react-native";
+import { Animated, Image, StyleSheet, useWindowDimensions } from "react-native";
 import { AddFoodIcon, EmptyPlateIcon } from "../../../Components/customSvgIcon";
 import { SwiperFlatList } from "react-native-swiper-flatlist";
 import AlertComponent from "../../../Components/alert";
 import ToastComponent from "../../../services/CustomToast";
-import {
-  getFood,
-  getSuggestions,
-} from "../../../services/foodAI/FoodDatabase";
+import noFood from "../../../assets/images/noFood.png";
+import { getFood, getSuggestions } from "../../../services/foodAI/FoodDatabase";
 import {
   createTable,
   getCustomMeal,
@@ -81,7 +79,6 @@ function RecordFood({ navigation, route }) {
 
   const getCustiomMeals = async () => {
     // get custome meals from  db
-    
   };
 
   useEffect(() => {
@@ -96,7 +93,7 @@ function RecordFood({ navigation, route }) {
     <>
       <SafeAreaView></SafeAreaView>
       <ScrollView flex={1} h={height}>
-        <HStack space="3" alignItems="center" my={10} mx={5}>
+        <HStack space="3" alignItems="center" my={6} mx={5}>
           <Pressable
             onPress={() => {
               navigation.goBack();
@@ -115,7 +112,7 @@ function RecordFood({ navigation, route }) {
           </Heading>
         </HStack>
 
-        <Input
+        {/* <Input
           // ref={SearchRef}
           getRef={(input) => {
             searchRef = input;
@@ -142,10 +139,16 @@ function RecordFood({ navigation, route }) {
           }}
           // let them select a food and then add it to the list of selected foods
           // onSubmitEditing={(e) => handleSearch(e.nativeEvent.text)}
-        />
+        /> */}
 
         {/* Tab value */}
-        <HStack bg="secondary.30" m={3} rounded="full" flexWrap={"nowrap"}>
+        <HStack
+          bg="secondary.30"
+          m={3}
+          mt={0}
+          rounded="full"
+          flexWrap={"nowrap"}
+        >
           <Pressable
             w={"50%"}
             onPress={() => {
@@ -193,6 +196,7 @@ function RecordFood({ navigation, route }) {
         {/* Custom meal Tab */}
 
         <SwiperFlatList
+          // style={{ height:600 }}
           onMomentumScrollEnd={({ index }) => {
             if (index) {
               setTabValue("Skip Meal");
@@ -203,9 +207,9 @@ function RecordFood({ navigation, route }) {
           }}
           ref={swiperRef}
         >
-          <Box width={width} p={5}>
-            <Box p={2} flex={1} rounded="lg">
-              <Heading
+          <Box width={width} flex={1} height={500}>
+            <Box flex={1} rounded="lg" >
+              {/* <Heading
                 style={{ fontFamily: "Poppins-Medium" }}
                 fontSize={"lg"}
                 ml={-4}
@@ -213,59 +217,65 @@ function RecordFood({ navigation, route }) {
                 {!isSearch
                   ? "Custom Meals"
                   : `Showing results for '${searchValue}'`}
-              </Heading>
-              {fakeCustomMeals ? (
-                <ScrollView showsVerticalScrollIndicator={false}>
-                  <Radio.Group
-                    name="CustomMealsRadioGroup"
-                    value={customMeal}
-                    onChange={(e) => {
-                      setCustomMeal(e);
-                    }}
-                  >
-                    {fakeCustomMeals.map((item, index) => {
-                      return (
-                        <HStack
-                          rounded={"lg"}
-                          key={index}
-                          bg={colors["secondary"]["30"]}
-                          mt={1}
-                          p="2"
-                          w={"100%"}
-                        >
-                          <Radio
-                            value={item}
-                            borderColor={"secondary.500"}
-                            colorScheme="secondary"
+              </Heading> */}
+              {
+                /* fakeCustomMeals */ false ? (
+                  <ScrollView showsVerticalScrollIndicator={false}>
+                    <Radio.Group
+                      name="CustomMealsRadioGroup"
+                      value={customMeal}
+                      onChange={(e) => {
+                        setCustomMeal(e);
+                      }}
+                    >
+                      {fakeCustomMeals.map((item, index) => {
+                        return (
+                          <HStack
+                            rounded={"lg"}
+                            key={index}
+                            bg={colors["secondary"]["30"]}
+                            mt={1}
+                            p="2"
+                            w={"100%"}
                           >
-                            <VStack>
-                              <Heading
-                                color={colors["secondary"]["600"]}
-                                style={{ fontFamily: "Poppins-Regular" }}
-                                fontSize={"lg"}
-                              >
-                                Burger king
-                              </Heading>
-                              <Text fontSize="xs" color={"muted.500"}>
-                                I forgot what you had here
-                              </Text>
-                            </VStack>
-                          </Radio>
-                        </HStack>
-                      );
-                    })}
-                  </Radio.Group>
-                </ScrollView>
-              ) : (
-                <Center bg="secondary.30" p="10" rounded={"full"} mt={20}>
-                  <EmptyPlateIcon
-                    width={250}
-                    height={150}
-                    background={colors["muted"]["200"]}
-                    fill={colors["secondary"]["100"]}
-                  />
-                </Center>
-              )}
+                            <Radio
+                              value={item}
+                              borderColor={"secondary.500"}
+                              colorScheme="secondary"
+                            >
+                              <VStack>
+                                <Heading
+                                  color={colors["secondary"]["600"]}
+                                  style={{ fontFamily: "Poppins-Regular" }}
+                                  fontSize={"lg"}
+                                >
+                                  Burger king
+                                </Heading>
+                                <Text fontSize="xs" color={"muted.500"}>
+                                  I forgot what you had here
+                                </Text>
+                              </VStack>
+                            </Radio>
+                          </HStack>
+                        );
+                      })}
+                    </Radio.Group>
+                  </ScrollView>
+                ) : (
+                  <Center
+                    p="1"
+                    height={"100%"}
+                    weight={"full"}
+                    rounded={"full"}
+                  >
+                    {/* display Image from assets/images/noFood.png */}
+                    <Image
+                      source={require("../../../assets/images/noFood.png")}
+                      style={{ width: "80%", height: "70%" }}
+                    />
+                  </Center>
+                )
+              }
             </Box>
 
             {/* Confirm chosen custom meal */}

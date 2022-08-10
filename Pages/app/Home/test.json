@@ -1,0 +1,78 @@
+[
+  {
+    "id": 1201,
+    "name": "quince",
+    "prob": 0.6189050674438477,
+    "subclasses": [
+      {
+        "id": 2724,
+        "name": "quince cheese",
+        "prob": 0.6189050674438477
+      }
+    ]
+  },
+  {
+    "id": 1214,
+    "name": "pear",
+    "prob": 0.05031788349151611,
+    "subclasses": [
+      {
+        "id": 2728,
+        "name": "baked pears",
+        "prob": 0.05031788349151611
+      }
+    ]
+  },
+  {
+    "id": 1253,
+    "name": "apple",
+    "prob": 0.025844871997833252,
+    "subclasses": [
+      {
+        "id": 384,
+        "name": "baked apple with cinnamon",
+        "prob": 0.004764556884765625
+      },
+      {
+        "id": 235,
+        "name": "porridge with apple and cinnamon",
+        "prob": 0.0029277801513671875
+      },
+      {
+        "id": 1933,
+        "name": "oatmeal porridge",
+        "prob": 0.000675201416015625
+      }
+    ]
+  },
+  {
+    "id": 439,
+    "name": "jelly",
+    "prob": 0.012769844383001328,
+    "subclasses": [
+      {
+        "id": 2508,
+        "name": "unsweetened jelly",
+        "prob": 0.012769844383001328
+      }
+    ]
+  },
+  {
+    "id": 1186,
+    "name": "kiwi",
+    "prob": 0.005542561411857605,
+    "subclasses": [
+      {
+        "id": 2713,
+        "name": "dried kiwi",
+        "prob": 0.005542561411857605
+      }
+    ]
+  },
+  {
+    "id": 1270,
+    "name": "carambolas",
+    "prob": 0.005266964435577393,
+    "subclasses": []
+  }
+]

@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import {
   Image,
+  ImageBackground,
+  Platform,
   StyleSheet,
   Text,
   useWindowDimensions,
@@ -27,6 +29,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import AlertComponent from "../../../Components/alert";
 import { recogniseFood } from "../../../services/foodAI/FoodDatabase";
 import { HomeContext } from "../../../hooks/context";
+import foodBg from "../../../assets/images/foodBg.jpg";
+import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
 
 export default function UploadPicture({ navigation, route }) {
   const { foodType } = route.params;
@@ -34,25 +38,60 @@ export default function UploadPicture({ navigation, route }) {
   const cameraRef = useRef();
   const { colors } = useTheme();
   const { winHeight, winWidth } = useWindowDimensions();
-  const { setFoundFood } = useContext(HomeContext);
+  const { setFoundFood,setError } = useContext(HomeContext);
 
   const ratio = ["16:9", "1:1", "4:3"];
   const [currentRatio, setCurrentRatio] = useState(0);
   const [photo, setPhoto] = useState(null);
+  const [photoToDisplay, setPhotoToDisplay] = useState(null);
   const [modal, setModal] = useState(false);
 
   let takePicture = async () => {
     if (cameraRef) {
+      // get current pLatform
+      let platform = Platform.OS;
+      console.log(platform);
+      // get current ratio
+
       let options = {
-        quality: 0.5,
+        quality: 0.001,
         exif: true,
         imageType: "jpg",
         copyToCacheDirectory: false,
       };
+
+      let options2 = {
+        quality: 1,
+        base64: true,
+        exif: false,
+      };
+
       let newPhoto = await cameraRef.current.takePictureAsync(options);
-      // console.log("[Camera.jsx] photo", newPhoto);
-      recogniseFood(newPhoto, setFoundFood);
-      setPhoto(newPhoto.uri);
+      
+      console.log(
+        "[Camera.jsx] OLD photo height: ",
+        newPhoto.height,
+        " width: ",
+        newPhoto.width
+      );
+
+      const resizedImage = await manipulateAsync(
+        newPhoto.uri,
+        [{ resize: { height: 3840, width: 2160 } }],
+        { compress: 0.2, format: SaveFormat.JPEG }
+      );
+      setPhoto(resizedImage);
+      console.log(
+        "[Camera.jsx] OLD photo height: ",
+        resizedImage.height,
+        " width: ",
+        resizedImage.width
+      );
+
+      let newPhotoToDisplay = await cameraRef.current.takePictureAsync(
+        options2
+      );
+      setPhotoToDisplay(newPhotoToDisplay);
     }
   };
 
@@ -63,7 +102,7 @@ export default function UploadPicture({ navigation, route }) {
     })();
 
     return () => {};
-  }, []);
+  }, [photo]);
 
   if (hasPermission === null) {
     return <View />;
@@ -72,25 +111,42 @@ export default function UploadPicture({ navigation, route }) {
     return <Text>No access to camera</Text>;
   }
 
-  if (photo) {
+  if (photo && photoToDisplay) {
     let savePhoto = async () => {
       // save picture to the db here
+      // recogniseFood(photo, setFoundFood);
+      //navigate to ConfirmMeal screen
+console.log("[Camera.jsx] recognise photo: ", photo);
+      recogniseFood(photo, setFoundFood,setError);
       setModal(true);
     };
     let retakePhoto = async () => {
       setPhoto(null);
+      setPhotoToDisplay(null);
+      setFoundFood([]);
+
     };
+
     return (
       <>
-        <VStack h={winHeight} w={winWidth} flex={1} safeAreaTop >
+        <ImageBackground
+          source={foodBg}
+          style={{
+            flex: 1,
+            padding: 0,
+            margin: 0,
+          }}
+        >
           <Image
-            source={{ uri: photo }}
+            source={{ uri: "data:image/jpeg;base64," + photoToDisplay.base64 }}
             alt="Image Preview"
             style={{
-              alignSelf: "stretch",
+              width: "100%",
+              height: "100%",
               flex: 1,
             }}
           />
+
           <Center position={"absolute"} bottom={0} w={"100%"}>
             <Button.Group m={1}>
               <Button
@@ -125,7 +181,7 @@ export default function UploadPicture({ navigation, route }) {
               </Button>
             </Button.Group>
           </Center>
-        </VStack>
+        </ImageBackground>
         <AlertComponent
           setModalVisible={setModal}
           modalVisible={modal}
@@ -138,7 +194,7 @@ export default function UploadPicture({ navigation, route }) {
                 setTimeout(() => {
                   navigation.navigate("ConfirmMeal", {
                     foodType: foodType,
-                    photo: photo,
+                    photo: "data:image/jpeg;base64," + photoToDisplay.base64,
                   });
                 }, 500);
               },
