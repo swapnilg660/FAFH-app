@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState,useContext, useEffect } from "react";
 import { View, StyleSheet, Image, Dimensions } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import * as Progress from "react-native-progress";
@@ -38,6 +38,7 @@ import {
   WeightIcon,
 } from "../../../Components/customSvgIcon";
 import { SafeAreaView } from "react-native-safe-area-context";
+import AuthContext from "../../../hooks/context";
 
 function Home({ navigation }) {
   const { colors } = useTheme();
@@ -57,6 +58,7 @@ function Home({ navigation }) {
 
   // Additional Information Modal
   const [modalVisible, setModalVisible] = useState(false);
+  const {userToken} = useContext(AuthContext);
   const userFirstTime = async () => {
     const userFirstTime = JSON.parse(
       await SecureStore.getItemAsync("userFirstTime")

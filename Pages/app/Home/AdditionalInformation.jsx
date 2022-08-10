@@ -26,9 +26,10 @@ import useCountries from "use-countries";
 import CountryFlag from "react-native-country-flag";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import AuthContext from "../../../hooks/context";
+import { updateUser } from "../../../services/mongoDB/users";
 
 export default function AdditionalInformation({ navigation, setShowModal }) {
-  const {saveAdditionalInformation} = useContext(AuthContext);
+  const { saveAdditionalInformation, userToken } = useContext(AuthContext);
   const { window_height } = useWindowDimensions();
   const toast = useToast();
   const initialValues = {
@@ -43,6 +44,7 @@ export default function AdditionalInformation({ navigation, setShowModal }) {
     console.log(data);
     saveAdditionalInformation({ ...data })
       .then((res) => {
+        updateUser(userToken, data);
         formikAction.setSubmitting(false);
         formikAction.resetForm();
         // close the modal on success
