@@ -37,6 +37,7 @@ import { Foundation } from "@expo/vector-icons";
 
 import ToastComponent from "../../services/CustomToast";
 import { Animated, Button as RnButton } from "react-native";
+import { mongoCreateUser } from "../../services/mongoDB/users";
 
 function Register({ navigation }) {
   //Animations
@@ -68,6 +69,7 @@ function Register({ navigation }) {
   const [show, setShow] = useState(true);
   const [feedback, setFeedback] = useState(null);
   const toast = useToast();
+  const [token, setToken] = useState(null);
 
   //form states
   const initialValues = {
@@ -90,7 +92,10 @@ function Register({ navigation }) {
     signUp({
       ...data,
       stayLoggedIn: true,
+      setToken,
     }).then((res) => {
+      
+      mongoCreateUser(data);
       formikActions.setSubmitting(false);
       setFeedback(res);
       toast.show({

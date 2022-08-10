@@ -25,15 +25,36 @@ import { Avatar } from "react-native-paper";
 import { Card, Title, Paragraph } from "react-native-paper";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { WeightIcon } from "../../../Components/customSvgIcon";
+import { getUser } from "../../../services/mongoDB/users";
 
 function Profile({ navigation }) {
-  const { signOut } = useContext(AuthContext);
+  const { signOut, userToken } = useContext(AuthContext);
   const { colors } = useTheme();
+  const [user, setUser] = useState({});
+
+  const getuserData = async () => {
+    await getUser()
+      .then((res) => {
+        console.log("userData:", res);
+        setUser(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    getuserData();
+  }, []);
 
   return (
     <>
-      {/* {Platform.OS === "ios" && <SafeAreaView style={{backgroundColor:colors["primary"]["600"]}}></SafeAreaView>} */}
-      <ScrollView background={"primary.600"} flex={1} pt={6}>
+      {Platform.OS === "ios" && (
+        <SafeAreaView
+          style={{ backgroundColor: colors["primary"]["600"] }}
+        ></SafeAreaView>
+      )}
+      <ScrollView background={"primary.600"} flex={1} pt={1}>
         <VStack space="5" m={0}>
           <HStack
             alignItems={"center"}
@@ -46,7 +67,7 @@ function Profile({ navigation }) {
               color={"white"}
               fontSize="20"
             >
-              Hi, Priya
+              Hi, {user?.fullName?.split(" ")[0]}
             </Text>
             <MaterialIcons
               name="more-vert"
@@ -86,11 +107,13 @@ function Profile({ navigation }) {
                 <Text style={{ fontFamily: "Poppins-ExtraLight" }}>
                   Full name
                 </Text>
-                <Text style={{ fontFamily: "Poppins-Medium" }}>Priya Sing</Text>
+                <Text style={{ fontFamily: "Poppins-Medium" }}>
+                  {user?.fullName}
+                </Text>
               </Box>
               <VStack alignItems={"flex-end"}>
                 <Text style={{ fontFamily: "Poppins-Regular" }}>
-                  05/07/1990
+                  {user?.dateOfBirth}
                 </Text>
                 <Foundation
                   name="female-symbol"
@@ -122,12 +145,12 @@ function Profile({ navigation }) {
                   Contact
                 </Text>
                 <Text style={{ fontFamily: "Poppins-Medium" }}>
-                  +27 76 255 7667
+                  {user?.phoneNumber}
                 </Text>
               </Box>
               <VStack alignItems={"flex-end"}>
                 <Text style={{ fontFamily: "Poppins-Regular" }}>
-                  priyasing@gmail.com
+                  {user?.email}
                 </Text>
                 <Feather
                   name="mail"
@@ -152,11 +175,15 @@ function Profile({ navigation }) {
               </Center>
               <Box>
                 <Text style={{ fontFamily: "Poppins-ExtraLight" }}>Weight</Text>
-                <Text style={{ fontFamily: "Poppins-Medium" }}>52kg</Text>
+                <Text style={{ fontFamily: "Poppins-Medium" }}>
+                  {user ? user?.weight : "--"} {user ? user?.weightUnit : "--"}
+                </Text>
               </Box>
               <Box>
                 <Text style={{ fontFamily: "Poppins-ExtraLight" }}>Height</Text>
-                <Text style={{ fontFamily: "Poppins-Medium" }}>160cm</Text>
+                <Text style={{ fontFamily: "Poppins-Medium" }}>
+                  {user ? user?.height : "--"} {user ? user?.heightUnit : "--"}
+                </Text>
               </Box>
               <VStack alignItems={"flex-end"}>
                 <Text

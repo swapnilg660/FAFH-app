@@ -1,5 +1,6 @@
 import * as SecureStore from "expo-secure-store";
 import firebase from "firebase";
+import { mongoCreateUser } from "./mongoDB/users";
 // import "react-toastify/dist/ReactToastify.css";
 
 function WriteData(userId, Fname, Sname, Email, Photo) {
@@ -45,6 +46,7 @@ export const signIn = async (data) => {
   return token;
 };
 
+
 export const signUp = async (data) => {
   //register user and sign them in then
   // alert(data);
@@ -55,12 +57,17 @@ export const signUp = async (data) => {
       .createUserWithEmailAndPassword(data?.email, data?.password)
       .then(async (res) => {
         token = res.user.uid;
+        
         // alert("Sign Up Successful");
         // WriteData(userId, Fname, Sname, Email, Photo)
         if (data.stayLoggedIn) {
-          await SecureStore.setItemAsync("userToken", res.user.uid);
+          await SecureStore.setItemAsync(
+            "userToken",
+            JSON.stringify(token)
+          );
           await SecureStore.setItemAsync("userFirstTime", "true");
         }
+        
       })
       .catch((error) => {
         //will write code for error

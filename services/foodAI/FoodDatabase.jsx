@@ -4,6 +4,7 @@ import { Platform } from "react-native";
 // Edamam api query details: https://developer.edamam.com/edamam-docs-recipe-api
 const apiId = "0ecfa796";
 const apiKey = "6f49fee3718084681eaf706314748108";
+
 // heroku hosting link
 const dbUrl = "https://glacial-refuge-38575.herokuapp.com";
 
@@ -27,6 +28,7 @@ export const getSuggestions = (word, setSuggestions) => {
   )
     .then((response) => response.json())
     .then((result) => {
+      console.log(result);
       setSuggestions(result.slice(0, 5));
     })
     .catch((error) => console.log("error", error));
@@ -124,3 +126,5 @@ export const recogniseFood = async (image, setFood, setError) => {
       setError({ recError: "Error in recognizing food !" });
     });
 };
+
+
