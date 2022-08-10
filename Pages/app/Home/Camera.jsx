@@ -50,7 +50,7 @@ export default function UploadPicture({ navigation, route }) {
         copyToCacheDirectory: false,
       };
       let newPhoto = await cameraRef.current.takePictureAsync(options);
-      console.log("photo", newPhoto);
+      // console.log("[Camera.jsx] photo", newPhoto);
       recogniseFood(newPhoto, setFoundFood);
       setPhoto(newPhoto.uri);
     }
@@ -82,8 +82,7 @@ export default function UploadPicture({ navigation, route }) {
     };
     return (
       <>
-        <SafeAreaView></SafeAreaView>
-        <VStack h={winHeight} w={winWidth} flex={1} bg={"secondary.30"}>
+        <VStack h={winHeight} w={winWidth} flex={1} safeAreaTop >
           <Image
             source={{ uri: photo }}
             alt="Image Preview"
@@ -151,7 +150,7 @@ export default function UploadPicture({ navigation, route }) {
   }
 
   return (
-    <Box style={styles.container} flex={1} bg={"secondary.30"}>
+    <Box style={styles.container} flex={1} safeAreaTop>
       <Camera ref={cameraRef} style={styles.camera} ratio={ratio[currentRatio]}>
         <HStack
           space="3"

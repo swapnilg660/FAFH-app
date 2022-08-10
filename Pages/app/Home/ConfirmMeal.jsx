@@ -38,7 +38,7 @@ function ConfirmMeal({ navigation, route }) {
   );
   // const [selectedFood, setSelectedFood] = useState({});
   const [userSuggestion, setUserSuggestion] = React.useState("");
-  const [isSuggestedFoodLoaded, setIsSuggestedFoodLoaded] = useState(true);
+  const [isSuggestedFoodLoaded, setIsSuggestedFoodLoaded] = useState(false);
   const [isOtherInvalid, setIsOtherInvalid] = useState(false);
 
   const handleAddMeal = () => {
@@ -65,8 +65,13 @@ function ConfirmMeal({ navigation, route }) {
 
   useEffect(() => {
     // console.log("[Confirm Meal] Selected Food:", selectedFood);
-    console.log("[Confirm Meal] selectedFood:", selectedFood);
-  }, [selectedFood]);
+    if (foundFood.length > 0) {
+      setIsSuggestedFoodLoaded(true);
+    } else {
+      console.log("[Confirm Meal] No suggested food found");
+    }
+    console.log("[ConfirmMeals.jsx] foundFood:", foundFood[0]);
+  }, [foundFood]);
 
   return (
     <>
@@ -93,6 +98,7 @@ function ConfirmMeal({ navigation, route }) {
         </HStack>
         {/* Body */}
         <VStack space="2" px={2}>
+          {/* Image Container */}
           <Box w={"full"} h={height / 3}>
             <Image
               source={{ uri: photo }}
@@ -104,6 +110,7 @@ function ConfirmMeal({ navigation, route }) {
               }}
             />
           </Box>
+          {/* Suggestions Container */}
           <VStack space="5">
             <Heading
               style={{ fontFamily: "Poppins-Regular" }}
@@ -214,6 +221,7 @@ function ConfirmMeal({ navigation, route }) {
                 );
               })}
             </VStack>
+            
 
             <Center mb={5}>
               <Button.Group>
