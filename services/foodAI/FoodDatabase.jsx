@@ -69,6 +69,26 @@ export const getFood = (word, setFood) => {
     .catch((error) => console.log("search error", error));
 };
 
+export const getBarcodeFood = (barcode, setFood) => {
+  var myHeaders = new Headers();
+  myHeaders.append("Accept", "application/json");
+  myHeaders.append("Cookie", "route=1ec7638396cb58f649ca30dda440f445");
+
+  var requestOptions = {
+    method: "GET",
+    headers: myHeaders,
+    redirect: "follow",
+  };
+
+  fetch(
+    `https://api.edamam.com/api/food-database/v2/parser?app_id=${apiId}&app_key=${apiKey}&upc=${barcode}`,
+    requestOptions
+  )
+    .then((response) => response.text())
+    .then((result) => setFood(result))
+    .catch((error) => console.log("error", error));
+};
+
 // get food nutritrition for the selected meal
 export const getNutrition = (params, setNutrition) => {
   var myHeaders = new Headers();
@@ -120,5 +140,3 @@ export const recogniseFood = async (image, setFood) => {
     .then((result) => setFood(result.recognition_results))
     .catch((error) => console.log("error", error));
 };
-
-
