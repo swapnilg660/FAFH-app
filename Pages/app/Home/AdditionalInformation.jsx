@@ -42,38 +42,37 @@ export default function AdditionalInformation({ navigation, setShowModal }) {
 
   const handleSubmit = (data, formikAction) => {
     console.log(data);
-    saveAdditionalInformation({ ...data })
-      .then((res) => {
-        updateUser(userToken, data);
-        formikAction.setSubmitting(false);
-        formikAction.resetForm();
-        // close the modal on success
-        toast.show({
-          placement: "top",
-          render: () => (
-            <ToastComponent
-              state={res === "Success" ? "Success" : "Error"}
-              message={res === "Success" ? "Logged in Successfully" : res}
-            />
-          ),
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-        formikAction.setSubmitting(false);
-        toast.show({
-          placement: "top",
-          render: () => (
-            <ToastComponent
-              state="Error"
-              message="Something went wrong, please try again"
-            />
-          ),
-        });
-      })
-      .finally(() => {
-        formikAction.setSubmitting(false);
-      });
+    updateUser(userToken, data);
+
+    formikAction.setSubmitting(false);
+    formikAction.resetForm();
+    // close the modal on success
+    // toast.show({
+    //   placement: "top",
+    //   render: () => (
+    //     <ToastComponent
+    //       state={res === "Success" ? "Success" : "Error"}
+    //       message={res === "Success" ? "Logged in Successfully" : res}
+    //     />
+    //   ),
+    // });
+
+    // .catch((err) => {
+    //   console.log(err);
+    //   formikAction.setSubmitting(false);
+    //   toast.show({
+    //     placement: "top",
+    //     render: () => (
+    //       <ToastComponent
+    //         state="Error"
+    //         message="Something went wrong, please try again"
+    //       />
+    //     ),
+    //   });
+    // })
+    // .finally(() => {
+    //   formikAction.setSubmitting(false);
+    // });
   };
 
   return (

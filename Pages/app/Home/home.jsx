@@ -553,6 +553,7 @@ function Home({ navigation }) {
         <Modal
           animationType="slide"
           visible={modalVisible}
+          // visible={true}
           onRequestClose={() => {
             setModalVisible(!modalVisible);
           }}
