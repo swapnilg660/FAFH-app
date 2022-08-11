@@ -1,0 +1,388 @@
+[
+  {
+    "name": "meal1"
+  },
+  {
+    "name": "meal2"
+  },
+  {
+    "name": "Chocolate m&m Cookies",
+    "nutritionalInfo": {
+      "CA": {
+        "label": "Calcium, Ca",
+        "quantity": 66.19397681266467,
+        "unit": "mg"
+      },
+      "CHOCDF": {
+        "label": "Carbohydrate, by difference",
+        "quantity": 65.43446394482172,
+        "unit": "g"
+      },
+      "CHOLE": {
+        "label": "Cholesterol",
+        "quantity": 60.45721573993343,
+        "unit": "mg"
+      },
+      "ENERC_KCAL": {
+        "label": "Energy",
+        "quantity": 455.9163466756638,
+        "unit": "kcal"
+      },
+      "FAMS": {
+        "label": "Fatty acids, total monounsaturated",
+        "quantity": 5.697675634601768,
+        "unit": "g"
+      },
+      "FAPU": {
+        "label": "Fatty acids, total polyunsaturated",
+        "quantity": 1.1989728700988884,
+        "unit": "g"
+      },
+      "FASAT": {
+        "label": "Fatty acids, total saturated",
+        "quantity": 12.420065515297479,
+        "unit": "g"
+      },
+      "FAT": {
+        "label": "Total lipid (fat)",
+        "quantity": 21.048013600061747,
+        "unit": "g"
+      },
+      "FATRN": {
+        "label": "Fatty acids, total trans",
+        "quantity": 0.583632298932041,
+        "unit": "g"
+      },
+      "FE": {
+        "label": "Iron, Fe",
+        "quantity": 2.116601700076662,
+        "unit": "mg"
+      },
+      "FIBTG": {
+        "label": "Fiber, total dietary",
+        "quantity": 3.2466795795285575,
+        "unit": "g"
+      },
+      "FOLAC": {
+        "label": "Folic acid",
+        "quantity": 21.679147655244133,
+        "unit": "µg"
+      },
+      "FOLDFE": {
+        "label": "Folate, DFE",
+        "quantity": 50.651480531159564,
+        "unit": "µg"
+      },
+      "FOLFD": {
+        "label": "Folate, food",
+        "quantity": 13.7690708374644,
+        "unit": "µg"
+      },
+      "K": {
+        "label": "Potassium, K",
+        "quantity": 204.40845151727842,
+        "unit": "mg"
+      },
+      "MG": {
+        "label": "Magnesium, Mg",
+        "quantity": 48.94662993806174,
+        "unit": "mg"
+      },
+      "NA": {
+        "label": "Sodium, Na",
+        "quantity": 223.33755224566724,
+        "unit": "mg"
+      },
+      "NIA": {
+        "label": "Niacin",
+        "quantity": 1.1293254414448748,
+        "unit": "mg"
+      },
+      "P": {
+        "label": "Phosphorus, P",
+        "quantity": 142.5914639935447,
+        "unit": "mg"
+      },
+      "PROCNT": {
+        "label": "Protein",
+        "quantity": 5.414106746246327,
+        "unit": "g"
+      },
+      "RIBF": {
+        "label": "Riboflavin",
+        "quantity": 0.17875533628164295,
+        "unit": "mg"
+      },
+      "SUGAR": {
+        "label": "Sugars, total",
+        "quantity": 45.85289740829891,
+        "unit": "g"
+      },
+      "SUGAR.added": {
+        "label": "Sugars, added",
+        "quantity": 45.42681329054722,
+        "unit": "g"
+      },
+      "THIA": {
+        "label": "Thiamin",
+        "quantity": 0.15184341884152194,
+        "unit": "mg"
+      },
+      "TOCPHA": {
+        "label": "Vitamin E (alpha-tocopherol)",
+        "quantity": 0.6182418839051739,
+        "unit": "mg"
+      },
+      "VITA_RAE": {
+        "label": "Vitamin A, RAE",
+        "quantity": 116.73512894809136,
+        "unit": "µg"
+      },
+      "VITB12": {
+        "label": "Vitamin B-12",
+        "quantity": 0.20407651595794735,
+        "unit": "µg"
+      },
+      "VITB6A": {
+        "label": "Vitamin B-6",
+        "quantity": 0.04249417042421322,
+        "unit": "mg"
+      },
+      "VITC": {
+        "label": "Vitamin C, total ascorbic acid",
+        "quantity": 0.11712195340501792,
+        "unit": "mg"
+      },
+      "VITD": {
+        "label": "Vitamin D (D2 + D3)",
+        "quantity": 0.3617594038018434,
+        "unit": "µg"
+      },
+      "VITK1": {
+        "label": "Vitamin K (phylloquinone)",
+        "quantity": 3.0551135615275853,
+        "unit": "µg"
+      },
+      "WATER": {
+        "label": "Water",
+        "quantity": 11.91886923564723,
+        "unit": "g"
+      },
+      "ZN": {
+        "label": "Zinc, Zn",
+        "quantity": 1.0261785588444405,
+        "unit": "mg"
+      }
+    }
+  },
+  {
+    "name": "Chocolate m&m Cookies",
+    "nutritionalInfo": {
+      "CA": {
+        "label": "Calcium, Ca",
+        "quantity": 66.19397681266467,
+        "unit": "mg"
+      },
+      "CHOCDF": {
+        "label": "Carbohydrate, by difference",
+        "quantity": 65.43446394482172,
+        "unit": "g"
+      },
+      "CHOLE": {
+        "label": "Cholesterol",
+        "quantity": 60.45721573993343,
+        "unit": "mg"
+      },
+      "ENERC_KCAL": {
+        "label": "Energy",
+        "quantity": 455.9163466756638,
+        "unit": "kcal"
+      },
+      "FAMS": {
+        "label": "Fatty acids, total monounsaturated",
+        "quantity": 5.697675634601768,
+        "unit": "g"
+      },
+      "FAPU": {
+        "label": "Fatty acids, total polyunsaturated",
+        "quantity": 1.1989728700988884,
+        "unit": "g"
+      },
+      "FASAT": {
+        "label": "Fatty acids, total saturated",
+        "quantity": 12.420065515297479,
+        "unit": "g"
+      },
+      "FAT": {
+        "label": "Total lipid (fat)",
+        "quantity": 21.048013600061747,
+        "unit": "g"
+      },
+      "FATRN": {
+        "label": "Fatty acids, total trans",
+        "quantity": 0.583632298932041,
+        "unit": "g"
+      },
+      "FE": {
+        "label": "Iron, Fe",
+        "quantity": 2.116601700076662,
+        "unit": "mg"
+      },
+      "FIBTG": {
+        "label": "Fiber, total dietary",
+        "quantity": 3.2466795795285575,
+        "unit": "g"
+      },
+      "FOLAC": {
+        "label": "Folic acid",
+        "quantity": 21.679147655244133,
+        "unit": "µg"
+      },
+      "FOLDFE": {
+        "label": "Folate, DFE",
+        "quantity": 50.651480531159564,
+        "unit": "µg"
+      },
+      "FOLFD": {
+        "label": "Folate, food",
+        "quantity": 13.7690708374644,
+        "unit": "µg"
+      },
+      "K": {
+        "label": "Potassium, K",
+        "quantity": 204.40845151727842,
+        "unit": "mg"
+      },
+      "MG": {
+        "label": "Magnesium, Mg",
+        "quantity": 48.94662993806174,
+        "unit": "mg"
+      },
+      "NA": {
+        "label": "Sodium, Na",
+        "quantity": 223.33755224566724,
+        "unit": "mg"
+      },
+      "NIA": {
+        "label": "Niacin",
+        "quantity": 1.1293254414448748,
+        "unit": "mg"
+      },
+      "P": {
+        "label": "Phosphorus, P",
+        "quantity": 142.5914639935447,
+        "unit": "mg"
+      },
+      "PROCNT": {
+        "label": "Protein",
+        "quantity": 5.414106746246327,
+        "unit": "g"
+      },
+      "RIBF": {
+        "label": "Riboflavin",
+        "quantity": 0.17875533628164295,
+        "unit": "mg"
+      },
+      "SUGAR": {
+        "label": "Sugars, total",
+        "quantity": 45.85289740829891,
+        "unit": "g"
+      },
+      "SUGAR.added": {
+        "label": "Sugars, added",
+        "quantity": 45.42681329054722,
+        "unit": "g"
+      },
+      "THIA": {
+        "label": "Thiamin",
+        "quantity": 0.15184341884152194,
+        "unit": "mg"
+      },
+      "TOCPHA": {
+        "label": "Vitamin E (alpha-tocopherol)",
+        "quantity": 0.6182418839051739,
+        "unit": "mg"
+      },
+      "VITA_RAE": {
+        "label": "Vitamin A, RAE",
+        "quantity": 116.73512894809136,
+        "unit": "µg"
+      },
+      "VITB12": {
+        "label": "Vitamin B-12",
+        "quantity": 0.20407651595794735,
+        "unit": "µg"
+      },
+      "VITB6A": {
+        "label": "Vitamin B-6",
+        "quantity": 0.04249417042421322,
+        "unit": "mg"
+      },
+      "VITC": {
+        "label": "Vitamin C, total ascorbic acid",
+        "quantity": 0.11712195340501792,
+        "unit": "mg"
+      },
+      "VITD": {
+        "label": "Vitamin D (D2 + D3)",
+        "quantity": 0.3617594038018434,
+        "unit": "µg"
+      },
+      "VITK1": {
+        "label": "Vitamin K (phylloquinone)",
+        "quantity": 3.0551135615275853,
+        "unit": "µg"
+      },
+      "WATER": {
+        "label": "Water",
+        "quantity": 11.91886923564723,
+        "unit": "g"
+      },
+      "ZN": {
+        "label": "Zinc, Zn",
+        "quantity": 1.0261785588444405,
+        "unit": "mg"
+      }
+    }
+  },
+  {
+    "name": "Chocolate m&m Cookies",
+    "nutritionalInfo": {
+      "CA": {
+        "label": "Calcium, Ca",
+        "quantity": 66.19397681266467,
+        "unit": "mg"
+      },
+      "CHOCDF": {
+        "label": "Carbohydrate, by difference",
+        "quantity": 65.43446394482172,
+        "unit": "g"
+      },
+      "CHOLE": {
+        "label": "Cholesterol",
+        "quantity": 60.45721573993343,
+        "unit": "mg"
+      },
+      "ENERC_KCAL": {
+        "label": "Energy",
+        "quantity": 455.9163466756638,
+        "unit": "kcal"
+      },
+      "FAMS": {
+        "label": "Fatty acids, total monounsaturated",
+        "quantity": 5.697675634601768,
+        "unit": "g"
+      },
+      "FAPU": {
+        "label": "Fatty acids, total polyunsaturated",
+        "quantity": 1.1989728700988884,
+        "unit": "g"
+      },
+      "FASAT": {
+        "label": "Fatty acids, total saturated",
+        "quantity": 12.420065515297479,
+        "unit": "g"
+      }
+    }
+}
+]

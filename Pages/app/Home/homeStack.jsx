@@ -11,10 +11,7 @@ import { HomeContext } from "../../../hooks/context";
 const Stack = createStackNavigator();
 
 function HomeStack() {
-  const [meals, setMeals] = React.useState([
-    { name: "meal1" },
-    { name: "meal2" },
-  ]);
+  const [meals, setMeals] = React.useState([]);
   const [foundFood, setFoundFood] = React.useState([]);
   const [homeError, setError] = React.useState({});
   return (

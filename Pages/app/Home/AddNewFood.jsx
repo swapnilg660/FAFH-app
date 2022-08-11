@@ -39,7 +39,7 @@ import { storeCustomMeals } from "../../../services/mongoDB/foodStorage";
 function AddNewFood({ navigation, route }) {
   const [wasFoodSearched, setWasFoodSearched] = React.useState(false);
   const { foodType } = route.params;
-  const { setMeals } = React.useContext(HomeContext);
+  const { setMeals, meals } = React.useContext(HomeContext);
   const { height, width } = useWindowDimensions();
   const [searchValue, setSearchValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -79,14 +79,11 @@ function AddNewFood({ navigation, route }) {
   const { colors } = useTheme();
 
   const handleSuggest = (text) => {
-    clearTimeout(suggestiontimeout);
     if (text.length < 0) {
       return;
     }
-
-    let suggestiontimeout = setTimeout(() => {
-      getSuggestions(text, setSuggestions);
-    }, 500);
+    // timer not working please help find another way to delay search till user is done typing
+    getSuggestions(text, setSuggestions);
   };
 
   const handleSearch = (text) => {
@@ -125,16 +122,15 @@ function AddNewFood({ navigation, route }) {
     setMeals((prev) => [
       ...prev,
       {
-        name:
-          selectedTitle.length > 30
-            ? selectedTitle.slice(0, 30) + "..."
-            : selectedTitle,
+        name: selectedTitle,
         nutritionalInfo: nutrition,
       },
     ]);
+    console.log("meals", meals);
+    navigation.navigate("CapturedMeal", { occasion: "breakfast" });
 
     // save custom meal to db
-    storeCustomMeals("Tadaa012", selectedTitle, nutrition);
+    // storeCustomMeals("Tadaa012", selectedTitle, nutrition);
   };
 
   React.useEffect(() => {}, [searchQuery]);

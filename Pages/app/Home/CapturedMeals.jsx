@@ -16,15 +16,33 @@ import { Alert, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
 import { HomeContext } from "../../../hooks/context";
+import { recordFood } from "../../../services/mongoDB/foodStorage";
 
 function CapturedMeals({ navigation, route }) {
   const { colors } = useTheme();
   const { occasion } = route.params;
   const { meals, setMeals } = React.useContext(HomeContext);
+  const [totalCost, setTotalCost] = React.useState(0);
 
   // function to get a random number
   const getRandomNumber = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
+  };
+
+  // generate random food id
+  const generateFoodId = () => {
+    let foodId = "food";
+    for (let i = 0; i < 10; i++) {
+      foodId += getRandomNumber(0, 9);
+    }
+    return foodId;
+  };
+
+  const handleSubmitMeal = () => {
+    let foodId = generateFoodId();
+    recordFood(occasion, foodId, meals, totalCost);
+    Alert.alert("Meal recorded successfully!");
+    navigation.navigate("Home");
   };
 
   React.useEffect(() => {
@@ -72,7 +90,11 @@ function CapturedMeals({ navigation, route }) {
                     </Center>
                   )}
                 </Box>
-                <Text style={{ fontFamily: "Poppins-Light" }}>{meal.name}</Text>
+                <Text style={{ fontFamily: "Poppins-Light" }}>
+                  {meal.name.length > 30
+                    ? meal.name.slice(0, 30) + "..."
+                    : meal.name}
+                </Text>
               </HStack>
 
               <IconButton
@@ -110,7 +132,7 @@ function CapturedMeals({ navigation, route }) {
                 }}
               />
             </HStack>
-          )
+          );
         })}
         <HStack
           pl={3}
@@ -118,7 +140,7 @@ function CapturedMeals({ navigation, route }) {
           rounded="lg"
           justifyContent={"space-between"}
           alignItems={"center"}
-          my={1} 
+          my={1}
         >
           <Text style={{ fontFamily: "Poppins-Light" }}>Add More...</Text>
           <IconButton
@@ -149,11 +171,12 @@ function CapturedMeals({ navigation, route }) {
               style={{ fontFamily: "Poppins-Regular" }}
               fontSize={16}
               w={"50%"}
-              rightElement={
+              leftElement={
                 <Text px={5} pb={2} color={"muted.400"} fontSize="xl">
                   R
                 </Text>
               }
+              onChangeText={(text) => setTotalCost(parseInt(text))}
             />
             <FormControl.HelperText>
               {
@@ -198,8 +221,8 @@ function CapturedMeals({ navigation, route }) {
                 style: { fontFamily: "Poppins-Light" },
               }}
               onPress={() => {
-                //toast meal submitted successfully
-                
+                handleSubmitMeal();
+
                 console.log("Food Submitted");
               }}
               colorScheme="primary"
