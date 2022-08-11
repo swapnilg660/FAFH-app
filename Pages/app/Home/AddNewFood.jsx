@@ -34,7 +34,10 @@ import {
   getDBConnection,
   saveMeals,
 } from "../../../services/localDB/localDB";
-import { storeCustomMeals } from "../../../services/mongoDB/foodStorage";
+import {
+  recordCustomeMeal,
+  storeCustomMeals,
+} from "../../../services/mongoDB/foodStorage";
 
 function AddNewFood({ navigation, route }) {
   const [wasFoodSearched, setWasFoodSearched] = React.useState(false);
@@ -126,8 +129,13 @@ function AddNewFood({ navigation, route }) {
         nutritionalInfo: nutrition,
       },
     ]);
-    console.log("meals", meals);
-    navigation.navigate("CapturedMeal", { occasion: "breakfast" });
+    let dta = {
+      name: selectedTitle,
+      nutritionalInfo: nutrition,
+    };
+    
+    recordCustomeMeal(dta, foodType);
+    // navigation.navigate("CapturedMeal", { occasion: foodType });
 
     // save custom meal to db
     // storeCustomMeals("Tadaa012", selectedTitle, nutrition);

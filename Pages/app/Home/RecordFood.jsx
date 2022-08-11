@@ -37,6 +37,7 @@ import {
   getCustomMeal,
   getDBConnection,
 } from "../../../services/localDB/localDB";
+import { getCustomMeals } from "../../../services/mongoDB/foodStorage";
 function RecordFood({ navigation, route }) {
   // Fake data, we need a GET request to get this data
   const fakeCustomMeals = [9, 98, 76];
@@ -52,11 +53,7 @@ function RecordFood({ navigation, route }) {
   const [alertVisible, setAlertVisible] = useState(false);
 
   const swiperRef = useRef();
-  const searchRef = useRef(null);
-  const [searchValue, setSearchValue] = useState("");
-  const [suggestions, setSuggestions] = useState([]);
-  const [food, setFood] = useState([]);
-  const [isSearch, setIsSearch] = useState(false);
+  const [customMeals, setCustomMeals] = useState([]);
 
   const [customMeal, setCustomMeal] = useState("");
 
@@ -87,7 +84,7 @@ function RecordFood({ navigation, route }) {
     } else {
       rotateFabBackward();
     }
-    getCustiomMeals();
+    getCustomMeals(setCustomMeals);
   }, [stagger]);
   return (
     <>
@@ -208,7 +205,7 @@ function RecordFood({ navigation, route }) {
           ref={swiperRef}
         >
           <Box width={width} flex={1} height={500}>
-            <Box flex={1} rounded="lg" >
+            <Box flex={1} rounded="lg">
               {/* <Heading
                 style={{ fontFamily: "Poppins-Medium" }}
                 fontSize={"lg"}
@@ -218,64 +215,68 @@ function RecordFood({ navigation, route }) {
                   ? "Custom Meals"
                   : `Showing results for '${searchValue}'`}
               </Heading> */}
-              {
-                /* fakeCustomMeals */ false ? (
-                  <ScrollView showsVerticalScrollIndicator={false}>
-                    <Radio.Group
-                      name="CustomMealsRadioGroup"
-                      value={customMeal}
-                      onChange={(e) => {
-                        setCustomMeal(e);
-                      }}
-                    >
-                      {fakeCustomMeals.map((item, index) => {
-                        return (
-                          <HStack
-                            rounded={"lg"}
-                            key={index}
-                            bg={colors["secondary"]["30"]}
-                            mt={1}
-                            p="2"
-                            w={"100%"}
-                          >
-                            <Radio
-                              value={item}
-                              borderColor={"secondary.500"}
-                              colorScheme="secondary"
-                            >
-                              <VStack>
-                                <Heading
-                                  color={colors["secondary"]["600"]}
-                                  style={{ fontFamily: "Poppins-Regular" }}
-                                  fontSize={"lg"}
-                                >
-                                  Burger king
-                                </Heading>
-                                <Text fontSize="xs" color={"muted.500"}>
-                                  I forgot what you had here
-                                </Text>
-                              </VStack>
-                            </Radio>
-                          </HStack>
-                        );
-                      })}
-                    </Radio.Group>
-                  </ScrollView>
-                ) : (
-                  <Center
-                    p="1"
-                    height={"100%"}
-                    weight={"full"}
-                    rounded={"full"}
+              {customMeals.length > 0 ? (
+                <ScrollView showsVerticalScrollIndicator={false}>
+                  <Radio.Group
+                    name="CustomMealsRadioGroup"
+                    value={customMeal}
+                    onChange={(e) => {
+                      setCustomMeal(e);
+                    }}
                   >
-                    {/* display Image from assets/images/noFood.png */}
-                    <Image
-                      source={require("../../../assets/images/noFood.png")}
-                      style={{ width: "80%", height: "70%" }}
-                    />
-                  </Center>
-                )
-              }
+                    {customMeals.map((item, index) => {
+                      return (
+                        <HStack
+                          rounded={"lg"}
+                          key={index}
+                          bg={colors["secondary"]["30"]}
+                          mt={1}
+                          p="2"
+                          w={"100%"}
+                        >
+                          <Radio
+                            value={item}
+                            borderColor={"secondary.500"}
+                            colorScheme="secondary"
+                          >
+                            <VStack>
+                              <Heading
+                                color={colors["secondary"]["600"]}
+                                style={{ fontFamily: "Poppins-Regular" }}
+                                fontSize={"lg"}
+                              >
+                                {item.mealName}
+                              </Heading>
+                              <Text fontSize="xs" color={"muted.500"}>
+                                <HStack>
+                                  {Object.keys(
+                                    item.mealNutrition.slice(0, 4)
+                                  ).map((nutrient, index) => (
+                                    <Text>
+                                      {item.mealNutrition[nutrient].label}:
+                                      {item.mealNutrition[nutrient].quantity}
+                                      {item.mealNutrition[nutrient].unit}
+                                      {"  "}
+                                    </Text>
+                                  ))}
+                                </HStack>
+                              </Text>
+                            </VStack>
+                          </Radio>
+                        </HStack>
+                      );
+                    })}
+                  </Radio.Group>
+                </ScrollView>
+              ) : (
+                <Center p="1" height={"100%"} weight={"full"} rounded={"full"}>
+                  {/* display Image from assets/images/noFood.png */}
+                  <Image
+                    source={require("../../../assets/images/noFood.png")}
+                    style={{ width: "80%", height: "70%" }}
+                  />
+                </Center>
+              )}
             </Box>
 
             {/* Confirm chosen custom meal */}
