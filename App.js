@@ -3,6 +3,7 @@ import "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect, useReducer, useMemo, useRef } from "react";
 import { NavigationContainer } from "@react-navigation/native";
+import { LogBox } from "react-native";
 // import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 // import Toast from '@rimiti/react-native-toastify';
 
@@ -66,7 +67,6 @@ export default function App() {
         dispatch({ type: "GOOGLE_SIGN_IN", token: token });
       },
       userToken: userData.userToken,
-      
     }),
     []
   );
@@ -98,7 +98,6 @@ export default function App() {
   return (
     <NativeBaseProvider theme={FAFHTHEME}>
       <AuthContext.Provider value={contextData}>
-        
         <NavigationContainer>
           {userData.userToken == null ? <AuthStack /> : <AppStack />}
         </NavigationContainer>

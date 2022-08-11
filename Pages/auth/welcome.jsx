@@ -1,15 +1,26 @@
 import * as SplashScreen from "expo-splash-screen";
-import { View, Text, StyleSheet, Pressable, SafeAreaView } from "react-native";
+import { Image, useWindowDimensions, Animated } from "react-native";
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import useFonts from "../../hooks/useFonts";
-import { useTheme } from "native-base";
+import { Button, Center, Text, useTheme, VStack } from "native-base";
+import { FAFH_logo } from "../../Components/customSvgIcon";
 
 function Welcome({ navigation }) {
   const { colors } = useTheme();
-  console.log(colors.primary["600"]);
+  const { height } = useWindowDimensions();
+  const slideIn = useRef(new Animated.Value(-height)).current;
+  const slideInEffect = () => {
+    Animated.timing(slideIn, {
+      toValue: 0,
+      duration: 1000,
+      useNativeDriver: true,
+    }).start();
+  };
   //loading fonts
   // const [appIsReady, setAppIsReady] = useState(false);
   const appIsReady = useRef(false);
+
+  // animation for image to slide down
 
   useEffect(() => {
     //splash screen
@@ -27,6 +38,7 @@ function Welcome({ navigation }) {
       }
     }
     prepare();
+    slideInEffect();
 
     //...more code
   }, []);
@@ -40,51 +52,65 @@ function Welcome({ navigation }) {
     return null;
   }
   return (
-    // <SafeAreaView>
-    <SafeAreaView
+    <VStack
+      position={"relative"}
+      flex={1}
+      // justifyContent="center"
+      // alignItems="center"
       onLayout={onLayoutRootView}
-      style={{
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-        // backgroundColor: colors.primary["50"],
-      }}
     >
-      {console.log("app loaded")}
-      <Pressable
-        onPress={() => {
-          console.log("Going to login page");
-          navigation.navigate("Login");
+      <Animated.Image
+        style={{ transform: [{ translateY: slideIn }] }}
+        source={require("../../assets/images/HomeImage.png")}
+      />
+
+      <Animated.View
+        style={{
+          transform: [
+            {
+              translateY: slideIn.interpolate({
+                inputRange: [-height, 0],
+                outputRange: [height, 0],
+              }),
+            },
+          ],
         }}
       >
-        <Text style={styles.buttons}>Login</Text>
-      </Pressable>
-      <Pressable
-        onPress={() => {
-          console.log("Going to register page");
-          navigation.navigate("Register");
-        }}
-      >
-        <Text style={styles.buttons}>Register</Text>
-      </Pressable>
-    </SafeAreaView>
-    // </SafeAreaView>
+        <Center mt={-height / 7}>
+          <FAFH_logo fill={colors.secondary["500"]} width={110} height={110} />
+        </Center>
+        <Center>
+          <Text
+            fontSize="32"
+            // pt={7}
+            style={{ fontFamily: "Poppins-SemiBold" }}
+            color="primary.600"
+          >
+            FAFH
+          </Text>
+          <Text
+            color={"primary.600"}
+            px="20"
+            textAlign="center"
+            style={{ fontFamily: "Poppins-Light" }}
+          >
+            Tracking food and beverages you consume away from home
+          </Text>
+        </Center>
+        <Center p={5}>
+          <Button
+            w={"50%"}
+            colorScheme="secondary"
+            onPress={() => {
+              navigation.navigate("Onboarding");
+            }}
+          >
+            Get Started
+          </Button>
+        </Center>
+      </Animated.View>
+    </VStack>
   );
 }
 
 export default React.memo(Welcome);
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  buttons: {
-    fontSize: 30,
-    margin: 10,
-    padding: 10,
-    borderRadius: 10,
-    borderWidth: 1,
-  },
-});
