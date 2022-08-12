@@ -180,7 +180,7 @@ function CapturedMeals({ navigation, route }) {
             />
             <FormControl.HelperText>
               {
-                "This helps you track your expenses blablabla.\nWe'll keep this between us."
+                "This helps you track your expenses...\nWe'll keep this between us."
               }
             </FormControl.HelperText>
           </FormControl>

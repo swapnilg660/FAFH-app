@@ -44,7 +44,9 @@ function ConfirmMeal({ navigation, route }) {
       return;
     }
     setIsOtherInvalid(false);
-    setSelectedFood({ ...selectedFood, Other: userSuggestion });
+    // This is raising an error, will fix later
+
+    // setSelectedFood({ ...selectedFood, Other: userSuggestion });
     setMeals((prev) => [
       ...prev,
       {
@@ -232,7 +234,7 @@ function ConfirmMeal({ navigation, route }) {
                     rounded="lg"
                   />
                 ))}
-              {homeError?.recError && <Text >Something went wrong !</Text>}
+              {homeError?.recError && <Text>Something went wrong !</Text>}
             </VStack>
 
             <Center mb={5}>

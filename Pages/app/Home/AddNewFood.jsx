@@ -135,7 +135,7 @@ function AddNewFood({ navigation, route }) {
     };
     
     recordCustomeMeal(dta, foodType);
-    // navigation.navigate("CapturedMeal", { occasion: foodType });
+    navigation.navigate("CapturedMeal", { occasion: foodType });
 
     // save custom meal to db
     // storeCustomMeals("Tadaa012", selectedTitle, nutrition);

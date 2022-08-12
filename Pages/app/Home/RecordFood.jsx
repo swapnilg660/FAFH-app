@@ -40,7 +40,6 @@ import {
 import { getCustomMeals } from "../../../services/mongoDB/foodStorage";
 function RecordFood({ navigation, route }) {
   // Fake data, we need a GET request to get this data
-  const fakeCustomMeals = [9, 98, 76];
 
   const { foodType } = route.params;
   const [tabValue, setTabValue] = useState("Custom");
@@ -84,8 +83,14 @@ function RecordFood({ navigation, route }) {
     } else {
       rotateFabBackward();
     }
-    getCustomMeals(setCustomMeals);
-  }, [stagger]);
+    if (customMeals.length === 0) {
+      setCustomMeal(null);
+      getCustomMeals(setCustomMeals);
+    }
+
+    return () => {
+    };
+  }, [stagger, customMeals]);
   return (
     <>
       <SafeAreaView></SafeAreaView>
@@ -108,35 +113,6 @@ function RecordFood({ navigation, route }) {
             {foodType}
           </Heading>
         </HStack>
-
-        {/* <Input
-          // ref={SearchRef}
-          getRef={(input) => {
-            searchRef = input;
-          }}
-          borderColor={colors["primary"]["30"]}
-          bg={colors["primary"]["30"]}
-          m={5}
-          mt={0}
-          rounded="2xl"
-          placeholder="Search food"
-          style={{ fontFamily: "Poppins-Regular" }}
-          fontSize={16}
-          leftElement={
-            <Octicons
-              style={{ paddingLeft: 10 }}
-              name="search"
-              size={24}
-              color={colors.muted["400"]}
-            />
-          }
-          // on change, query suggested foods
-          onChangeText={(text) => {
-            // handleSuggest(text);
-          }}
-          // let them select a food and then add it to the list of selected foods
-          // onSubmitEditing={(e) => handleSearch(e.nativeEvent.text)}
-        /> */}
 
         {/* Tab value */}
         <HStack
@@ -216,40 +192,57 @@ function RecordFood({ navigation, route }) {
                   : `Showing results for '${searchValue}'`}
               </Heading> */}
               {customMeals.length > 0 ? (
-                <ScrollView showsVerticalScrollIndicator={false}>
-                  <Radio.Group
-                    name="CustomMealsRadioGroup"
-                    value={customMeal}
-                    onChange={(e) => {
-                      setCustomMeal(e);
-                    }}
+                <ScrollView showsVerticalScrollIndicator={false} m={5}>
+                  <HStack
+                    alignSelf={"center"}
+                    alignItems="center"
+                    flexWrap={"wrap"}
+                    justifyContent="center"
+                    space="5"
+                    pt={6}
                   >
-                    {customMeals.map((item, index) => {
+                    {customMeals.map((item) => {
                       return (
-                        <HStack
+                        <Pressable
+                          key={Math.random() * 10000}
+                          onPress={() => setCustomMeal(item)}
+                          _pressed={{
+                            bg: "muted.200",
+                          }}
+                          position="relative"
+                          bg="secondary.30"
+                          borderWidth={customMeal == item ? 2 : 0}
+                          borderColor="secondary.300"
+                          size="135px"
                           rounded={"lg"}
-                          key={index}
-                          bg={colors["secondary"]["30"]}
-                          mt={1}
-                          p="2"
-                          w={"100%"}
+                          p={2}
                         >
-                          <Radio
-                            value={item}
-                            borderColor={"secondary.500"}
-                            colorScheme="secondary"
-                          >
-                            <VStack>
-                              <Heading
-                                color={colors["secondary"]["600"]}
-                                style={{ fontFamily: "Poppins-Regular" }}
-                                fontSize={"lg"}
-                              >
-                                {item.mealName}
-                              </Heading>
-                              <Text fontSize="xs" color={"muted.500"}>
-                                <HStack>
-                                  {Object.keys(
+                          {customMeal == item ? (
+                            <AntDesign
+                              style={{
+                                position: "absolute",
+                                top: -10,
+                                right: -10,
+                                zIndex: 2,
+                                backgroundColor: "white",
+                                borderRadius: 100,
+                              }}
+                              name="checkcircle"
+                              size={24}
+                              color={colors.primary["600"]}
+                            />
+                          ) : null}
+                          <VStack>
+                            <Heading
+                              color={colors["secondary"]["600"]}
+                              style={{ fontFamily: "Poppins-Regular" }}
+                              fontSize={"lg"}
+                            >
+                              {item?.mealName}
+                            </Heading>
+                            <Text fontSize="xs" color={"muted.500"}>
+                              <HStack>
+                                {/* {Object.keys(
                                     item.mealNutrition.slice(0, 4)
                                   ).map((nutrient, index) => (
                                     <Text>
@@ -258,15 +251,16 @@ function RecordFood({ navigation, route }) {
                                       {item.mealNutrition[nutrient].unit}
                                       {"  "}
                                     </Text>
-                                  ))}
-                                </HStack>
-                              </Text>
-                            </VStack>
-                          </Radio>
-                        </HStack>
+                                  ))} */}
+                              </HStack>
+                            </Text>
+                          </VStack>
+                          {/* </Radio> */}
+                        </Pressable>
                       );
                     })}
-                  </Radio.Group>
+                  </HStack>
+                  {/* </Radio.Group> */}
                 </ScrollView>
               ) : (
                 <Center p="1" height={"100%"} weight={"full"} rounded={"full"}>

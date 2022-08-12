@@ -1,4 +1,5 @@
 import * as SplashScreen from "expo-splash-screen";
+import * as SecureStore from "expo-secure-store";
 import { Image, useWindowDimensions, Animated } from "react-native";
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import useFonts from "../../hooks/useFonts";
@@ -8,6 +9,7 @@ import { FAFH_logo } from "../../Components/customSvgIcon";
 function Welcome({ navigation }) {
   const { colors } = useTheme();
   const { height } = useWindowDimensions();
+  const [userFirstTime, setUFT] = useState(null);
   const slideIn = useRef(new Animated.Value(-height)).current;
   const slideInEffect = () => {
     Animated.timing(slideIn, {
@@ -20,8 +22,6 @@ function Welcome({ navigation }) {
   // const [appIsReady, setAppIsReady] = useState(false);
   const appIsReady = useRef(false);
 
-  // animation for image to slide down
-
   useEffect(() => {
     //splash screen
     async function prepare() {
@@ -29,6 +29,9 @@ function Welcome({ navigation }) {
         await SplashScreen.preventAutoHideAsync();
         await useFonts();
         console.log("fonts loaded");
+        const token = await SecureStore.getItemAsync("userBoarded");
+        console.log("token", token);
+        setUFT(token);
       } catch (e) {
         console.warn(e);
       } finally {
@@ -40,7 +43,7 @@ function Welcome({ navigation }) {
     prepare();
     slideInEffect();
 
-    //...more code
+    return () => {};
   }, []);
   const onLayoutRootView = useCallback(async () => {
     if (appIsReady.current) {
@@ -60,7 +63,7 @@ function Welcome({ navigation }) {
       onLayout={onLayoutRootView}
     >
       <Animated.Image
-        style={{ transform: [{ translateY: slideIn }] }}
+        style={{ transform: [{ translateY: slideIn }], width: "100%" }}
         source={require("../../assets/images/HomeImage.png")}
       />
 
@@ -102,7 +105,12 @@ function Welcome({ navigation }) {
             w={"50%"}
             colorScheme="secondary"
             onPress={() => {
-              navigation.navigate("Onboarding");
+              if (!userFirstTime) {
+                navigation.navigate("Onboarding");
+                SecureStore.setItemAsync("userBoarded", "true");
+              } else {
+                navigation.navigate("Login");
+              }
             }}
           >
             Get Started

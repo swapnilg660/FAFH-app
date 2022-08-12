@@ -419,16 +419,16 @@ function Home({ navigation }) {
                   </View>
                 </HStack>
               </VStack>
-              {/* Physical activities */}
+              {/* Find Recipes*/}
               <Card style={[styles.indicatorCard, { paddingBottom: 30 }]}>
                 <View style={styles.cardContent}>
                   <Title style={styles.cardTitle}>
-                    <Ionicons
-                      name="bicycle-outline"
+                    <MaterialCommunityIcons
+                      name="food-apple-outline"
                       size={30}
                       color={colors["secondary"]["500"]}
-                    />{" "}
-                    Physical activity
+                    />
+                    Recipes
                   </Title>
                   <Card.Content>
                     <Button
@@ -437,7 +437,7 @@ function Home({ navigation }) {
                       colorScheme="tertiary"
                       onPress={() => {
                         Alert.alert(
-                          "Physical activity",
+                          "Find Recipes",
                           "Feature coming soon !",
                           [
                             {
@@ -459,7 +459,7 @@ function Home({ navigation }) {
                         color: colors["secondary"]["600"],
                       }}
                     >
-                      View History
+                      Find Recipe
                     </Button>
                   </Card.Content>
                 </View>
