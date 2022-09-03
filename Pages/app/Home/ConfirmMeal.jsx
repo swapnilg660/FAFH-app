@@ -21,7 +21,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Dimensions, Image, useWindowDimensions } from "react-native";
 import { HomeContext } from "../../../hooks/context";
-import { background } from "native-base/lib/typescript/theme/styled-system";
 
 function ConfirmMeal({ navigation, route }) {
   const { foodType, photo } = route.params;
@@ -39,7 +38,7 @@ function ConfirmMeal({ navigation, route }) {
   const [isOtherInvalid, setIsOtherInvalid] = useState(false);
 
   const handleAddMeal = () => {
-    if (userSuggestion.length) {
+    if (Object.values(selectedFood).includes(true)) {
       if (selectedFood.Other === true && userSuggestion === "") {
         setIsOtherInvalid(true);
         alert("Please specify the food");
@@ -66,7 +65,6 @@ function ConfirmMeal({ navigation, route }) {
   };
 
   const getFood = (foundFood) => {
-    console.log("ConfirmMeal.jsx: getFood() called", foundFood);
     if (foundFood?.length > 0) {
       let newFoundFood = foundFood.slice(0, 3);
       let subclasses = [];
@@ -90,14 +88,12 @@ function ConfirmMeal({ navigation, route }) {
       toDisplayFood = toDisplayFood.map(
         (item) => item.charAt(0).toUpperCase() + item.slice(1)
       );
-      // console.log("[ConfirmMeal.jsx] toDisplayFood: ", toDisplayFood);
       setDisplayedFood(toDisplayFood);
       setSelectedFood(
         toDisplayFood.reduce((o, key) => ({ ...o, [key]: false }), {})
       );
       setIsSuggestedFoodLoaded(true);
     } else {
-      console.log("[ConfirmMeal.jsx] getFood", "no food found");
       setIsSuggestedFoodLoaded(false);
     }
   };
@@ -161,10 +157,11 @@ function ConfirmMeal({ navigation, route }) {
             <VStack alignItems={"center"} space={2}>
               {isSuggestedFoodLoaded &&
                 [...new Set(displayedFood)].map((item, index) => {
-                  console.log(
-                    `\n${index}selectedFood[${item}]:`,
-                    selectedFood[item]
-                  );
+                  //displaying selected food for debugging
+                  // console.log(
+                  //   `\n${index}selectedFood[${item}]:`,
+                  //   selectedFood[item]
+                  // );
                   return (
                     <Pressable
                       _pressed={{
@@ -241,9 +238,7 @@ function ConfirmMeal({ navigation, route }) {
                     rounded="lg"
                   />
                 ))}
-              {homeError?.recError && (
-                <Text>{homeError.recError}</Text>
-              )}
+              {homeError?.recError && <Text>{homeError.recError}</Text>}
             </VStack>
 
             <Center mb={5}>
@@ -258,11 +253,9 @@ function ConfirmMeal({ navigation, route }) {
                   Cancel
                 </Button>
                 <Button
-                  disabled={!userSuggestion.length && !isSuggestedFoodLoaded}
                   width={"40%"}
                   colorScheme="primary"
                   onPress={handleAddMeal}
-                  
                 >
                   Add
                 </Button>

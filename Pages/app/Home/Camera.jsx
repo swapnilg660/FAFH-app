@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import {
+  ActivityIndicator,
   Image,
   ImageBackground,
   Platform,
@@ -16,6 +17,7 @@ import {
   HStack,
   Icon,
   IconButton,
+  Spinner,
   useTheme,
   VStack,
 } from "native-base";
@@ -38,42 +40,29 @@ export default function UploadPicture({ navigation, route }) {
   const cameraRef = useRef();
   const { colors } = useTheme();
   const { winHeight, winWidth } = useWindowDimensions();
-  const { setFoundFood,setError } = useContext(HomeContext);
+  const { setFoundFood, setError } = useContext(HomeContext);
 
   const ratio = ["16:9", "1:1", "4:3"];
   const [currentRatio, setCurrentRatio] = useState(0);
   const [photo, setPhoto] = useState(null);
   const [photoToDisplay, setPhotoToDisplay] = useState(null);
   const [modal, setModal] = useState(false);
+  const [takingPicture, setTakingPicture] = useState(false);
 
   let takePicture = async () => {
     if (cameraRef) {
       // get current pLatform
-      let platform = Platform.OS;
-      console.log(platform);
       // get current ratio
 
       let options = {
-        quality: 0.001,
+        quality: 1,
         exif: true,
         imageType: "jpg",
+        base64: true,
         copyToCacheDirectory: false,
       };
 
-      let options2 = {
-        quality: 1,
-        base64: true,
-        exif: false,
-      };
-
       let newPhoto = await cameraRef.current.takePictureAsync(options);
-      
-      console.log(
-        "[Camera.jsx] OLD photo height: ",
-        newPhoto.height,
-        " width: ",
-        newPhoto.width
-      );
 
       const resizedImage = await manipulateAsync(
         newPhoto.uri,
@@ -81,17 +70,11 @@ export default function UploadPicture({ navigation, route }) {
         { compress: 0.2, format: SaveFormat.JPEG }
       );
       setPhoto(resizedImage);
-      console.log(
-        "[Camera.jsx] OLD photo height: ",
-        resizedImage.height,
-        " width: ",
-        resizedImage.width
-      );
 
-      let newPhotoToDisplay = await cameraRef.current.takePictureAsync(
-        options2
-      );
-      setPhotoToDisplay(newPhotoToDisplay);
+      // let newPhotoToDisplay = await cameraRef.current.takePictureAsync(
+      //   options2
+      // );
+      setPhotoToDisplay(newPhoto);
     }
   };
 
@@ -116,15 +99,13 @@ export default function UploadPicture({ navigation, route }) {
       // save picture to the db here
       // recogniseFood(photo, setFoundFood);
       //navigate to ConfirmMeal screen
-console.log("[Camera.jsx] recognise photo: ", photo);
-      recogniseFood(photo, setFoundFood,setError);
+      recogniseFood(photo, setFoundFood, setError);
       setModal(true);
     };
     let retakePhoto = async () => {
       setPhoto(null);
       setPhotoToDisplay(null);
       setFoundFood([]);
-
     };
 
     return (
@@ -138,6 +119,7 @@ console.log("[Camera.jsx] recognise photo: ", photo);
           }}
         >
           <Image
+            // source={{ uri: photoToDisplay.uri }}
             source={{ uri: "data:image/jpeg;base64," + photoToDisplay.base64 }}
             alt="Image Preview"
             style={{
@@ -260,15 +242,21 @@ console.log("[Camera.jsx] recognise photo: ", photo);
           bottom={5}
         >
           <IconButton
+            disabled={takingPicture}
             rounded={"full"}
             w={50}
             variant="solid"
             icon={
-              <Icon size="2xl" as={AntDesign} name="camera" color="white" />
+              takingPicture ? (
+                <ActivityIndicator size="small" color={colors["white"]} />
+              ) : (
+                <Icon size="2xl" as={AntDesign} name="camera" color="white" />
+              )
             }
             onPress={() => {
+              setTakingPicture(true);
               takePicture().then(() => {
-                console.log(photo);
+                setTakingPicture(false);
               });
             }}
           />
