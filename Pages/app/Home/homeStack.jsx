@@ -7,6 +7,7 @@ import UploadPicture from "./Camera";
 import AddNewFood from "./AddNewFood";
 import ConfirmMeal from "./ConfirmMeal";
 import CapturedMeals from "./CapturedMeals";
+import Recipes from "./Recipes";
 import { HomeContext } from "../../../hooks/context";
 const Stack = createStackNavigator();
 
@@ -29,6 +30,9 @@ function HomeStack() {
         <Stack.Screen name="AddNewFood" component={AddNewFood} />
         <Stack.Screen name="ConfirmMeal" component={ConfirmMeal} />
         <Stack.Screen name="CapturedMeal" component={CapturedMeals} />
+        <Stack.Group>
+          <Stack.Screen name="Recipes" component={Recipes} />
+        </Stack.Group>
       </Stack.Navigator>
     </HomeContext.Provider>
   );
