@@ -436,23 +436,7 @@ function Home({ navigation }) {
                       borderWidth={0.5}
                       colorScheme="tertiary"
                       onPress={() => {
-                        Alert.alert(
-                          "Find Recipes",
-                          "Feature coming soon !",
-                          [
-                            {
-                              text: "Cancel",
-                              style: "cancel",
-                            },
-                            {
-                              text: "OK",
-                              onPress: () => {
-                                console.log("OK Pressed");
-                              },
-                            },
-                          ],
-                          { cancelable: false }
-                        );
+                        navigation.navigate("Recipes");
                       }}
                       _text={{
                         style: { fontFamily: "Poppins-Regular" },
