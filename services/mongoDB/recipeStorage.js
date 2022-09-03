@@ -1,26 +1,25 @@
 // Store recipes in MongoDB
 const saveRecipe = (recipe) => {
   var formdata = new FormData();
-  formdata.append("userId", "sgfgdfgdfg");
-  formdata.append("userName", "Suprise Ngoveni");
-  formdata.append("name", "Pancakes");
-  formdata.append("calories", "24");
-  formdata.append("totalTime", "40");
-  formdata.append("prepTime", "23");
-  formdata.append("description", "This is a really delicious bread");
-  formdata.append("ingredients", '["1/2 milk", "2 cpus of flower"]');
-  formdata.append("servings", "0");
-  formdata.append(
-    "directions",
-    '[{"title":"break eggs","description":"break eggs and stir well"}, {"title":"mix well","description":"mix eggs with milk and flavour"}]'
-  );
-  formdata.append("type", "breakfast");
-  formdata.append("category", "protein");
-  formdata.append(
-    "picture",
-    fileInput.files[0],
-    "/C:/Users/Dr Tadaa/Downloads/star-wars-spaceship-zoom-background-copbqhzqdbha7i0z-copbqhzqdbha7i0z.jpg"
-  );
+  formdata.append("userId", recipe.userId);
+  formdata.append("userName", recipe.userName);
+  formdata.append("name", recipe.name);
+  formdata.append("calories", recipe.calories);
+  formdata.append("totalTime", recipe.totalTime);
+  formdata.append("prepTime", recipe.prepTime);
+  formdata.append("description", recipe.description);
+  formdata.append("ingredients", JSON.stringify(recipe.ingredients));
+  formdata.append("servings", recipe.servings);
+  formdata.append("directions", JSON.stringify(recipe.directions));
+  formdata.append("type", recipe.type);
+  formdata.append("category", recipe.category);
+  formdata.append("picture", {
+    uri: recipe.image.uri,
+    name: recipe.image.uri.split("/").pop(),
+    type: platform === "android" ? mime.getType(image.uri) : "jpeg",
+    filepath: recipe.image.uri,
+    originalFilename: recipe.image.uri.split("/").pop(),
+  });
 
   var requestOptions = {
     method: "POST",

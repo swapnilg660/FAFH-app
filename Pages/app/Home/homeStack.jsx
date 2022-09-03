@@ -7,6 +7,7 @@ import UploadPicture from "./Camera";
 import AddNewFood from "./AddNewFood";
 import ConfirmMeal from "./ConfirmMeal";
 import CapturedMeals from "./CapturedMeals";
+import Recipes from "./Recipes";
 import { HomeContext } from "../../../hooks/context";
 import RecipesInfo from "./recipesInfo";
 const Stack = createStackNavigator();

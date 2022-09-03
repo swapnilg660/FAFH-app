@@ -222,7 +222,7 @@ function Home({ navigation }) {
                 </Card.Content>
               </Box>
               {/* Steps counter */}
-              <HStack
+              {/* <HStack
                 justifyContent={"space-between"}
                 style={{ elevation: 3 }}
                 rounded={"md"}
@@ -261,7 +261,7 @@ function Home({ navigation }) {
                     textStyle={{ fontSize: 16 }}
                   />
                 </Center>
-              </HStack>
+              </HStack> */}
 
               {/* Record Food */}
               <Card style={styles.indicatorCard}>

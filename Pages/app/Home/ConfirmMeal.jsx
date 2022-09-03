@@ -21,6 +21,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Dimensions, Image, useWindowDimensions } from "react-native";
 import { HomeContext } from "../../../hooks/context";
+import { background } from "native-base/lib/typescript/theme/styled-system";
 
 function ConfirmMeal({ navigation, route }) {
   const { foodType, photo } = route.params;
@@ -38,29 +39,34 @@ function ConfirmMeal({ navigation, route }) {
   const [isOtherInvalid, setIsOtherInvalid] = useState(false);
 
   const handleAddMeal = () => {
-    if (selectedFood.Other === true && userSuggestion === "") {
-      setIsOtherInvalid(true);
-      alert("Please specify the food");
-      return;
-    }
-    setIsOtherInvalid(false);
-    // This is raising an error, will fix later
+    if (userSuggestion.length) {
+      if (selectedFood.Other === true && userSuggestion === "") {
+        setIsOtherInvalid(true);
+        alert("Please specify the food");
+        return;
+      }
+      setIsOtherInvalid(false);
+      // This is raising an error, will fix later
 
-    // setSelectedFood({ ...selectedFood, Other: userSuggestion });
-    setMeals((prev) => [
-      ...prev,
-      {
-        photo: photo,
-        name: `Meal from AI ${Math.random().toString().substring(2, 5)}`,
-        nutritionalInfo: "nutritionalInfo we get from AI",
-      },
-    ]);
-    navigation.navigate("CapturedMeal", {
-      occasion: foodType,
-    });
+      // setSelectedFood({ ...selectedFood, Other: userSuggestion });
+      setMeals((prev) => [
+        ...prev,
+        {
+          photo: photo,
+          name: `Meal from AI ${Math.random().toString().substring(2, 5)}`,
+          nutritionalInfo: "nutritionalInfo we get from AI",
+        },
+      ]);
+      navigation.navigate("CapturedMeal", {
+        occasion: foodType,
+      });
+    } else {
+      alert("Please select at least one suggestion");
+    }
   };
 
   const getFood = (foundFood) => {
+    console.log("ConfirmMeal.jsx: getFood() called", foundFood);
     if (foundFood?.length > 0) {
       let newFoundFood = foundFood.slice(0, 3);
       let subclasses = [];
@@ -154,7 +160,7 @@ function ConfirmMeal({ navigation, route }) {
             {/* Check box container */}
             <VStack alignItems={"center"} space={2}>
               {isSuggestedFoodLoaded &&
-                displayedFood.map((item, index) => {
+                [...new Set(displayedFood)].map((item, index) => {
                   console.log(
                     `\n${index}selectedFood[${item}]:`,
                     selectedFood[item]
@@ -224,6 +230,7 @@ function ConfirmMeal({ navigation, route }) {
                   );
                 })}
               {!isSuggestedFoodLoaded &&
+                !homeError?.recError &&
                 [1, 2, 3, 4].map((item, index) => (
                   <Skeleton
                     key={index}
@@ -234,7 +241,9 @@ function ConfirmMeal({ navigation, route }) {
                     rounded="lg"
                   />
                 ))}
-              {homeError?.recError && <Text>Something went wrong !</Text>}
+              {homeError?.recError && (
+                <Text>{homeError.recError}</Text>
+              )}
             </VStack>
 
             <Center mb={5}>
@@ -249,9 +258,11 @@ function ConfirmMeal({ navigation, route }) {
                   Cancel
                 </Button>
                 <Button
+                  disabled={!userSuggestion.length && !isSuggestedFoodLoaded}
                   width={"40%"}
                   colorScheme="primary"
                   onPress={handleAddMeal}
+                  
                 >
                   Add
                 </Button>

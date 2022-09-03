@@ -9,7 +9,7 @@ const apiKey = "6f49fee3718084681eaf706314748108";
 const dbUrl = "https://glacial-refuge-38575.herokuapp.com";
 
 // const logmeal userToken <-- will be auto generated when user logs in
-const userToken = "cbae9560dffdd395d2fd75b0b31fbe598cd350ec";
+const userToken = "ba03e0c55a81e1c584fdaece6126cbba5a0ed24c";
 
 // get suggestions from Edamam api while typing in the search bar
 export const getSuggestions = (word, setSuggestions) => {
@@ -36,6 +36,7 @@ export const getSuggestions = (word, setSuggestions) => {
 
 // get more food from Edamam api based on the search query
 export const getFood = (word, setFood) => {
+  console.log("getFood() called");
   var myHeaders = new Headers();
   myHeaders.append("Accept", "application/json");
   myHeaders.append("Cookie", "route=1ec7638396cb58f649ca30dda440f445");
@@ -52,6 +53,7 @@ export const getFood = (word, setFood) => {
   )
     .then((response) => response.json())
     .then((result) => {
+      // console.log("FOOD DATABASE:", result);
       let hints = result.hints;
       let food = [];
       hints.map((hint) => {
@@ -118,6 +120,7 @@ export const getNutrition = (params, setNutrition) => {
 // recognise the food from the image
 export const recogniseFood = async (image, setFood, setError) => {
   // get current platform
+  console.log("recogniseFood() called");
   const platform = Platform.OS;
   // <-- pass another parameter for user token
   var formdata = new FormData();
@@ -140,7 +143,13 @@ export const recogniseFood = async (image, setFood, setError) => {
 
   fetch(`${dbUrl}/recogniseImage`, requestOptions)
     .then((response) => response.json())
-    .then((result) => setFood(result.recognition_results))
+    .then((result) => {
+      setFood(result.recognition_results);
+      console.log("[RecogniseFood(res):]", result);
+      result.success === false
+        ? setError({ recError: result.message })
+        : console.log("No error");
+    })
     .catch((error) => {
       console.log("[FoodDatabase.jsx] recogniseFoodError:", error);
       setError({ recError: "Error in recognizing food !" });
