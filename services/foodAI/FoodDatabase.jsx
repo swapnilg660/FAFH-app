@@ -9,7 +9,7 @@ const apiKey = "6f49fee3718084681eaf706314748108";
 const dbUrl = "https://glacial-refuge-38575.herokuapp.com";
 
 // const logmeal userToken <-- will be auto generated when user logs in
-const userToken = "cbae9560dffdd395d2fd75b0b31fbe598cd350ec";
+const userToken = "528de5da7674df8b526a2af4dccc2f5e24bb853a";
 
 // get suggestions from Edamam api while typing in the search bar
 export const getSuggestions = (word, setSuggestions) => {

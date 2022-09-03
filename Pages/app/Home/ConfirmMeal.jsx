@@ -154,7 +154,7 @@ function ConfirmMeal({ navigation, route }) {
             {/* Check box container */}
             <VStack alignItems={"center"} space={2}>
               {isSuggestedFoodLoaded &&
-                displayedFood.map((item, index) => {
+                [...new Set(displayedFood)].map((item, index) => {
                   console.log(
                     `\n${index}selectedFood[${item}]:`,
                     selectedFood[item]
