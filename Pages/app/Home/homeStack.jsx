@@ -32,7 +32,10 @@ function HomeStack() {
         <Stack.Screen name="ConfirmMeal" component={ConfirmMeal} />
         <Stack.Screen name="CapturedMeal" component={CapturedMeals} />
 
-        <Stack.Screen name="Recipes" component={RecipesInfo} />
+        <Stack.Group>
+          <Stack.Screen name="Recipes" component={Recipes} />
+          <Stack.Screen name="RecipesInfo" component={RecipesInfo} />
+        </Stack.Group>
       </Stack.Navigator>
     </HomeContext.Provider>
   );
