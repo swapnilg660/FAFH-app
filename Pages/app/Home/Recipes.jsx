@@ -17,7 +17,7 @@ import {
   useTheme,
   VStack,
 } from "native-base";
-import React from "react";
+import React, { useEffect } from "react";
 import { Image, TouchableOpacity, useWindowDimensions } from "react-native";
 
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -27,7 +27,7 @@ const RECIPE_CONTAINER_WIDTH = 200;
 
 function Recipes({ navigation }) {
   const { height, width } = useWindowDimensions();
-  const { colors,sizes } = useTheme();
+  const { colors, sizes } = useTheme();
 
   const [filterList, setFilterList] = React.useState(["All"]);
   const dataFilter = [
@@ -74,7 +74,7 @@ function Recipes({ navigation }) {
     { name: "Chicken Pot Pie", image: undefined },
   ];
   const [bookMarkedRecipes, setBookMarkedRecipes] = React.useState(
-    recipes.map(r => r.name).filter((recipe) => recipe.length > 10)
+    recipes.map((r) => r.name).filter((recipe) => recipe.length > 10)
   );
   const newRecipes = [
     { name: "Ramen", rating: 3, author: "John Doe" },
@@ -83,6 +83,12 @@ function Recipes({ navigation }) {
     { name: "Alfredo Pasta", rating: 5, author: "Patrick Vierra" },
     { name: "Beef Chow mein", rating: 1, author: "Kenan Malale" },
   ];
+
+  useEffect(() => {
+    getRecipes().then((res) => {
+      console.log("results", res);
+    });
+  });
   return (
     <>
       <SafeAreaView></SafeAreaView>
