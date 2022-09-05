@@ -3,6 +3,7 @@ import {
   Feather,
   Foundation,
   Ionicons,
+  MaterialCommunityIcons,
   MaterialIcons,
 } from "@expo/vector-icons";
 import {
@@ -77,11 +78,11 @@ function Recipes({ navigation }) {
     recipes.map((r) => r.name).filter((recipe) => recipe.length > 10)
   );
   const newRecipes = [
-    { name: "Ramen", rating: 3, author: "John Doe" },
-    { name: "Steak with Tomato", rating: 2, author: "Kev Milner" },
-    { name: "Chow Fan", rating: 4, author: "Roelien Brinks" },
-    { name: "Alfredo Pasta", rating: 5, author: "Patrick Vierra" },
-    { name: "Beef Chow mein", rating: 1, author: "Kenan Malale" },
+    { name: "Ramen", rating: 3, author: "John Doe",image:"" },
+    { name: "Steak with Tomato", rating: 2, author: "Kev Milner",image:"" },
+    { name: "Chow Fan", rating: 4, author: "Roelien Brinks",image:"" },
+    { name: "Alfredo Pasta", rating: 5, author: "Patrick Vierra",image:"" },
+    { name: "Beef Chow mein", rating: 1, author: "Kenan Malale",image:"" },
   ];
 
   useEffect(() => {
@@ -216,6 +217,9 @@ function Recipes({ navigation }) {
                 >
                   {/* Recipe image */}
                   <Center
+                    style={{
+                      elevation: 10,
+                    }}
                     bg="blue.400"
                     rounded="full"
                     position={"absolute"}
@@ -289,11 +293,11 @@ function Recipes({ navigation }) {
                         45 Mins
                       </Text>
                     </VStack>
-                    {bookMarkedRecipes.includes(item) ? (
+                    {bookMarkedRecipes.includes(item.name) ? (
                       <TouchableOpacity
                         onPress={() => {
                           setBookMarkedRecipes((prev) => {
-                            return prev.filter((i) => i !== item);
+                            return prev.filter((i) => i !== item.name);
                           });
                         }}
                       >
@@ -307,7 +311,7 @@ function Recipes({ navigation }) {
                       <TouchableOpacity
                         onPress={() => {
                           setBookMarkedRecipes((prev) => {
-                            return [...prev, item];
+                            return [...prev, item.name];
                           });
                         }}
                       >
@@ -338,8 +342,9 @@ function Recipes({ navigation }) {
               mt={(height * 0.18) / 3}
               p={3}
               rounded="2xl"
-              // height={height * 0.18}
-              borderWidth={0.5}
+              style={{
+                elevation: 10,
+              }}
               borderColor="muted.200"
               backgroundColor={"#fff"}
             >
@@ -381,24 +386,45 @@ function Recipes({ navigation }) {
                 ))}
               </HStack>
               {/* Author */}
-              <HStack space="3" alignItems="center">
-                <Text style={{ fontFamily: "Poppins-Light" }} color="muted.500">
-                  By
-                </Text>
-                <Center
-                  width={"45px"}
-                  height={"45px"}
-                  background="fuchsia.400"
-                  rounded="full"
-                  _text={{
-                    style: { fontFamily: "Poppins-SemiBold", fontSize: 20 },
-                  }}
-                >
-                  {item.author.substring(0, 1)}
-                </Center>
-                <Text style={{ fontFamily: "Poppins-Medium", fontSize: 20 }}>
-                  {item.author}
-                </Text>
+              <HStack
+                alignItems={"flex-end"}
+                justifyContent={"space-between"}
+                space={5}
+                width={"100%"}
+              >
+                <HStack space="3" alignItems="flex-end" >
+                  <Center
+                    width={"30px"}
+                    height={"30px"}
+                    background="fuchsia.400"
+                    rounded="full"
+                    _text={{
+                      style: { fontFamily: "Poppins-SemiBold", fontSize: 20 },
+                    }}
+                  >
+                    {item.author.substring(0, 1)}
+                  </Center>
+                  <Text
+                    style={{ fontFamily: "Poppins-Light" }}
+                    color="muted.500"
+                  >
+                    By {item.author}
+                  </Text>
+                </HStack>
+                <HStack alignItems={"flex-end"}  justifyContent={"space-evenly"}>
+                  <MaterialCommunityIcons
+                    name="timer-outline"
+                    size={24}
+                    color="black"
+                  />
+                  <Text
+                    style={{ fontFamily: "Poppins-Light" }}
+                    color="muted.500"
+                  >
+                    {/* {item.time} */}
+                    45 Mins
+                  </Text>
+                </HStack>
               </HStack>
             </VStack>
           ))}

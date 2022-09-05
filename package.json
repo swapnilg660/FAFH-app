@@ -23,6 +23,7 @@
     "@t2tx/react-native-universal-pedometer": "^2.0.3",
     "expo": "~45.0.0",
     "expo-app-loading": "^2.0.0",
+    "expo-barcode-scanner": "~11.3.0",
     "expo-blur": "~11.1.0",
     "expo-camera": "~12.2.0",
     "expo-checkbox": "~2.1.0",

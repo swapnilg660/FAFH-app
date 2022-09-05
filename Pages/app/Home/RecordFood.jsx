@@ -88,8 +88,7 @@ function RecordFood({ navigation, route }) {
       getCustomMeals(setCustomMeals);
     }
 
-    return () => {
-    };
+    return () => {};
   }, [stagger, customMeals]);
   return (
     <>
@@ -394,7 +393,6 @@ function RecordFood({ navigation, route }) {
               },
             }}
           >
-            {/* Still need to decide */}
             <IconButton
               onPress={() =>
                 navigation.navigate("UploadPicture", { foodType: foodType })
@@ -404,12 +402,13 @@ function RecordFood({ navigation, route }) {
               rounded="full"
               icon={
                 <MaterialCommunityIcons
-                  name="barcode-scan"
                   size={24}
-                  color={colors.white}
+                  name="camera"
+                  color={colors["white"]}
                 />
               }
             />
+
             <IconButton
               onPress={() =>
                 navigation.navigate("AddNewFood", { foodType: foodType })
@@ -428,9 +427,9 @@ function RecordFood({ navigation, route }) {
               rounded="full"
               icon={
                 <MaterialCommunityIcons
+                  name="barcode-scan"
                   size={24}
-                  name="camera"
-                  color={colors["white"]}
+                  color={colors.white}
                 />
               }
             />
