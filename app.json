@@ -18,7 +18,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "app.fafh.uj"
     },
     "android": {
       "adaptiveIcon": {
@@ -31,6 +32,11 @@
     "web": {
       "favicon": "./assets/images/favicon.png"
     },
-    "description": ""
+    "description": "",
+    "extra": {
+      "eas": {
+        "projectId": "1a9f2a92-590b-4a16-b534-02ddee167874"
+      }
+    }
   }
 }

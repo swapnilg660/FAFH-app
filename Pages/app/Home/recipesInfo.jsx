@@ -20,11 +20,12 @@ import { FontAwesome } from "@expo/vector-icons";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 
-const RecipesInfo = () => {
+const RecipesInfo = ({ navigation, route }) => {
   const { colors } = useTheme();
+
   const [serving, setServing] = useState(1);
   const recipe = {
     _id: "6312b2816bf2ba37443a298e",
@@ -59,6 +60,10 @@ const RecipesInfo = () => {
     datePosted: "2022-09-03T01:48:49.744Z",
     __v: 0,
   };
+
+  useEffect(() => {
+    console.log(route.params);
+  }, []);
 
   return (
     // <SafeAreaView style={{ backgroundColor: "red", flex: 1, height: "90%" }}>
@@ -161,7 +166,9 @@ const RecipesInfo = () => {
               bgColor="transparent"
               h={10}
               // px={3}
-              onPress={() => setServing(serving - 1)}
+              onPress={() =>
+                setServing((prev) => (!prev == 0 ? serving - 1 : 0))
+              }
             >
               <Text>-</Text>
             </Button>
@@ -172,7 +179,7 @@ const RecipesInfo = () => {
               bgColor="transparent"
               h={10}
               // px={3}
-              onPress={() => setServing(serving - 1)}
+              onPress={() => setServing(serving + 1)}
             >
               <Text>+</Text>
             </Button>
