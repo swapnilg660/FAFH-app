@@ -6584,13 +6584,6 @@ expo-file-system@~14.0.0:
     "@expo/config-plugins" "^4.0.14"
     uuid "^3.4.0"
 
-expo-font@^10.1.0:
-  version "10.2.0"
-  resolved "https://registry.yarnpkg.com/expo-font/-/expo-font-10.2.0.tgz#881f767e13b2b534a4d3ffaedcf675ce6b63439d"
-  integrity sha512-2V4EcpmhNoppaLn+lPprZVS+3bmV9hxLPKttKh2u8ghjH/oX9bv3u4JVo77SYh0EfrWO4toqVyXn8pXH8GpbIg==
-  dependencies:
-    fontfaceobserver "^2.1.0"
-
 expo-font@~10.1.0:
   version "10.1.0"
   resolved "https://registry.yarnpkg.com/expo-font/-/expo-font-10.1.0.tgz#2e8f8954943c5afca8444c1ffb1d74623c6a4fb6"

@@ -59,7 +59,7 @@ export const getCustomMeals = (setCustomMeals) => {
   )
     .then((response) => response.json())
     .then((result) => {
-      console.log("customee meals:", result);
+      console.log("custom meals:", result);
       setCustomMeals(result);
     })
     .catch((error) => console.log("custom meal", error));

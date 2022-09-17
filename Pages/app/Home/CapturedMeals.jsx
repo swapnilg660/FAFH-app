@@ -38,6 +38,25 @@ function CapturedMeals({ navigation, route }) {
     return foodId;
   };
 
+  // Meal Name
+  const MealName = ({ meal }) => {
+    let text = "";
+    if (meal?.userSuggestion?.Other.length > 0) {
+      text =
+        meal.userSuggestion["Other"].length > 30
+          ? meal.userSuggestion["Other"].substring(0, 30) + "..."
+          : meal.userSuggestion["Other"];
+    } else if (meal.name?.length > 0) {
+      text = meal.name;
+    } else {
+      text =
+        meal.userSuggestion["0"]?.length > 30
+          ? meal.userSuggestion["0"].slice(0, 30) + "..."
+          : meal.userSuggestion["0"];
+    }
+    return <Text style={{ fontFamily: "Poppins-Light" }}>{text}</Text>;
+  };
+
   const handleSubmitMeal = () => {
     let foodId = generateFoodId();
     recordFood(occasion, foodId, meals, totalCost);
@@ -46,7 +65,7 @@ function CapturedMeals({ navigation, route }) {
   };
 
   React.useEffect(() => {
-    // console.log(meals);
+    console.log();
   });
 
   return (
@@ -56,6 +75,7 @@ function CapturedMeals({ navigation, route }) {
         <Heading>{occasion}</Heading>
 
         {meals.map((meal, index) => {
+          console.log(meal.userSuggestion);
           return (
             <HStack
               key={`${index}${meal}${getRandomNumber(1000, 100000)}`}
@@ -90,13 +110,8 @@ function CapturedMeals({ navigation, route }) {
                     </Center>
                   )}
                 </Box>
-                <Text style={{ fontFamily: "Poppins-Light" }}>
-                  {meal.name.length > 30
-                    ? meal.name.slice(0, 30) + "..."
-                    : meal.name}
-                </Text>
               </HStack>
-
+              <MealName meal={meal} />
               <IconButton
                 rounded={"none"}
                 colorScheme="danger"

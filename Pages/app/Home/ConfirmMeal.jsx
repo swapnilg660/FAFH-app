@@ -45,15 +45,19 @@ function ConfirmMeal({ navigation, route }) {
         return;
       }
       setIsOtherInvalid(false);
-      // This is raising an error, will fix later
 
       // setSelectedFood({ ...selectedFood, Other: userSuggestion });
       setMeals((prev) => [
         ...prev,
         {
           photo: photo,
-          name: `Meal from AI ${Math.random().toString().substring(2, 5)}`,
           nutritionalInfo: "nutritionalInfo we get from AI",
+          userSuggestion: {
+            ...Object.keys(selectedFood).filter(
+              (key) => selectedFood[key] === true
+            ),
+            Other: userSuggestion,
+          },
         },
       ]);
       navigation.navigate("CapturedMeal", {

@@ -139,7 +139,7 @@ function Home({ navigation }) {
         <Box style={styles.dailyActivitiesContainer}>
           <HStack py={2}>
             <VStack w="55%" ml={7}>
-              <Text style={styles.activitiesTitle}>Daily Activities</Text>
+              <Text style={styles.activitiesTitle}>Daily Calories</Text>
               <HStack w={"100%"} justifyContent={"space-between"}>
                 <TouchableOpacity>
                   <StepsIcon />
@@ -196,73 +196,7 @@ function Home({ navigation }) {
               />
             </View>
             {/* Indicators container */}
-            <VStack>
-              <Box bg={"primary.50"} shadow={1} p={2} my={5} rounded="md">
-                <HStack space={2} p={3} alignItems="center">
-                  <MaterialCommunityIcons
-                    name="clock-check-outline"
-                    size={20}
-                    color={colors["secondary"]["600"]}
-                  />
-                  <Text style={{ fontFamily: "Poppins-Regular" }} fontSize="18">
-                    Active time
-                  </Text>
-                </HStack>
-                <Card.Content style={styles.cardContent}>
-                  <View>
-                    <Text style={styles.interLight}>
-                      <Title>30</Title>/60mins
-                    </Text>
-                  </View>
-                  <View>
-                    <Text style={styles.interLight}>
-                      1234 kcal <Title>|</Title> 1.56 km
-                    </Text>
-                  </View>
-                </Card.Content>
-              </Box>
-              {/* Steps counter */}
-              {/* <HStack
-                justifyContent={"space-between"}
-                style={{ elevation: 3 }}
-                rounded={"md"}
-                bg={"primary.50"}
-                p={2}
-                pt={3}
-                pl={3}
-                mb={5}
-              >
-                <VStack space={2} justifyContent={"space-between"}>
-                  <HStack>
-                    <StepsIcon fill={colors.secondary["500"]} />
-                    <Text
-                      style={{ fontFamily: "Poppins-Regular" }}
-                      fontSize={"16"}
-                      pl={2}
-                    >
-                      Steps counter
-                    </Text>
-                  </HStack>
-                  <Text ml={2} pt={1} style={{ fontFamily: "Poppins-Light" }}>
-                    <Heading>{stepsCounter.current}/</Heading>
-                    {stepsCounter.goal}
-                  </Text>
-                </VStack>
-                <Center mr={5}>
-                  <Progress.Circle
-                    strokeCap={"round"}
-                    showsText={true}
-                    color={colors.primary["600"]}
-                    progress={stepsCounter.current / stepsCounter.goal}
-                    size={50}
-                    formatText={(percentage) =>
-                      `${(percentage * 100).toString().substring(0, 3)}%`
-                    }
-                    textStyle={{ fontSize: 16 }}
-                  />
-                </Center>
-              </HStack> */}
-
+            <VStack mt={5}>
               {/* Record Food */}
               <Card style={styles.indicatorCard}>
                 <Title style={styles.cardTitle}>
