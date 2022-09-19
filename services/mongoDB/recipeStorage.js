@@ -1,5 +1,8 @@
+//db url
+const dbUrl = "https://glacial-refuge-38575.herokuapp.com";
+
 // Store recipes in MongoDB
-const saveRecipe = (recipe) => {
+export const saveRecipe = (recipe) => {
   var formdata = new FormData();
   formdata.append("userId", recipe.userId);
   formdata.append("userName", recipe.userName);
@@ -27,14 +30,14 @@ const saveRecipe = (recipe) => {
     redirect: "follow",
   };
 
-  fetch("http://localhost:5000/saveRecipe", requestOptions)
+  fetch(`${dbUrl}/saveRecipe`, requestOptions)
     .then((response) => response.text())
     .then((result) => console.log(result))
     .catch((error) => console.log("error", error));
 };
 
 // Get recipes from MongoDB
-const getRecipes = () => {
+export const getRecipes = () => {
   var formdata = new FormData();
 
   var requestOptions = {
@@ -43,14 +46,14 @@ const getRecipes = () => {
     redirect: "follow",
   };
 
-  fetch("http://localhost:5000/getRecipes", requestOptions)
+  fetch(`${dbUrl}/getRecipes`, requestOptions)
     .then((response) => response.text())
     .then((result) => console.log(result))
     .catch((error) => console.log("error", error));
 };
 
 // Get recipe image from MongoDB
-const getRecipeImage = (recipeId) => {
+export const getRecipeImage = (recipeId) => {
   var formdata = new FormData();
 
   var requestOptions = {
@@ -59,10 +62,7 @@ const getRecipeImage = (recipeId) => {
     redirect: "follow",
   };
 
-  fetch(
-    `http://localhost:5000/getRecipeImage?recipeId=${recipeId}`,
-    requestOptions
-  )
+  fetch(`${dbUrl}getRecipeImage?recipeId=${recipeId}`, requestOptions)
     .then((response) => response.text())
     .then((result) => console.log(result))
     .catch((error) => console.log("error", error));

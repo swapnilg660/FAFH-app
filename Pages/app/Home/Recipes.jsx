@@ -18,10 +18,11 @@ import {
   useTheme,
   VStack,
 } from "native-base";
-import React from "react";
+import React, { useEffect } from "react";
 import { Image, TouchableOpacity, useWindowDimensions } from "react-native";
 
 import { SafeAreaView } from "react-native-safe-area-context";
+import { getRecipes } from "../../../services/mongoDB/recipeStorage";
 
 const RECIPE_CONTAINER_HEIGHT = 220;
 const RECIPE_CONTAINER_WIDTH = 200;
@@ -84,6 +85,11 @@ function Recipes({ navigation }) {
     { name: "Alfredo Pasta", rating: 5, author: "Patrick Vierra",image:"" },
     { name: "Beef Chow mein", rating: 1, author: "Kenan Malale",image:"" },
   ];
+  useEffect(()=>{
+
+    console.log("[+] GETTING RECIPES:");
+    getRecipes()
+  },[])
   return (
     <>
       <SafeAreaView></SafeAreaView>
