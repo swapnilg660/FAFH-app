@@ -37,8 +37,9 @@ export const saveRecipe = (recipe) => {
 };
 
 // Get recipes from MongoDB
-export const getRecipes = () => {
+export const getRecipes = async (setResults) => {
   var formdata = new FormData();
+  formdata.append("servings", "0");
 
   var requestOptions = {
     method: "POST",
@@ -46,9 +47,12 @@ export const getRecipes = () => {
     redirect: "follow",
   };
 
-  fetch(`${dbUrl}/getRecipes`, requestOptions)
-    .then((response) => response.text())
-    .then((result) => console.log(result))
+  fetch("https://glacial-refuge-38575.herokuapp.com/getRecipes", requestOptions)
+    .then((response) => response.json())
+    .then((result) => {
+      console.log("RESULTS", result);
+      return result;
+    })
     .catch((error) => console.log("error", error));
 };
 
@@ -62,7 +66,10 @@ export const getRecipeImage = (recipeId) => {
     redirect: "follow",
   };
 
-  fetch(`${dbUrl}getRecipeImage?recipeId=${recipeId}`, requestOptions)
+  fetch(
+    `https://glacial-refuge-38575.herokuapp.com/getRecipeImage?recipeId=${recipeId}`,
+    requestOptions
+  )
     .then((response) => response.text())
     .then((result) => console.log(result))
     .catch((error) => console.log("error", error));

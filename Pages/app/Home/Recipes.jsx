@@ -85,11 +85,12 @@ function Recipes({ navigation }) {
     { name: "Alfredo Pasta", rating: 5, author: "Patrick Vierra",image:"" },
     { name: "Beef Chow mein", rating: 1, author: "Kenan Malale",image:"" },
   ];
-  useEffect(()=>{
 
-    console.log("[+] GETTING RECIPES:");
-    getRecipes()
-  },[])
+  useEffect(() => {
+    getRecipes().then((res) => {
+      console.log("results", res);
+    });
+  });
   return (
     <>
       <SafeAreaView></SafeAreaView>
