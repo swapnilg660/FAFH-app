@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Center,
+  Checkbox,
   Heading,
   HStack,
   Input,
@@ -49,7 +50,9 @@ function AddNewFood({ navigation, route }) {
   const [food, setFood] = useState([]);
   const [isSearch, setIsSearch] = useState(false);
   const [nutrition, setNutrition] = useState([]);
-  const [selectedTitle, setSelectedTitle] = useState("Search...");
+  const [catergory, setCatergory] = useState("Generic");
+  const [isSaveMeal, setIsSaveMeal] = useState(false);
+  const [selectedTitle, setSelectedTitle] = useState({ label: "", image: "" });
 
   //display controllers
   const scrollViewRef = React.useRef();
@@ -100,7 +103,7 @@ function AddNewFood({ navigation, route }) {
     getFood(text, setFood);
   };
 
-  const handleFoodClick = (id, unitUri, label) => {
+  const handleFoodClick = (id, unitUri, label, image) => {
     let param = {
       ingredients: [
         {
@@ -110,7 +113,10 @@ function AddNewFood({ navigation, route }) {
         },
       ],
     };
-    setSelectedTitle(label);
+    setSelectedTitle({
+      label,
+      image,
+    });
     setWasFoodSearched(true);
     getNutrition(param, setNutrition);
   };
@@ -125,16 +131,18 @@ function AddNewFood({ navigation, route }) {
     setMeals((prev) => [
       ...prev,
       {
-        name: selectedTitle,
+        name: selectedTitle.label,
         nutritionalInfo: nutrition,
+        catergory: catergory,
+        image: selectedTitle.image,
       },
     ]);
     let dta = {
-      name: selectedTitle,
+      name: selectedTitle.label,
       nutritionalInfo: nutrition,
     };
-    
-    recordCustomeMeal(dta, foodType);
+
+    if (isSaveMeal) recordCustomeMeal(dta, foodType);
     navigation.navigate("CapturedMeal", { occasion: foodType });
 
     // save custom meal to db
@@ -182,7 +190,7 @@ function AddNewFood({ navigation, route }) {
                 textAlign={"center"}
                 px={2}
               >
-                {selectedTitle}
+                {selectedTitle.label}
                 {/* A very long name of the food that we are looking for */}
               </Heading>
             </Center>
@@ -288,7 +296,8 @@ function AddNewFood({ navigation, route }) {
                                 handleFoodClick(
                                   item.id,
                                   item.measureUri,
-                                  item.label
+                                  item.label,
+                                  item.image
                                 )
                               }
                             >
@@ -469,6 +478,15 @@ function AddNewFood({ navigation, route }) {
         )}
         {wasFoodSearched && (
           <Center p={4}>
+            <HStack space={4} mb={5}>
+              <Checkbox
+                // value={isSaveMeal}
+                isChecked={isSaveMeal}
+                onChange={() => setIsSaveMeal(!isSaveMeal)}
+                accessibilityLabel="Is store custome meal"
+              />
+              <Text>Save meal to custome meals</Text>
+            </HStack>
             <Button.Group>
               <Button
                 onPress={() => {

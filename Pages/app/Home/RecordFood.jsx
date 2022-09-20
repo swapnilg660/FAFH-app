@@ -89,7 +89,7 @@ function RecordFood({ navigation, route }) {
     }
 
     return () => {};
-  }, [stagger, customMeals]);
+  }, [stagger]);
   return (
     <>
       <SafeAreaView></SafeAreaView>

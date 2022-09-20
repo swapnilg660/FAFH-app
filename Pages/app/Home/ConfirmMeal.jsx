@@ -50,7 +50,7 @@ function ConfirmMeal({ navigation, route }) {
       setMeals((prev) => [
         ...prev,
         {
-          photo: photo,
+          // photo: photo,
           nutritionalInfo: "nutritionalInfo we get from AI",
           userSuggestion: {
             ...Object.keys(selectedFood).filter(

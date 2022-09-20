@@ -28,7 +28,7 @@ export const getSuggestions = (word, setSuggestions) => {
   )
     .then((response) => response.json())
     .then((result) => {
-      console.log(result);
+      // console.log(result);
       setSuggestions(result.slice(0, 5));
     })
     .catch((error) => console.log("error", error));
@@ -60,6 +60,7 @@ export const getFood = (word, setFood) => {
         let store = {};
         store["id"] = hint.food.foodId;
         store["label"] = hint.food.label;
+        store["image"] = hint.food.image;
         store["energy"] = hint.food.nutrients.ENERC_KCAL + " kcal";
         store["protein"] = hint.food.nutrients.PROCNT + " g";
         store["fat"] = hint.food.nutrients.FAT + " g";
@@ -113,7 +114,10 @@ export const getNutrition = (params, setNutrition) => {
     requestOptions
   )
     .then((response) => response.json())
-    .then((result) => setNutrition(result.totalNutrients))
+    .then((result) => {
+      console.log("NUTRITION:", result);
+      setNutrition(result.totalNutrients);
+    })
     .catch((error) => console.log("error", error));
 };
 

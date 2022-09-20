@@ -25,14 +25,20 @@ export const recordCustomeMeal = async (data, occasion) => {
     .catch((error) => console.log("error", error));
 };
 
-export const recordFood = async (occasion, mealArray, cost) => {
+export const recordFood = async (occasion, mealArray, isFAFH, cost) => {
   let token = await SecureStore.getItemAsync("userToken");
   var formdata = new FormData();
-
+  console.log(`{
+    userId: ${token},
+    mealList: ${JSON.stringify(mealArray)},
+    mealCost: ${cost},
+    occasion: ${occasion},
+  }`);
   formdata.append("userId", token);
-  formdata.append("type", occasion);
   formdata.append("mealList", JSON.stringify(mealArray));
   formdata.append("mealCost", cost);
+  formdata.append("isFAFH", JSON.stringify(isFAFH));
+  formdata.append("occasion", occasion);
 
   var requestOptions = {
     method: "POST",
@@ -41,9 +47,9 @@ export const recordFood = async (occasion, mealArray, cost) => {
   };
 
   fetch(`${dbUrl}/storeMealsRecord`, requestOptions)
-    .then((response) => response.text())
+    .then((response) => response.json())
     .then((result) => console.log(result))
-    .catch((error) => console.log("error : ", error));
+    .catch((error) => console.log("error: ", error));
 };
 
 export const getCustomMeals = (setCustomMeals) => {
@@ -59,7 +65,7 @@ export const getCustomMeals = (setCustomMeals) => {
   )
     .then((response) => response.json())
     .then((result) => {
-      console.log("custom meals:", result);
+      console.log("custom meals found:", result);
       setCustomMeals(result);
     })
     .catch((error) => console.log("custom meal", error));
