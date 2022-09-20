@@ -1,3 +1,8 @@
+import React from "react";
+
+// recipes context
+export const RecipesContext = React.createContext();
+
 //db url
 const dbUrl = "https://glacial-refuge-38575.herokuapp.com";
 
@@ -37,7 +42,7 @@ export const saveRecipe = (recipe) => {
 };
 
 // Get recipes from MongoDB
-export const getRecipes = async (setResults) => {
+export const getRecipes = (setResults, setRecipesLoading) => {
   var formdata = new FormData();
   formdata.append("servings", "0");
 
@@ -50,7 +55,8 @@ export const getRecipes = async (setResults) => {
   fetch("https://glacial-refuge-38575.herokuapp.com/getRecipes", requestOptions)
     .then((response) => response.json())
     .then((result) => {
-      console.log("RESULTS", result);
+      setResults(result);
+      setRecipesLoading(false);
       return result;
     })
     .catch((error) => console.log("error", error));
@@ -71,6 +77,6 @@ export const getRecipeImage = (recipeId) => {
     requestOptions
   )
     .then((response) => response.text())
-    .then((result) => console.log(result))
+    .then((result) => console.log("Getting the image :",result))
     .catch((error) => console.log("error", error));
 };
