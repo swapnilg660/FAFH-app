@@ -60,7 +60,7 @@ export const getCustomMeals = (setCustomMeals) => {
   };
 
   fetch(
-    `${dbUrl}/getCustomeMeals?userId="33FZYqhSzPPMkkTxBZHo4fnyECQ2"`,
+    `${dbUrl}/getCustomeMeals?userId=${token}`,
     requestOptions
   )
     .then((response) => response.json())

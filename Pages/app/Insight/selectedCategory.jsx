@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   Button,
@@ -9,6 +9,8 @@ import {
   useTheme,
 } from "native-base";
 import { BarChartCat } from "./categoryCharts";
+import { array } from "yup";
+import { ScrollView } from "react-native-gesture-handler";
 
 function SelectedCategory({ category }) {
   const { colors } = useTheme();
@@ -18,7 +20,11 @@ function SelectedCategory({ category }) {
     { name: "Monthly", selected: false },
   ]);
 
-  const fill = "rgb(134, 65, 244)";
+  function random(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  }
+  
+
   const dataWeek = [
     {
       day: "Mon",
@@ -49,6 +55,17 @@ function SelectedCategory({ category }) {
       value: 5,
     },
   ];
+
+  category = category.map((e) => {
+    return {
+      ...e,
+      data: dataWeek.map((e) => {
+        return { ...e, value: random(50,300) };
+      }),
+    };
+  });
+  useEffect(() => {
+  }, [category]);
 
   return (
     <>
@@ -89,20 +106,24 @@ function SelectedCategory({ category }) {
         justifyContent={"center"}
         alignItems={"center"}
       >
-        <BarChartCat data={dataWeek} fill={fill} />
-        <VStack>
+        <BarChartCat data={category} />
+        <HStack
+          justifyContent={"center"}
+          alignItems={"center"}
+          width="100%"
+          bg={"muted.100"}
+          p={2}
+          rounded={"md"}
+          space={2}
+          flexWrap="wrap"
+        >
           {category.map((item) => (
-            <HStack
-              key={item.name}
-              width={"100%"}
-              justifyContent={"space-between"}
-              alignItems={"center"}
-            >
-              <Text color="primary.600">{item.name}</Text>
-              <Text color="primary.600">{item.value}</Text>
+            <HStack key={item.name} alignItems={"center"}>
+              <Center bg={item.bg} m={1} p="1.5" rounded={"full"}></Center>
+              <Text color={"primary.600"}>{item.name}</Text>
             </HStack>
           ))}
-        </VStack>
+        </HStack>
       </Box>
     </>
   );
