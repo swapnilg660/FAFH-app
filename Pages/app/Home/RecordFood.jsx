@@ -85,7 +85,7 @@ function RecordFood({ navigation, route }) {
     }
     if (customMeals.length === 0) {
       setCustomMeal(null);
-      getCustomMeals(setCustomMeals);
+      // getCustomMeals(setCustomMeals);
     }
 
     return () => {};
