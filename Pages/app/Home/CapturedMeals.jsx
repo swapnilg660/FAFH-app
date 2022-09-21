@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Center,
+  Checkbox,
   FormControl,
   Heading,
   HStack,
@@ -11,6 +12,7 @@ import {
   ScrollView,
   Text,
   useTheme,
+  VStack,
 } from "native-base";
 import { Alert, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -23,6 +25,10 @@ function CapturedMeals({ navigation, route }) {
   const { occasion } = route.params;
   const { meals, setMeals } = React.useContext(HomeContext);
   const [totalCost, setTotalCost] = React.useState(0);
+  const [isFAFH, setIsFAFH] = React.useState({
+    state: true,
+    location: "",
+  });
 
   // function to get a random number
   const getRandomNumber = (min, max) => {
@@ -59,13 +65,13 @@ function CapturedMeals({ navigation, route }) {
 
   const handleSubmitMeal = () => {
     let foodId = generateFoodId();
-    recordFood(occasion, foodId, meals, totalCost);
+    recordFood(occasion, meals,isFAFH, totalCost);
     Alert.alert("Meal recorded successfully!");
     navigation.navigate("Home");
   };
 
   React.useEffect(() => {
-    console.log();
+    // console.log("List of meals: ", meals);
   });
 
   return (
@@ -171,12 +177,35 @@ function CapturedMeals({ navigation, route }) {
             }}
           />
         </HStack>
-        <HStack
-          space="3"
-          mt={10}
-          justifyContent={"flex-end"}
-          alignItems="center"
-        >
+        <VStack mb={5} mt={10}>
+          <HStack space={2} mb={5}>
+            <Checkbox
+              // value={isSaveMeal}
+              isChecked={isFAFH.state}
+              onChange={() => setIsFAFH({ ...isFAFH, state: !isFAFH.state })}
+              accessibilityLabel="Check if meal was consumed at home"
+            />
+            <Text>Check if meal was not consumed at home.</Text>
+          </HStack>
+          {isFAFH.state ? (
+            <FormControl>
+              <Input
+                borderColor={colors["primary"]["30"]}
+                bg={colors["primary"]["30"]}
+                rounded="md"
+                value={isFAFH.location}
+                placeholder="Enter meal location..."
+                style={{ fontFamily: "Poppins-Regular" }}
+                fontSize={14}
+                w={"80%"}
+                onChangeText={(text) =>
+                  setIsFAFH({ ...isFAFH, location: text })
+                }
+              />
+            </FormControl>
+          ) : null}
+        </VStack>
+        <HStack space="3" justifyContent={"flex-end"} alignItems="center">
           <FormControl>
             <Input
               borderColor={colors["primary"]["30"]}
