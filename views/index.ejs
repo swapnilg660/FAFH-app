@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Administrator Dashboard</title>
+  <link rel="stylesheet" type="text/css" href="/assets/style.css" />
+  <!-- link for table -->
+  <link rel="stylesheet" href="./table.css" />
+  <link rel="stylesheet" type="text/css" href="/media/css/site-examples.css?_=11229a4cc52ab488c3d6ed72e1ec231e1" />
+  <link rel="stylesheet" type="text/css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css" />
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap4.min.css" />
+  <link rel="stylesheet" type="text/css"
+    href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.bootstrap4.min.css" />
+
+  <script type="text/javascript" src="/media/js/site.js?_=87a9e5380bcd291d5eea77cf210da433" data-domain="datatables.net"
+    data-api="https://plausible.sprymedia.co.uk/api/event"></script>
+  <script src="https://media.ethicalads.io/media/client/ethicalads.min.js"></script>
+  <script type="text/javascript"
+    src="/media/js/dynamic.php?comments-page=extensions%2Fbuttons%2Fexamples%2Fstyling%2Fbootstrap4.html"
+    async></script>
+  <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+  <script type="text/javascript" language="javascript"
+    src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" language="javascript"
+    src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap4.min.js"></script>
+  <script type="text/javascript" language="javascript"
+    src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+  <script type="text/javascript" language="javascript"
+    src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.bootstrap4.min.js"></script>
+  <script type="text/javascript" language="javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+  <script type="text/javascript" language="javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+  <script type="text/javascript" language="javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+  <script type="text/javascript" language="javascript"
+    src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+  <script type="text/javascript" language="javascript"
+    src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
+  <script type="text/javascript" language="javascript"
+    src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.colVis.min.js"></script>
+  <script type="text/javascript" language="javascript" src="../../../../examples/resources/demo.js"></script>
+  <script type="text/javascript" class="init">
+    $(document).ready(function () {
+      var table = $("#example").DataTable({
+        lengthChange: false,
+        buttons: ["copy", "excel", "pdf", "colvis"],
+      });
+
+      table
+        .buttons()
+        .container()
+        .appendTo("#example_wrapper .col-md-6:eq(0)");
+    });
+  </script>
+
+  <!-- scritp for pop up -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- scritp for pop up -->
+
+</head>
+
+<body>
+  <div class="container" id="mainpart">
+    <div class="navigation  ">
+      <ul>
+        <li>
+          <a href="#">
+            <span class="icon">
+              <ion-icon name="pizza-outline"></ion-icon>
+            </span>
+            <span class="title">FAFH Admin Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <span class="icon">
+              <ion-icon name="home-outline"></ion-icon>
+            </span>
+            <span id="dashboard-btn" class="title">Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <span class="icon">
+              <ion-icon name="settings-outline"></ion-icon>
+            </span>
+            <span id="settingbtn" class="title">Settings</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <span class="icon">
+              <ion-icon name="lock-closed-outline"></ion-icon>
+            </span>
+            <span id="password-btn" class="title">Password</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <span class="icon">
+              <ion-icon name="log-out-outline"></ion-icon>
+            </span>
+            <span type="button"  data-toggle="modal" data-target="#myModal" class="title">Sign Out</span>
+
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!--Main-->
+    <div class="main">
+      <div class="topbar">
+        <div class="toggle">
+          <ion-icon name="grid-outline"></ion-icon>
+        </div>
+        <!--Search-->
+        <div class="search">
+          <label>
+            <input type="text" placeholder="Search" />
+            <!-- <ion-icon name="search-outline"></ion-icon> -->
+          </label>
+        </div>
+        <!--User Image-->
+        <div  class="user">
+          <img src="/images/user.png" />
+        </div>
+      </div>
+      <!-- top-bar-end-here -->
+
+      <!-- dashboard table start here -->
+      <div id="dtable">
+        <div id="popup1#content">
+          <table id="example" class="table table-striped table-bordered" style="width: 100%">
+            <thead>
+              <tr>
+                <th>User ID</th>
+                <th>Meal</th>
+                <th>Nutritional Information</th>
+                <th>Occasion</th>
+                <th>FAFH?</th>
+                <th>Cost</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <%mealsList.forEach(meal => {%>
+                <tr>
+                    <td><%= meal.userId %></td>
+                    <td><%= meal.mealList.name %></td>
+                    <td><%- String(meal.mealList.nutritionalInfo).replace(/}/g, '<br>').replace(/{/g, '<br>').replace('[', '').replace(']', '')%></td>
+                    <td><%= meal.occasion %></td>
+                    <td><%- String(meal.isFAFH).replace(/{/g, '').replace(/}/g, '') %></td>
+                    <td><%= meal.mealCost %></td>
+                    <td><%= meal.mealDate %></td>
+                  </tr>
+              <%})%>
+            </tbody>
+            <tfoot>
+              <tr>
+                <th>User ID</th>
+                <th>Meal</th>
+                <th>Nutritional Information</th>
+                <th>Occasion</th>
+                <th>FAFH?</th>
+                <th>Cost</th>
+                <th>Date</th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+      <!-- dashboard table ends here -->
+
+      <!-- setting data start here -->
+      <div id="setting-data">
+        <div class="container">
+          <div class="row ">
+            <div class="col-7 mx-auto">
+              <button type="button" class="  btn btn-primary btn-lg btn-block">
+                Change Profile Picture
+              </button>
+              <button type="button"  data-toggle="modal" data-target="#myModal2" class="  btn btn-primary btn-lg btn-block">
+                Change Email Address
+              </button>
+              <div>
+                <input class="custominout" type="color" id="color">
+                <button id="nom22" class="  customcolor">Change</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- setting data end here -->
+
+      <!-- password data start -->
+      <div id="password-data">
+        <input class="form-control form-control-lg" type="text" placeholder="Old Password" />
+        <input class="form-control form-control-lg" type="text" placeholder="New Password" />
+        <input class="form-control form-control-lg" type="text" placeholder="Confirm Password" />
+        <button type="button" class="  btn btn-outline-primary btn-lg">
+          Cancel
+        </button>
+        <button type="button" class="  btn btn-primary btn-lg">Change</button>
+      </div>
+      <!-- password data  ends -->
+
+      <!-- logout data -->
+<div id="logout-data">
+  <div class="modal" id="myModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Logout</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          Do you want to Logout Now?
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button " class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
+          <a href="login"class="btn btn-primary">Yes</a>
+
+        </div>
+        
+      </div>
+    </div>
+
+</div>
+      <!-- logout data -->
+    </div>
+    <div id="logout-data">
+      <div class="modal" id="myModal2">
+        <div class="modal-dialog">
+          <div class="modal-content">
+          
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">Change Email</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            
+            <!-- Modal body -->
+            <div class="modal-body">
+              <input class="form-control" type="Email" placeholder="Type Your New Email">
+            </div>
+            
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button " class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
+              <a href="index"class="btn btn-primary">Change</a>
+    
+            </div>
+            
+          </div>
+        </div>
+    
+    </div>
+          <!-- logout data -->
+        </div>
+  </div>
+
+<script>
+      $(document).ready(function () {
+
+$("#nom22").click(function(){
+  $("button,.navigation" ).css({
+	backgroundColor: $("#color").val()
+
+  });
+  
+});
+
+});
+</script>
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+  <script>
+
+    //menu toggle
+    let toggle = document.querySelector(".toggle");
+    let navigation = document.querySelector(".navigation");
+    let main = document.querySelector(".main");
+
+    toggle.onclick = function () {
+      navigation.classList.toggle("active");
+      main.classList.toggle("active");
+    };
+
+    let list = document.querySelectorAll(".navigation li");
+    function activeLink() {
+      list.forEach((item) => item.classList.remove("hovered"));
+      this.classList.add("hovered");
+    }
+    list.forEach((item) => item.addEventListener("mouseover", activeLink));
+
+    $("#myModal").on("shown.bs.modal", function () {
+      $("#myInput").trigger("focus");
+    });
+    $("#myModal2").on("shown.bs.modal", function () {
+      $("#myInput").trigger("focus");
+    });
+  </script>
+  
+  <script>
+    $(document).ready(function () {
+      $("#dashboard-btn").click(function () {
+        $("#dtable").show();
+        $("#setting-data").hide();
+        $("#password-data").hide();
+      });
+      $("#settingbtn,.user").click(function () {
+        $("#setting-data").show();
+        $("#password-data").hide();
+        $("#dtable").hide();
+      });
+      $("#password-btn").click(function () {
+        $("#password-data").show();
+        $("#setting-data").hide();
+        $("#dtable").hide();
+      });
+    });
+  </script>
+</body>
+
+</html>
