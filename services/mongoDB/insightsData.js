@@ -30,9 +30,10 @@ export const getTopRestaurants = async (setTopRestaurants) => {
     body: formdata,
     redirect: "follow",
   };
+  console.log(`${dbUrl}/getTopRestaurants?userId=${token}`)
 
-  fetch(`${dbUrl}/getTopRestaurants?userId=${token}`, requestOptions)
+  fetch(`https://glacial-refuge-38575.herokuapp.com/getTopRestaurants?userId=tadaa`, requestOptions)
     .then((response) => response.json())
-    .then((result) => setTopRestaurants(result))
-    .catch((error) => console.log("error getting resturants: ", error));
+    .then((result) => setTopRestaurants(result.data))
+    .catch((error) => console.log("error getting restaurants: ", error));
 };

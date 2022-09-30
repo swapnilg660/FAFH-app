@@ -4,7 +4,7 @@ import {
   Button,
   Center,
   HStack,
-  VStack,
+  Heading,
   Text,
   useTheme,
 } from "native-base";
@@ -23,7 +23,6 @@ function SelectedCategory({ category }) {
   function random(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
-  
 
   const dataWeek = [
     {
@@ -60,12 +59,11 @@ function SelectedCategory({ category }) {
     return {
       ...e,
       data: dataWeek.map((e) => {
-        return { ...e, value: random(50,300) };
+        return { ...e, value: random(50, 300) };
       }),
     };
   });
-  useEffect(() => {
-  }, [category]);
+  useEffect(() => {}, [category]);
 
   return (
     <>
@@ -96,6 +94,8 @@ function SelectedCategory({ category }) {
           </Button>
         ))}
       </HStack>
+      
+      <Heading mt={5}>Calories consumed: {category.map((e) => `${e.name},`)}</Heading>
       <Box
         alignSelf={"center"}
         m={2}
@@ -107,6 +107,38 @@ function SelectedCategory({ category }) {
         alignItems={"center"}
       >
         <BarChartCat data={category} />
+        <HStack
+          justifyContent={"center"}
+          alignItems={"center"}
+          width="100%"
+          bg={"muted.100"}
+          p={2}
+          rounded={"md"}
+          space={2}
+          flexWrap="wrap"
+        >
+          {category.map((item) => (
+            <HStack key={item.name} alignItems={"center"}>
+              <Center bg={item.bg} m={1} p="1.5" rounded={"full"}></Center>
+              <Text color={"primary.600"}>{item.name}</Text>
+            </HStack>
+          ))}
+        </HStack>
+      </Box>
+
+      <Heading mt={5}>Money spent on: {category.map((e) => `${e.name},`)}</Heading>
+
+      <Box
+        alignSelf={"center"}
+        m={2}
+        p={5}
+        rounded={10}
+        width={"100%"}
+        bg="secondary.30"
+        justifyContent={"center"}
+        alignItems={"center"}
+      >
+        <BarChartCat data={category} type="money"/>
         <HStack
           justifyContent={"center"}
           alignItems={"center"}

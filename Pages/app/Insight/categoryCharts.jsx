@@ -4,7 +4,7 @@ import { View } from "react-native";
 import { LineChart, Path, Grid, XAxis, YAxis } from "react-native-svg-charts";
 import Category from "./categoryComponent";
 
-function BarChartCat({ data }) {
+function BarChartCat({ data, type }) {
   const { colors } = useTheme();
   const axesSvg = { fontSize: 10, fill: "grey" };
   const verticalContentInset = { top: 10, bottom: 10 };
@@ -34,10 +34,10 @@ function BarChartCat({ data }) {
     <HStack height={"200px"}>
       <YAxis
         data={yAxisData}
-        style={{ marginBottom: xAxisHeight,marginHorizontal: 10 }}
+        style={{ marginBottom: xAxisHeight, marginHorizontal: 10 }}
         contentInset={verticalContentInset}
         svg={axesSvg}
-        formatLabel={(value) => `${value}cal`}
+        formatLabel={(value) => (type ? `R${value}0` : `${value}cal`)}
       />
       <Box minWidth="100%">
         <LineChart

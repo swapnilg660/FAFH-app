@@ -93,20 +93,16 @@ function Recipes({ navigation }) {
     recipesFromDb.filter((recipe) => recipe.bookmarked)
   );
   const [imagesForRecipes, setImagesForRecipes] = React.useState([]);
+  const getImages = () => {
+    recipesFromDb.forEach((recipe) => {
+      getRecipeImage(recipe.recipeId, setImagesForRecipes);
+    });
+  };
 
   useEffect(() => {
     getRecipes(setRecipesFromDb, setRecipesLoading);
     console.log("recipesFromDb", recipesFromDb);
-    setImagesForRecipes(
-      recipesFromDb.map((recipes) => {
-        getRecipeImage(recipes.recipeId);
-        console.log("recipes.recipeId", recipes.recipeId);
-        return {
-          id: recipes.recipeId,
-          image: null,
-        };
-      })
-    );
+    getImages();
   }, []);
   return (
     <RecipesContext.Provider value={{ setRecipesFromDb, recipesFromDb }}>
@@ -274,16 +270,20 @@ function Recipes({ navigation }) {
                           4.5
                         </Text>
                       </HStack>
-                      <Image
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          borderRadius: sizes["2xl"],
-                        }}
-                        source={{ uri: item.image }}
-                        alt={`${item.name} image`}
-                        srcset=""
-                      />
+                      {false ? (
+                        <Image
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            borderRadius: sizes["2xl"],
+                          }}
+                          source={{ uri: item.image }}
+                          alt={`${item.name} image`}
+                          srcset=""
+                        />
+                      ) : (
+                        "camera"
+                      )}
                     </Center>
 
                     <Heading

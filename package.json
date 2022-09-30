@@ -27,7 +27,7 @@
     "expo-blur": "~11.1.0",
     "expo-camera": "~12.2.0",
     "expo-checkbox": "~2.1.0",
-    "expo-cli": "^5.4.12",
+    "expo-cli": "^6.0.6",
     "expo-font": "~10.1.0",
     "expo-image-manipulator": "~10.3.1",
     "expo-secure-store": "~11.2.0",

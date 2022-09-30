@@ -1,5 +1,5 @@
 import * as React from "react";
-import Svg, { Circle, Rect, Path } from "react-native-svg";
+import Svg, { Circle, Rect, Path,G,Defs,ClipPath } from "react-native-svg";
 
 function GoogleIcon() {
   return (
@@ -68,6 +68,8 @@ function FAFH_logo({ fill, width, height }) {
     </Svg>
   );
 }
+
+
 function StepsIcon({ width, height, fill }) {
   return (
     <Svg
@@ -154,6 +156,33 @@ function EmptyPlateIcon({ width, height, background, fill }) {
     </Svg>
   );
 }
+function HomeIconForLogo(props) {
+  return (
+    <Svg
+      width={31}
+      height={29}
+      viewBox="0 0 31 29"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <G clipPath="url(#clip0_911_377)" fill="#FF9B21">
+        <Path d="M7.747 7.016L.176 13.582l.463.513c.244.283.61.685.803.89l.35.369 6.75-5.864c3.711-3.228 6.785-5.864 6.829-5.864.078 0 2.349 1.951 10.208 8.791l3.371 2.928.35-.368c.192-.197.558-.6.803-.882l.463-.514-7.572-6.565C18.838 3.412 15.406.458 15.371.458c-.035 0-3.467 2.954-7.624 6.558zM4.717 5.132v2.79l.375-.333c.21-.18 1.066-.933 1.904-1.67l1.528-1.352.026-1.113.027-1.113h-3.86v2.791z" />
+        <Path d="M10.044 10.14l-5.336 4.631.35.394c.183.223.462.514.602.642l.262.248 4.593-3.972c2.533-2.174 4.637-3.98 4.69-3.997.052-.009.35.222.672.522.323.3 1.528 1.37 2.681 2.38a635.65 635.65 0 013.912 3.458l1.826 1.627-.079 4.75c-.035 2.62-.07 5.377-.07 6.13v1.361l.716.171.725.172.218-.206.219-.205-.018-6.763-.026-6.763-3.886-3.373c-2.14-1.849-4.524-3.92-5.3-4.597l-1.416-1.233-5.335 4.623z" />
+      </G>
+      <Defs>
+        <ClipPath id="clip0_911_377">
+          <Path
+            fill="#fff"
+            transform="translate(.176 .458)"
+            d="M0 0H30.39V28.1983H0z"
+          />
+        </ClipPath>
+      </Defs>
+    </Svg>
+  )
+}
+
 function HomeIcon({ width, height, fill, reduceDimensions }) {
   return (
     <Svg
@@ -255,4 +284,5 @@ export {
   ProfileIcon,
   RecordFoodIcon,
   WeightIcon,
+  HomeIconForLogo
 };

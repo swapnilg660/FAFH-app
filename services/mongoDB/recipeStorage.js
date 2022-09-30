@@ -63,7 +63,7 @@ export const getRecipes = (setResults, setRecipesLoading) => {
 };
 
 // Get recipe image from MongoDB
-export const getRecipeImage = (recipeId) => {
+export const getRecipeImage = (recipeId, setImage) => {
   var formdata = new FormData();
 
   var requestOptions = {
@@ -77,6 +77,6 @@ export const getRecipeImage = (recipeId) => {
     requestOptions
   )
     .then((response) => response.text())
-    .then((result) => console.log("Getting the image :",result))
+    .then((result) => setImage((prev) => [...prev, result.image]))
     .catch((error) => console.log("error", error));
 };

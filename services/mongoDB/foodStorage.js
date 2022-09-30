@@ -27,6 +27,7 @@ export const recordCustomeMeal = async (data, occasion) => {
 
 export const recordFood = async (occasion, mealArray, isFAFH, cost) => {
   let token = await SecureStore.getItemAsync("userToken");
+  console.log("[foodStorage] user token", token);
   var formdata = new FormData();
   console.log(`{
     userId: ${token},

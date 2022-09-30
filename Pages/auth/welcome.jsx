@@ -3,8 +3,16 @@ import * as SecureStore from "expo-secure-store";
 import { Image, useWindowDimensions, Animated } from "react-native";
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import useFonts from "../../hooks/useFonts";
-import { Button, Center, Text, useTheme, VStack } from "native-base";
-import { FAFH_logo } from "../../Components/customSvgIcon";
+import {
+  Button,
+  Center,
+  Text,
+  useTheme,
+  VStack,
+  HStack,
+  Box,
+} from "native-base";
+import { FAFH_logo, HomeIconForLogo } from "../../Components/customSvgIcon";
 
 function Welcome({ navigation }) {
   const { colors } = useTheme();
@@ -79,18 +87,41 @@ function Welcome({ navigation }) {
           ],
         }}
       >
-        <Center mt={-height / 7}>
-          <FAFH_logo fill={colors.secondary["500"]} width={110} height={110} />
-        </Center>
+        <Box
+          mt={-height / 7}
+          rounded="full"
+          w="200px"
+          h="200px"
+          alignSelf="center"
+          position="relative"
+        >
+          <Center>
+            <FAFH_logo fill={colors.primary["600"]} width={110} height={110} />
+          </Center>
+          <HStack space="2" alignItems="center">
+            <Text color="primary.600" fontSize="22">
+              F<Text color={"secondary.500"}>OO</Text>D
+            </Text>
+            <Text color="primary.600" fontSize="22">
+              AWAY
+            </Text>
+            <HStack  alignItems="center">
+              <Text fontSize="22" color="primary.600">
+                FROM
+              </Text>
+              <HomeIconForLogo />
+            </HStack>
+          </HStack>
+        </Box>
+
         <Center>
-          <Text
+          {/* <Text
             fontSize="32"
-            // pt={7}
             style={{ fontFamily: "Poppins-SemiBold" }}
             color="primary.600"
           >
             FAFH
-          </Text>
+          </Text> */}
           <Text
             color={"primary.600"}
             px="20"

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   Button,
@@ -29,12 +29,12 @@ import {
   VegsIcon,
 } from "./insightSvg";
 import Category from "./categoryComponent";
-import { PieChart } from "react-native-chart-kit";
 import SelectedCategory from "./selectedCategory";
+import { getTopRestaurants } from "../../../services/mongoDB/insightsData";
 
 function Insights({ navigation }) {
   const { colors } = useTheme();
-  const [value, setValue] = React.useState(0);
+  const [topRestaurants, setTopRestaurants] = React.useState(null);
 
   //categories data
   const [categories, setCategories] = React.useState([
@@ -90,48 +90,11 @@ function Insights({ navigation }) {
   ]);
   const CategoriesScrollRef = React.useRef();
 
-  // chart data
-  const labels = [
-    <MaterialCommunityIcons name="food-drumstick" size={24} color="black" />,
-    <MaterialCommunityIcons name="bread-slice" size={24} color="black" />,
-    <FontAwesome5 name="pizza-slice" size={24} color="black" />,
-    <MaterialCommunityIcons name="fruit-watermelon" size={24} color="black" />,
-    <MaterialCommunityIcons name="cup" size={24} color="black" />,
-  ];
-
-  const data = [
-    {
-      name: "Carbs",
-      quantity: 195,
-      color: colors.primary["600"],
-      legendFontColor: colors.primary["600"],
-      legendFontSize: 15,
-    },
-    {
-      name: "Protein",
-      quantity: 100,
-      color: colors.secondary["600"],
-      legendFontColor: colors.secondary["600"],
-      legendFontSize: 15,
-    },
-    {
-      name: "Fat",
-      quantity: 50,
-      color: colors.danger["600"],
-      legendFontColor: colors.danger["600"],
-      legendFontSize: 15,
-    },
-  ];
-  const chartConfig = {
-    backgroundGradientFrom: "#1E2923",
-    backgroundGradientFromOpacity: 0,
-    backgroundGradientTo: "#08130D",
-    backgroundGradientToOpacity: 0.5,
-    color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-    strokeWidth: 2, // optional, default 3
-    barPercentage: 0.5,
-    useShadowColorFromDataset: false, // optional
-  };
+  useEffect(() => {
+    //getting top restaurants
+    getTopRestaurants(setTopRestaurants);
+    console.log("TOP RESTAURANTS :",topRestaurants);
+  }, []);
 
   return (
     <>
@@ -346,8 +309,9 @@ function Insights({ navigation }) {
                 Top Restaurants
               </Heading>
               <VStack space="3" mb={3}>
-                {["McDonalds", "KFC", "Burger King", "Pizza Hut"].map(
+                {topRestaurants?.map(
                   (item, index) => {
+                    const [restaurantName,restaurantExpenses] = item;
                     return (
                       <HStack
                         key={index}
@@ -364,7 +328,7 @@ function Insights({ navigation }) {
                             fontFamily: "Poppins-Regular",
                           }}
                         >
-                          {`${index + 1}. ${item}`}
+                          {`${index + 1}. ${restaurantName}`}
                         </Text>
                         <Text
                           fontSize="md"
@@ -372,7 +336,7 @@ function Insights({ navigation }) {
                             fontFamily: "Poppins-Regular",
                           }}
                         >
-                          {`R${index + 1}000`}
+                          {`R${restaurantExpenses}`}
                         </Text>
                       </HStack>
                     );
