@@ -163,7 +163,7 @@ function CapturedMeals({ navigation, route }) {
           alignItems={"center"}
           my={1}
         >
-          <Text style={{ fontFamily: "Poppins-Light" }}>Add More...</Text>
+          <Text style={{ fontFamily: "Poppins-Light" }}>Add More</Text>
           <IconButton
             rounded={"none"}
             colorScheme="secondary"

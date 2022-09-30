@@ -95,7 +95,9 @@ function SelectedCategory({ category }) {
         ))}
       </HStack>
       
-      <Heading mt={5}>Calories consumed: {category.map((e) => `${e.name},`)}</Heading>
+      <Heading mt={5} style={{
+        fontFamily: "Poppins-SemiBold"
+      }}>Calorie Intake</Heading>
       <Box
         alignSelf={"center"}
         m={2}
@@ -126,7 +128,7 @@ function SelectedCategory({ category }) {
         </HStack>
       </Box>
 
-      <Heading mt={5}>Money spent on: {category.map((e) => `${e.name},`)}</Heading>
+      {/* <Heading mt={5}>Money spent on: {category.map((e) => `${e.name},`)}</Heading>
 
       <Box
         alignSelf={"center"}
@@ -156,7 +158,7 @@ function SelectedCategory({ category }) {
             </HStack>
           ))}
         </HStack>
-      </Box>
+      </Box> */}
     </>
   );
 }

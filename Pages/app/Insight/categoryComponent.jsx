@@ -7,16 +7,18 @@ function Category({ name, Icon, onPress, bg, blurred, selected }) {
     <Pressable onPress={onPress}>
       <VStack space="1" alignItems={"center"}>
         <Center
-        rounded="full"
-          borderWidth={3}
+          rounded="full"
+          // borderWidth={3}
           borderColor={selected ? colors.primary["600"] : "transparent"}
         >
           <Center
-            bg={blurred ? "muted.500" : bg}
+            bg={bg}
+            
             rounded={"full"}
             size="16"
             borderWidth={3}
             borderColor="transparent"
+            opacity={blurred ? 0.1 : 1}
           >
             <Icon />
           </Center>

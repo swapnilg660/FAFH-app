@@ -342,8 +342,9 @@ function AddNewFood({ navigation, route }) {
             <Heading
               color={"secondary.700"}
               style={{ fontFamily: "Poppins-Regular" }}
+              pb={3}
             >
-              Basic nutritional information
+              Nutrients
             </Heading>
 
             {isCollapsed &&

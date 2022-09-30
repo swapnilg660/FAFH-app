@@ -93,7 +93,7 @@ function Insights({ navigation }) {
   useEffect(() => {
     //getting top restaurants
     getTopRestaurants(setTopRestaurants);
-    console.log("TOP RESTAURANTS :",topRestaurants);
+    console.log("TOP RESTAURANTS :", topRestaurants);
   }, []);
 
   return (
@@ -179,172 +179,159 @@ function Insights({ navigation }) {
           {categories.some((c) => c.selected) ? (
             <SelectedCategory category={categories.filter((c) => c.selected)} />
           ) : (
-            <>
-              <VStack p={3} bg="primary.30" rounded="lg">
-                <Box my={2}>
-                  <Text style={{ fontFamily: "Poppins-Light" }}>Carbs</Text>
-                  <Progress.Bar
-                    progress={65 / 100}
-                    width={Dimensions.get("window").width * 0.8}
-                    height={8}
-                    color={colors.primary[500]}
-                    unfilledColor={colors.primary[50]}
-                    borderWidth={0}
-                  />
-                </Box>
-                <Box my={2}>
-                  <Text style={{ fontFamily: "Poppins-Light" }}>Protein</Text>
-                  <Progress.Bar
-                    progress={35 / 100}
-                    width={Dimensions.get("window").width * 0.8}
-                    height={8}
-                    color={colors.secondary[500]}
-                    unfilledColor={colors.secondary[50]}
-                    borderWidth={0}
-                  />
-                </Box>
-                <Box my={2}>
-                  <Text style={{ fontFamily: "Poppins-Light" }}>Fat</Text>
-                  <Progress.Bar
-                    progress={49 / 100}
-                    width={Dimensions.get("window").width * 0.8}
-                    height={8}
-                    color={colors.red[600]}
-                    unfilledColor={colors.red[50]}
-                    borderWidth={0}
-                  />
-                </Box>
-                <HStack
-                  my={5}
-                  bg="primary.50"
-                  rounded={"xl"}
-                  p={3}
-                  justifyContent="space-between"
-                  alignItems="center"
+            <VStack p={3} bg="primary.30" rounded="lg">
+            <Box my={2}>
+              <Text style={{ fontFamily: "Poppins-Light" }}>Carbs</Text>
+              <Progress.Bar
+                progress={65 / 100}
+                width={Dimensions.get("window").width * 0.8}
+                height={8}
+                color={colors.primary[500]}
+                unfilledColor={colors.primary[50]}
+                borderWidth={0}
+              />
+            </Box>
+            <Box my={2}>
+              <Text style={{ fontFamily: "Poppins-Light" }}>Protein</Text>
+              <Progress.Bar
+                progress={35 / 100}
+                width={Dimensions.get("window").width * 0.8}
+                height={8}
+                color={colors.secondary[500]}
+                unfilledColor={colors.secondary[50]}
+                borderWidth={0}
+              />
+            </Box>
+            <Box my={2}>
+              <Text style={{ fontFamily: "Poppins-Light" }}>Fat</Text>
+              <Progress.Bar
+                progress={49 / 100}
+                width={Dimensions.get("window").width * 0.8}
+                height={8}
+                color={colors.red[600]}
+                unfilledColor={colors.red[50]}
+                borderWidth={0}
+              />
+            </Box>
+            <HStack
+              my={5}
+              bg="primary.50"
+              rounded={"xl"}
+              p={3}
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <VStack space="1">
+                <Heading
+                  color={"muted.400"}
+                  style={{ fontFamily: "Poppins-SemiBold" }}
                 >
-                  <VStack space="1">
-                    <Heading
-                      color={"muted.400"}
-                      style={{ fontFamily: "Poppins-SemiBold" }}
-                    >
-                      Total Calories
-                    </Heading>
-                    <Heading
-                      fontSize={"lg"}
-                      style={{ fontFamily: "Poppins-Light" }}
-                    >
-                      {/* {value} */}
-                      320 Calories
-                    </Heading>
-                  </VStack>
-                  <PieChartInsights
-                    td={1}
-                    colors={[
-                      colors.primary["500"],
-                      colors.secondary["500"],
-                      colors.danger["500"],
-                    ]}
-                  />
-                </HStack>
-              </VStack>
-
-              {/* Expenditure */}
-              <Heading
-                style={{
-                  fontFamily: "Poppins-Regular",
-                }}
-              >
-                Expenditure
-              </Heading>
-              <VStack p={3} bg="secondary.30" rounded="lg">
-                <HStack
-                  space="3"
-                  alignItems="center"
-                  justifyContent={"space-evenly"}
+                  Total Calories
+                </Heading>
+                <Heading
+                  fontSize={"lg"}
+                  style={{ fontFamily: "Poppins-Light" }}
                 >
-                  <PieChartInsights
-                    colors={[
-                      colors.primary["500"],
-                      colors.secondary["500"],
-                      colors.danger["500"],
-                    ]}
-                  />
-                  <VStack space="2">
-                    <HStack space="3" alignItems="center">
-                      <Center
-                        bg="primary.500"
-                        rounded={"full"}
-                        size="3"
-                      ></Center>
-                      <Text style={{ fontFamily: "Poppins-Light" }}>Home</Text>
-                    </HStack>
-                    <HStack space="3" alignItems="center">
-                      <Center
-                        bg="danger.500"
-                        rounded={"full"}
-                        size="3"
-                      ></Center>
-                      <Text style={{ fontFamily: "Poppins-Light" }}>Away</Text>
-                    </HStack>
-                  </VStack>
-                </HStack>
-
-                <Text
-                  fontSize="md"
-                  style={{
-                    fontFamily: "Poppins-Light",
-                  }}
-                >
-                  You ve Spent 75% more money on food away from home, bringing
-                  food from home to work might help you save money.
-                </Text>
+                  {/* {value} */}
+                  320 Calories
+                </Heading>
               </VStack>
-
-              {/* Top Restaurants */}
-              <Heading
-                style={{
-                  fontFamily: "Poppins-Regular",
-                }}
-              >
-                Top Restaurants
-              </Heading>
-              <VStack space="3" mb={3}>
-                {topRestaurants?.map(
-                  (item, index) => {
-                    const [restaurantName,restaurantExpenses] = item;
-                    return (
-                      <HStack
-                        key={index}
-                        justifyContent={"space-between"}
-                        p={4}
-                        rounded={"xl"}
-                        mb={1}
-                        alignItems="center"
-                        bg={"primary.30"}
-                      >
-                        <Text
-                          fontSize="md"
-                          style={{
-                            fontFamily: "Poppins-Regular",
-                          }}
-                        >
-                          {`${index + 1}. ${restaurantName}`}
-                        </Text>
-                        <Text
-                          fontSize="md"
-                          style={{
-                            fontFamily: "Poppins-Regular",
-                          }}
-                        >
-                          {`R${restaurantExpenses}`}
-                        </Text>
-                      </HStack>
-                    );
-                  }
-                )}
-              </VStack>
-            </>
+              <PieChartInsights
+                td={1}
+                colors={[
+                  colors.primary["500"],
+                  colors.secondary["500"],
+                  colors.danger["500"],
+                ]}
+              />
+            </HStack>
+          </VStack>
           )}
+          {/* Expenditure */}
+          <Heading
+            style={{
+              fontFamily: "Poppins-Regular",
+            }}
+          >
+            Expenditure
+          </Heading>
+          <VStack p={3} bg="secondary.30" rounded="lg">
+            <HStack
+              space="3"
+              alignItems="center"
+              justifyContent={"space-evenly"}
+            >
+              <PieChartInsights
+                colors={[
+                  colors.primary["500"],
+                  colors.secondary["500"],
+                  colors.danger["500"],
+                ]}
+              />
+              <VStack space="2">
+                <HStack space="3" alignItems="center">
+                  <Center bg="primary.500" rounded={"full"} size="3"></Center>
+                  <Text style={{ fontFamily: "Poppins-Light" }}>Home</Text>
+                </HStack>
+                <HStack space="3" alignItems="center">
+                  <Center bg="danger.500" rounded={"full"} size="3"></Center>
+                  <Text style={{ fontFamily: "Poppins-Light" }}>Away</Text>
+                </HStack>
+              </VStack>
+            </HStack>
+
+            <Text
+              fontSize="md"
+              style={{
+                fontFamily: "Poppins-Light",
+              }}
+            >
+              You ve Spent 75% more money on food away from home, bringing food
+              from home to work might help you save money.
+            </Text>
+          </VStack>
+
+          {/* Top Restaurants */}
+          <Heading
+            style={{
+              fontFamily: "Poppins-Regular",
+            }}
+          >
+            Top Restaurants
+          </Heading>
+          <VStack space="3" mb={3}>
+            {topRestaurants?.map((item, index) => {
+              const [restaurantName, restaurantExpenses] = item;
+              return (
+                <HStack
+                  key={index}
+                  justifyContent={"space-between"}
+                  p={4}
+                  rounded={"xl"}
+                  mb={1}
+                  alignItems="center"
+                  bg={"primary.30"}
+                >
+                  <Text
+                    fontSize="md"
+                    style={{
+                      fontFamily: "Poppins-Regular",
+                    }}
+                  >
+                    {`${index + 1}. ${restaurantName}`}
+                  </Text>
+                  <Text
+                    fontSize="md"
+                    style={{
+                      fontFamily: "Poppins-Regular",
+                    }}
+                  >
+                    {`R${restaurantExpenses}`}
+                  </Text>
+                </HStack>
+              );
+            })}
+          </VStack>
         </VStack>
       </ScrollView>
     </>

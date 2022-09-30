@@ -44,6 +44,12 @@ function BarChartCat({ data, type }) {
           style={{ flex: 1 }}
           data={chartData}
           contentInset={verticalContentInset}
+          svg={{ 
+            strokeWidth: 3,
+            //add radius to the end of the line
+            // stroke: colors.primary["600"],
+          
+          }}
         >
           <Grid />
         </LineChart>
