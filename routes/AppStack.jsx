@@ -4,7 +4,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 // import Home from "../Pages/app/Home/home";
 import HomeStack from "../Pages/app/Home/homeStack";
 import InsightsStack from "../Pages/app/Insight/insightStack";
-import Profile from "../Pages/app/Profile_/profile"; //route settings
+import ProfileStack from "../Pages/app/Profile_/profileStack"; //route settings
 import TabBarComponent from "../Components/TabBarComponent";
 const Tab = createBottomTabNavigator();
 
@@ -24,7 +24,7 @@ function AppStack() {
         component={InsightsStack}
         options={{ title: "Insights" }}
       />
-      <Tab.Screen name="Profile" component={Profile} />
+      <Tab.Screen name="Profile" component={ProfileStack} />
     </Tab.Navigator>
   );
 }

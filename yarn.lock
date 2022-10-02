@@ -6603,6 +6603,15 @@ expo-image-manipulator@~10.3.1:
   dependencies:
     expo-image-loader "~3.2.0"
 
+expo-image-picker@~13.1.1:
+  version "13.1.1"
+  resolved "https://registry.yarnpkg.com/expo-image-picker/-/expo-image-picker-13.1.1.tgz#e039bf9748ccb7b89370ff2969c3ef07cc949192"
+  integrity sha512-fU8oONRkKg5DvuU+7KvnuOtf1ubzXNU/OsE/T6yB149LbXb+ZN5A49NicvJ+cOG4Oa5NAnILt0aAAkchIr3iRQ==
+  dependencies:
+    "@expo/config-plugins" "^4.0.14"
+    expo-image-loader "~3.2.0"
+    uuid "7.0.2"
+
 expo-json-utils@~0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/expo-json-utils/-/expo-json-utils-0.3.0.tgz#0c4a0195ee2bbde02cbb5f4d384d1cb63bea7493"
@@ -13572,6 +13581,11 @@ utils-merge@1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/utils-merge/-/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
   integrity sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==
+
+uuid@7.0.2:
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-7.0.2.tgz#7ff5c203467e91f5e0d85cfcbaaf7d2ebbca9be6"
+  integrity sha512-vy9V/+pKG+5ZTYKf+VcphF5Oc6EFiu3W8Nv3P3zIh0EqVI80ZxOzuPfe9EHjkFNvf8+xuTHVeei4Drydlx4zjw==
 
 uuid@^3.3.2, uuid@^3.4.0:
   version "3.4.0"
