@@ -30,9 +30,10 @@ import DataTable from "examples/Tables/DataTable";
 
 // Data
 import data from "layouts/dashboard/components/Projects/data";
+import authorsTableData from "layouts/tables/data/authorsTableData";
 
 function Projects() {
-  const { columns, rows } = data();
+  const { columns, rows } = authorsTableData();
   const [menu, setMenu] = useState(null);
 
   const openMenu = ({ currentTarget }) => setMenu(currentTarget);
@@ -53,9 +54,9 @@ function Projects() {
       open={Boolean(menu)}
       onClose={closeMenu}
     >
-      <MenuItem onClick={closeMenu}>Action</MenuItem>
-      <MenuItem onClick={closeMenu}>Another action</MenuItem>
-      <MenuItem onClick={closeMenu}>Something else</MenuItem>
+      <MenuItem onClick={closeMenu}>Download list of users</MenuItem>
+      <MenuItem onClick={closeMenu}>Download complete Data</MenuItem>
+      <MenuItem onClick={closeMenu}></MenuItem>
     </Menu>
   );
 
@@ -64,20 +65,13 @@ function Projects() {
       <MDBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
         <MDBox>
           <MDTypography variant="h6" gutterBottom>
-            Projects
+            List of all users
           </MDTypography>
           <MDBox display="flex" alignItems="center" lineHeight={0}>
-            <Icon
-              sx={{
-                fontWeight: "bold",
-                color: ({ palette: { info } }) => info.main,
-                mt: -0.5,
-              }}
-            >
-              done
-            </Icon>
+           
+              
             <MDTypography variant="button" fontWeight="regular" color="text">
-              &nbsp;<strong>30 done</strong> this month
+              List of all users click a column to sort by that column.
             </MDTypography>
           </MDBox>
         </MDBox>
