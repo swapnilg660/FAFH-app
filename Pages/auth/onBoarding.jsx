@@ -57,6 +57,9 @@ function OnboardingComponent({ navigation }) {
         onDone={() => {
           navigation.navigate("Login");
         }}
+        onSkip={() => {
+          navigation.navigate("Login");
+        }}
         containerStyles={{
           display: "flex",
           justifyContent: "flex-start",
