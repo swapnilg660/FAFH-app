@@ -30,10 +30,125 @@ import DataTable from "examples/Tables/DataTable";
 // Data
 import authorsTableData from "layouts/tables/data/authorsTableData";
 import projectsTableData from "layouts/tables/data/projectsTableData";
+import { useEffect, useState } from "react";
+import MDAvatar from "components/MDAvatar";
 
 function Tables() {
-  const { columns, rows } = authorsTableData();
+  const [rowsData, setRows] = useState([]);
+  const { columns, rows } = authorsTableData(rowsData);
   const { columns: pColumns, rows: pRows } = projectsTableData();
+
+  const Author = ({ image, name, email }) => (
+    <MDBox display="flex" alignItems="center" lineHeight={1}>
+      <MDAvatar src={image} name={name} size="sm" />
+      <MDBox ml={2} lineHeight={1}>
+        <MDTypography display="block" variant="button" fontWeight="medium">
+          {name}
+        </MDTypography>
+        <MDTypography variant="caption">{email}</MDTypography>
+      </MDBox>
+    </MDBox>
+  );
+
+  const Job = ({ title, description }) => (
+    <MDBox lineHeight={1} textAlign="left">
+      <MDTypography display="block" variant="caption" color="text" fontWeight="medium">
+        {title}
+      </MDTypography>
+      <MDTypography variant="caption">{description}</MDTypography>
+    </MDBox>
+  );
+
+  const getData = () => {
+    console.log("Getting data");
+    var urlencoded = new URLSearchParams();
+
+    var requestOptions = {
+      method: "GET",
+      body: urlencoded,
+      redirect: "follow",
+    };
+
+    fetch("https://glacial-refuge-38575.herokuapp.com/getAllUsers", requestOptions)
+      .then((response) => response.json())
+      .then((users) => {
+        console.log("users: ", users);
+        users.forEach((user) => {
+          var row = {
+            author: (
+              <Author
+                image="https://portal.bilardo.gov.tr/assets/pages/media/profile/profile_user.jpg"
+                name={user.fullName}
+                email={user.userToken}
+              />
+            ),
+            function: <Job title="Client" description={user.email} />,
+            status: (
+              <MDTypography
+                component="a"
+                href="#"
+                variant="caption"
+                color="text"
+                fontWeight="medium"
+              >
+                {user.phoneNumber}
+              </MDTypography>
+            ),
+            employed: (
+              <MDTypography
+                component="a"
+                href="#"
+                variant="caption"
+                color="text"
+                fontWeight="medium"
+              >
+                {user.dateOfBirth}
+              </MDTypography>
+            ),
+            action: (
+              <MDTypography
+                component="a"
+                href="#"
+                variant="caption"
+                color="text"
+                fontWeight="medium"
+              >
+                {user.gender}
+              </MDTypography>
+            ),
+            height: (
+              <MDTypography
+                component="a"
+                href="#"
+                variant="caption"
+                color="text"
+                fontWeight="medium"
+              >
+                {user.height} cm
+              </MDTypography>
+            ),
+            weight: (
+              <MDTypography
+                component="a"
+                href="#"
+                variant="caption"
+                color="text"
+                fontWeight="medium"
+              >
+                {user.weight} kg
+              </MDTypography>
+            ),
+          };
+          setRows((prev) => [...prev, row]);
+        });
+      })
+      .catch((error) => console.log("error: ", error));
+  };
+
+  getData();
+  useEffect(() => {
+    console.log("useEffect");
+  }, []);
 
   return (
     <DashboardLayout>
