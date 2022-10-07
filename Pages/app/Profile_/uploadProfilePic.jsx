@@ -11,9 +11,19 @@ import React, { useEffect } from "react";
 import * as ImagePicker from "expo-image-picker";
 // import { Image } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
+import uploadFile from "../../../services/testUploadFile";
+import { ProfileContext } from "./profileStack";
 
 function UploadProfilePic({ isOpen, setIsOpen }) {
   const [image, setImage] = React.useState(null);
+  const {setProfilePicture} = React.useContext(ProfileContext);
+
+  const onUpload = async (image) => {
+    if (image) {
+      await uploadFile(image);
+      setIsOpen(false);
+    }
+  };
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -22,16 +32,19 @@ function UploadProfilePic({ isOpen, setIsOpen }) {
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
+      base64: true,
     });
-
-    console.log(result);
 
     if (!result.cancelled) {
       setImage(result.uri);
     }
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    return () => {
+      setImage(null);
+    };
+  }, []);
 
   return (
     <Modal
@@ -118,7 +131,9 @@ function UploadProfilePic({ isOpen, setIsOpen }) {
               variant="solid"
               colorScheme={!image ? "muted" : "primary"}
               onPress={() => {
-                console.log("SENDING IMAGE", image);
+                // onUpload(image);
+                setProfilePicture(image);
+                setIsOpen(false);
               }}
             >
               Save

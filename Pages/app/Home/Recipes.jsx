@@ -17,16 +17,24 @@ import {
   Text,
   useTheme,
   VStack,
+  Image,
 } from "native-base";
 import React, { useEffect } from "react";
-import { Image, TouchableOpacity, useWindowDimensions } from "react-native";
-
+import { TouchableOpacity, useWindowDimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   getRecipeImage,
   getRecipes,
 } from "../../../services/mongoDB/recipeStorage";
 import { RecipesContext } from "../../../services/mongoDB/recipeStorage";
+import chickenCurry from "../../../assets/images/chickenCurry.jpg";
+import ramen from "../../../assets/images/ramen.jpg";
+import chowFan from "../../../assets/images/chowFan.jpg";
+import chowMein from "../../../assets/images/chowMein.jpg";
+import biryani from "../../../assets/images/Biryani.jpg";
+import pasta from "../../../assets/images/pasta.jpg";
+import steak from "../../../assets/images/steak.jpg";
+import stewBeef from "../../../assets/images/stewBeef.jpg";
 
 const RECIPE_CONTAINER_HEIGHT = 220;
 const RECIPE_CONTAINER_WIDTH = 200;
@@ -81,12 +89,40 @@ function Recipes({ navigation }) {
     { name: "Chicken Pot Pie", image: undefined },
   ];
 
+  const returnImage = (name) => {
+    switch (name) {
+      case "Chicken Curry":
+        return chickenCurry;
+      case "Beef Stew":
+        return stewBeef;
+      case "Chicken Biryani":
+        return biryani;
+      default:
+        return chowMein;
+    }
+  };
+
   const newRecipes = [
-    { name: "Ramen", rating: 3, author: "John Doe", image: "" },
-    { name: "Steak with Tomato", rating: 2, author: "Kev Milner", image: "" },
-    { name: "Chow Fan", rating: 4, author: "Roelien Brinks", image: "" },
-    { name: "Alfredo Pasta", rating: 5, author: "Patrick Vierra", image: "" },
-    { name: "Beef Chow mein", rating: 1, author: "Kenan Malale", image: "" },
+    { name: "Ramen", rating: 3, author: "John Doe", image: ramen },
+    {
+      name: "Steak with Tomato",
+      rating: 2,
+      author: "Kev Milner",
+      image: steak,
+    },
+    { name: "Chow Fan", rating: 4, author: "Roelien Brinks", image: chowFan },
+    {
+      name: "Alfredo Pasta",
+      rating: 5,
+      author: "Patrick Vierra",
+      image: pasta,
+    },
+    {
+      name: "Beef Chow mein",
+      rating: 1,
+      author: "Kenan Malale",
+      image: chowMein,
+    },
   ];
   const [recipesFromDb, setRecipesFromDb] = React.useState([]);
   const [bookMarkedRecipes, setBookMarkedRecipes] = React.useState(
@@ -270,7 +306,7 @@ function Recipes({ navigation }) {
                           4.5
                         </Text>
                       </HStack>
-                      {false ? (
+                      {item.image ? (
                         <Image
                           style={{
                             width: "100%",
@@ -282,7 +318,16 @@ function Recipes({ navigation }) {
                           srcset=""
                         />
                       ) : (
-                        "camera"
+                        <Image
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            borderRadius: sizes["2xl"],
+                          }}
+                          source={returnImage(item.name)}
+                          alt={`${item.name} image`}
+                          srcset=""
+                        />
                       )}
                     </Center>
 
@@ -381,7 +426,15 @@ function Recipes({ navigation }) {
                   width={height * 0.15}
                   rounded="full"
                 >
-                  Image
+                  <Image
+                    source={item.image}
+                    style={{
+                      resizeMode: "contain",
+                    }}
+                    h={height * 0.15}
+                    alt="Alternate Text"
+                    rounded="full"
+                  />
                 </Center>
                 <Heading
                   isTruncated={true}

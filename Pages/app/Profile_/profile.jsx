@@ -19,7 +19,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import {
   AntDesign,
   Entypo,
+  FontAwesome,
   FontAwesome5,
+  MaterialCommunityIcons,
   MaterialIcons,
   Zocial,
 } from "@expo/vector-icons";
@@ -33,8 +35,10 @@ import {
 import { useWindowDimensions } from "react-native";
 import AuthContext from "../../../hooks/context";
 import UploadProfilePic from "./uploadProfilePic";
+import { ProfileContext } from "./profileStack";
 
 function Profile({ navigation }) {
+  const { profilePicture } = useContext(ProfileContext);
   const { colors } = useTheme();
   const { height, width } = useWindowDimensions();
   const { signOut, userToken } = useContext(AuthContext);
@@ -173,7 +177,9 @@ function Profile({ navigation }) {
                 <Avatar
                   size={"xl"}
                   source={{
-                    uri: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
+                    uri: profilePicture
+                      ? profilePicture
+                      : "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
                   }}
                 >
                   SM
@@ -211,12 +217,8 @@ function Profile({ navigation }) {
                 px={5}
                 alignItems="center"
               >
-                <Center>
-                  <FontAwesome5
-                    name="weight"
-                    size={19}
-                    color={colors.primary["600"]}
-                  />
+                <Center bg="primary.600" p="1.5" rounded="full">
+                  <FontAwesome5 name="weight" size={19} color={colors.white} />
                 </Center>
                 <VStack>
                   <Text style={{ fontFamily: "Poppins-SemiBold" }}>BMI</Text>
@@ -237,7 +239,14 @@ function Profile({ navigation }) {
               justifyContent={"space-between"}
             >
               <HStack space="3" alignItems="center">
-                <WeightIconProfile />
+                <Center bg="primary.600" p="1.5" rounded="full">
+                  <MaterialCommunityIcons
+                    name="weight-kilogram"
+                    size={20}
+                    color="white"
+                  />
+                </Center>
+
                 <VStack>
                   <Text
                     style={{
@@ -257,7 +266,14 @@ function Profile({ navigation }) {
                 </VStack>
               </HStack>
               <HStack space="3" alignItems="center">
-                <HeightIconProfile />
+                <Center bg="primary.600" p="1.5" rounded="full">
+                  <MaterialCommunityIcons
+                    name="human-male-height"
+                    size={20}
+                    color="white"
+                  />
+                </Center>
+
                 <VStack>
                   <Text
                     style={{
@@ -287,7 +303,10 @@ function Profile({ navigation }) {
               justifyContent={"space-between"}
             >
               <HStack space="3" alignItems="center">
-                <GenderIconProfile />
+                <Center bg="primary.600" p="1" px={2} rounded="full">
+                  <FontAwesome name="genderless" size={25} color="white" />
+                </Center>
+
                 <VStack>
                   <Text
                     style={{
@@ -307,7 +326,9 @@ function Profile({ navigation }) {
                 </VStack>
               </HStack>
               <HStack space="3" alignItems="center">
-                <AgeIconProfile />
+                <Center bg="primary.600" p="1.5" rounded="full">
+                  <FontAwesome name="birthday-cake" size={18} color="white" />
+                </Center>
                 <VStack>
                   <Text
                     style={{

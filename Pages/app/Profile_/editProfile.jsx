@@ -13,6 +13,8 @@ import {
   Text,
   Select,
   CheckIcon,
+  Spinner,
+  useToast,
 } from "native-base";
 import { ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -21,11 +23,15 @@ import { AntDesign } from "@expo/vector-icons";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import UploadProfilePic from "./uploadProfilePic";
+import { ProfileContext } from "./profileStack";
+import ToastComponent from "../../../services/CustomToast";
 
 function EditProfile({ navigation, route }) {
   const { colors } = useTheme();
   const { actionType } = route.params;
   const [openImagePicker, setOpenImagePicker] = React.useState(false);
+  const { profilePicture } = React.useContext(ProfileContext);
+  const toast = useToast();
 
   const convertCell = (cell) =>
     cell
@@ -113,7 +119,9 @@ function EditProfile({ navigation, route }) {
         <Avatar
           size={"xl"}
           source={{
-            uri: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
+            uri: profilePicture
+              ? profilePicture
+              : "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
           }}
         >
           SM
@@ -130,7 +138,21 @@ function EditProfile({ navigation, route }) {
           validationSchema={validationSchema}
           onSubmit={(values, formikActions) => {
             // handleSubmit(values, formikActions);
-            console.log(values);
+            formikActions.setSubmitting(true);
+            setTimeout(() => {
+              formikActions.setSubmitting(false);
+              toast.show({
+                placement: "top",
+                render: () => (
+                  <ToastComponent
+                    state={true ? "Success" : "Error"}
+                    message={true ? "Profile Updated Successfully" : res}
+                  />
+                ),
+              });
+              navigation.goBack();
+            }, 2000);
+            // console.log(values);
           }}
         >
           {({
