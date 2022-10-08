@@ -116,3 +116,30 @@ export const getWater = async (setWater, water) => {
       });
     });
 };
+
+// pass the image data you get from image picker, exif must be set to true on the image picker
+const uploadAvatar = async (image) => {
+  var formdata = new FormData();
+  var token = await SecureStore.getItemAsync("userToken");
+  formdata.append("userToken", token);
+  formdata.append("avatar", {
+    // originagl data to pass
+    uri: image.uri,
+    name: image.uri.split("/").pop(),
+    type: platform === "android" ? mime.getType(image.uri) : "jpeg",
+    // customize data for FAFH backend
+    filepath: image.uri,
+    originalFilename: image.uri.split("/").pop(),
+  });
+
+  var requestOptions = {
+    method: "POST",
+    body: formdata,
+    redirect: "follow",
+  };
+
+  fetch(`localhost:5000/updateAvatar`, requestOptions)
+    .then((response) => response.text())
+    .then((result) => console.log(result))
+    .catch((error) => console.log("error", error));
+};
