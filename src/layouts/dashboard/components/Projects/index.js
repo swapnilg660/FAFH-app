@@ -63,17 +63,15 @@ function Projects() {
   );
 
   const getData = () => {
-    console.log("Getting data");
 
     var requestOptions = {
       method: "POST",
       redirect: "follow",
     };
 
-    fetch("http://localhost:5000/getAllUsers", requestOptions)
+    fetch("http://glacial-refuge-38575.herokuapp.com/getAllUsers", requestOptions)
       .then((response) => response.json())
       .then((users) => {
-        console.log("users: ", users);
         users.forEach((user) => {
           var row = {
             author: (
@@ -147,19 +145,18 @@ function Projects() {
   };
 
   const downloadUsers = () => {
-    var url = "http://localhost:5000/downloadUsers";
+    var url = "http://glacial-refuge-38575.herokuapp.com/downloadUsers";
     window.open(url, "_blank", "noopener,noreferrer");
     closeMenu();
   };
 
   const downloadMeals = () => {
-    var url = "http://localhost:5000/downloadMeals";
+    var url = "http://glacial-refuge-38575.herokuapp.com/downloadMeals";
     window.open(url, "_blank", "noopener,noreferrer");
     closeMenu();
   };
 
   useEffect(() => {
-    console.log("useEffect");
     getData();
   }, []);
 

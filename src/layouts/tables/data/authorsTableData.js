@@ -28,7 +28,6 @@ import team4 from "assets/images/team-4.jpg";
 import { useEffect, useState } from "react";
 
 export default function data(rowsData) {
-  console.log("passed data", rowsData);
   return {
     columns: [
       { Header: "Full Name", accessor: "author", width: "45%", align: "left" },

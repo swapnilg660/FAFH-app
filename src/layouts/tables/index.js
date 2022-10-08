@@ -60,7 +60,6 @@ function Tables() {
   );
 
   const getData = () => {
-    console.log("Getting data");
     var urlencoded = new URLSearchParams();
 
     var requestOptions = {
@@ -145,9 +144,8 @@ function Tables() {
       .catch((error) => console.log("error: ", error));
   };
 
-  getData();
   useEffect(() => {
-    console.log("useEffect");
+    getData();
   }, []);
 
   return (
