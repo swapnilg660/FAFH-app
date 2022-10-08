@@ -67,3 +67,76 @@ export const getUser = async (setUserProfileData, email) => {
     .then((result) => setUserProfileData(result.data))
     .catch((error) => console.log("error", error));
 };
+
+//please pass the current water value as glass
+export const drinkWater = async (glass) => {
+  let token = await SecureStore.getItemAsync("userToken");
+  var requestOptions = {
+    method: "POST",
+    redirect: "follow",
+  };
+
+  fetch(`${dbUrl}/drinkWater?userToken=${token}&glass=${glass}`, requestOptions)
+    .then((response) => response.text())
+    .then((result) => console.log(result))
+    .catch((error) => console.log("error", error));
+};
+
+export const getWater = async (setWater, water) => {
+  let token = await SecureStore.getItemAsync("userToken");
+  var requestOptions = {
+    method: "POST",
+    redirect: "follow",
+  };
+
+  fetch(`${dbUrl}/getWater?userToken=${token}`, requestOptions)
+    .then((response) => response.json())
+    .then((result) => {
+      console.log("water", result);
+      if (result.success) {
+        setWater({
+          ...water,
+          current: result.data.water,
+        });
+      } else {
+        setWater({
+          ...water,
+          current: 0,
+        });
+      }
+    })
+    .catch((error) => {
+      console.log("error", error);
+      setWater({
+        ...water,
+        current: 0,
+      });
+    });
+};
+
+// pass the image data you get from image picker, exif must be set to true on the image picker
+const uploadAvatar = async (image) => {
+  var formdata = new FormData();
+  var token = await SecureStore.getItemAsync("userToken");
+  formdata.append("userToken", token);
+  formdata.append("avatar", {
+    // originagl data to pass
+    uri: image.uri,
+    name: image.uri.split("/").pop(),
+    type: platform === "android" ? mime.getType(image.uri) : "jpeg",
+    // customize data for FAFH backend
+    filepath: image.uri,
+    originalFilename: image.uri.split("/").pop(),
+  });
+
+  var requestOptions = {
+    method: "POST",
+    body: formdata,
+    redirect: "follow",
+  };
+
+  fetch(`localhost:5000/updateAvatar`, requestOptions)
+    .then((response) => response.text())
+    .then((result) => console.log(result))
+    .catch((error) => console.log("error", error));
+};

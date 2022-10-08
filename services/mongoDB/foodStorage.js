@@ -6,7 +6,6 @@ const dbUrl = "https://glacial-refuge-38575.herokuapp.com";
 export const recordCustomeMeal = async (data, occasion) => {
   console.log("saving to database");
   let token = await SecureStore.getItemAsync("userToken");
-  console.log("toke", token);
   var formdata = new FormData();
   formdata.append("userId", token);
   formdata.append("type", occasion);
@@ -27,7 +26,6 @@ export const recordCustomeMeal = async (data, occasion) => {
 
 export const recordFood = async (occasion, mealArray, isFAFH, cost) => {
   let token = await SecureStore.getItemAsync("userToken");
-  console.log("[foodStorage] user token", token);
   var formdata = new FormData();
   console.log(`{
     userId: ${token},
@@ -60,10 +58,7 @@ export const getCustomMeals = (setCustomMeals) => {
     redirect: "follow",
   };
 
-  fetch(
-    `${dbUrl}/getCustomeMeals?userId=${token}`,
-    requestOptions
-  )
+  fetch(`${dbUrl}/getCustomeMeals?userId=${token}`, requestOptions)
     .then((response) => response.json())
     .then((result) => {
       console.log("custom meals found:", result);
