@@ -17,6 +17,7 @@ import FAFHTHEME from "./assets/theme/extTheme";
 import AuthStack from "./routes/AuthStack";
 import AppStack from "./routes/AppStack";
 import useFonts from "./hooks/useFonts";
+import { getUser } from "./services/mongoDB/users";
 
 export default function App() {
   //Load fonts
@@ -32,6 +33,8 @@ export default function App() {
     userToken: null,
     // ...
   });
+
+  const [userProfileData, setUserProfileData] = useState(null);
   const contextData = useMemo(
     () => ({
       signIn: async (data) => {
@@ -43,6 +46,8 @@ export default function App() {
           return token;
         } else {
           dispatch({ type: "SIGN_IN", token });
+
+          getUser(setUserProfileData, data.email);
           return "Success";
         }
       },
@@ -59,6 +64,7 @@ export default function App() {
           return token;
         } else {
           dispatch({ type: "SIGN_UP", token });
+          getUser(setUserProfileData, data.email);
           return "Success";
         }
       },
@@ -74,6 +80,7 @@ export default function App() {
     let userToken;
     try {
       userToken = await SecureStore.getItemAsync("userToken");
+      getUser(setUserProfileData, userToken);
     } catch (e) {
       // Restoring token failed
       console.log(e);
@@ -97,7 +104,7 @@ export default function App() {
 
   return (
     <NativeBaseProvider theme={FAFHTHEME}>
-      <AuthContext.Provider value={contextData}>
+      <AuthContext.Provider value={{ ...contextData, userProfileData }}>
         <NavigationContainer>
           {userData.userToken == null ? <AuthStack /> : <AppStack />}
         </NavigationContainer>

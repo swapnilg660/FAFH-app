@@ -2,6 +2,7 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import Profile from "./profile";
 import EditProfile from "./editProfile";
+import ReportBug from "./reportBug";
 
 const Stack = createStackNavigator();
 
@@ -23,6 +24,7 @@ function ProfileStack() {
       >
         <Stack.Screen name="Profile_" component={Profile} />
         <Stack.Screen name="EditProfile" component={EditProfile} />
+        <Stack.Screen name="ReportBug" component={ReportBug} />
       </Stack.Navigator>
     </ProfileContext.Provider>
   );

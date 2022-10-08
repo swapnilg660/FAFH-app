@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import { ScrollView, Animated } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 import {
   Center,
   HStack,
@@ -13,6 +14,7 @@ import {
   Icon,
   Box,
   Actionsheet,
+  IconButton,
 } from "native-base";
 
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -36,8 +38,10 @@ import { useWindowDimensions } from "react-native";
 import AuthContext from "../../../hooks/context";
 import UploadProfilePic from "./uploadProfilePic";
 import { ProfileContext } from "./profileStack";
+import { color } from "react-native-reanimated";
 
 function Profile({ navigation }) {
+  const { userProfileData } = useContext(AuthContext);
   const { profilePicture } = useContext(ProfileContext);
   const { colors } = useTheme();
   const { height, width } = useWindowDimensions();
@@ -51,13 +55,13 @@ function Profile({ navigation }) {
     {
       title: "Email",
       icon: <Zocial name="email" size={18} color={colors.white} />,
-      value: "sammicaheal@gmail.com",
+      email: "sammicaheal@gmail.com",
     },
-    {
-      title: "Phone",
-      icon: <MaterialIcons name="phone" size={18} color={colors.white} />,
-      value: "+1 234 567 890",
-    },
+    // {
+    //   title: "Phone",
+    //   icon: <MaterialIcons name="phone" size={18} color={colors.white} />,
+    //   phoneNumber: "+1 234 567 890",
+    // },
   ];
   const aboutData = [
     {
@@ -65,13 +69,55 @@ function Profile({ navigation }) {
       icon: <Entypo name="info" size={18} color={colors.white} />,
       value: "FERL, Food Away From Home",
     },
+    {
+      title: "Report a bug",
+      icon: (
+        <MaterialCommunityIcons name="bug" size={18} color={colors.white} />
+      ),
+      value: "Report a bug, Give feedback",
+      route: "ReportBug",
+    },
+    {
+      title: "Terms and Conditions",
+      icon: (
+        <MaterialCommunityIcons
+          name="file-document"
+          size={18}
+          color={colors.white}
+        />
+      ),
+      value: "Terms and Conditions, Ethical Clearance",
+    },
   ];
 
   const [bmi, setBmi] = React.useState(0);
-  const generateBmi = () => {
-    let bmi = Math.floor(Math.random() * (40 - 10 + 1)) + 10;
-    setBmi(bmi);
+
+  //calculate bmi
+  const calcBmi = () => {
+    const heightInMeters = userProfileData.height / 100;
+    const bmi = userProfileData.weight / (heightInMeters * heightInMeters);
+    setBmi(bmi.toFixed(2));
   };
+
+  const formatDate = (date) => {
+    date = date.split(" ");
+    let yyyy = date[2];
+    let mm = new Date(`${date[0]} 1, 2022`).getMonth() + 1;
+    // mm = mm.toString().length == 1 ? `0${mm}` : mm;
+    let dd = date[1];
+    dd = dd.substring(0, dd.length - 2);
+    // dd = dd.toString().length == 1 ? `0${dd}` : dd;
+    return `${yyyy},${mm},${dd}`;
+  };
+  const getAge = (date) => {
+    let [yyyy, mm, dd] = date.split(",");
+    date = new Date(yyyy, mm, dd);
+    console.log("DATE:", date);
+    var diff = Date.now() - date.getTime();
+    var age = new Date(diff);
+    return Math.abs(age.getUTCFullYear() - 1970) + 1;
+  };
+
   const getBmiColorAndText = (bmi) => {
     return bmi < 17
       ? {
@@ -98,7 +144,8 @@ function Profile({ navigation }) {
         };
   };
   useEffect(() => {
-    generateBmi();
+    calcBmi();
+    // console.log("USER DATA => ", userProfileData);
     //cleanup
     return () => {};
   }, []);
@@ -170,19 +217,34 @@ function Profile({ navigation }) {
                   <AntDesign
                     name="camera"
                     size={34}
-                    color={colors.primary["100"]}
+                    color={
+                      profilePicture
+                        ? colors.primary["100"]
+                        : colors.secondary["600"]
+                    }
                   />
                 </Center>
 
                 <Avatar
                   size={"xl"}
                   source={{
-                    uri: profilePicture
-                      ? profilePicture
-                      : "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
+                    uri: profilePicture,
                   }}
                 >
-                  SM
+                  <Center h="100%" w="100%" rounded="full">
+                    <LinearGradient
+                      style={{
+                        position: "absolute",
+                        left: 0,
+                        right: 0,
+                        top: 0,
+                        height: "100%",
+                        borderRadius: 100,
+                      }}
+                      // Background Linear Gradient
+                      colors={[colors.primary["100"], colors.primary["500"]]}
+                    />
+                  </Center>
                 </Avatar>
               </Pressable>
 
@@ -193,9 +255,13 @@ function Profile({ navigation }) {
                   }}
                   fontSize={"3xl"}
                 >
-                  Sam Micheal
+                  {userProfileData?.fullName}
                 </Heading>
-                <Text color={"muted.500"}>Jnr Business Analyst</Text>
+                <Text color={"muted.500"}>
+                  {userProfileData?.profession
+                    ? userProfileData.profession
+                    : "No profession set"}
+                </Text>
               </VStack>
             </HStack>
           </Box>
@@ -204,31 +270,25 @@ function Profile({ navigation }) {
         <VStack space="3" p={3} h={height * 1.15} bg={"white"}>
           <Text>Physical Information</Text>
           <Box rounded={"lg"} bg={"#00000008"} p="2">
-            <Pressable
-              onPress={() => {
-                generateBmi();
-              }}
+            <HStack
+              bg={getBmiColorAndText(bmi).bmiColor}
+              rounded={"lg"}
+              p={2}
+              space="7"
+              px={5}
+              alignItems="center"
             >
-              <HStack
-                bg={getBmiColorAndText(bmi).bmiColor}
-                rounded={"lg"}
-                p={2}
-                space="7"
-                px={5}
-                alignItems="center"
-              >
-                <Center bg="primary.600" p="1.5" rounded="full">
-                  <FontAwesome5 name="weight" size={19} color={colors.white} />
-                </Center>
-                <VStack>
-                  <Text style={{ fontFamily: "Poppins-SemiBold" }}>BMI</Text>
-                  <Text alignSelf={"flex-end"}>{bmi}</Text>
-                </VStack>
-                <Text color={getBmiColorAndText(bmi).textColor} pl={"20%"}>
-                  {getBmiColorAndText(bmi).bmiText}
-                </Text>
-              </HStack>
-            </Pressable>
+              <Center bg="primary.600" p="1.5" rounded="full">
+                <FontAwesome5 name="weight" size={19} color={colors.white} />
+              </Center>
+              <VStack>
+                <Text style={{ fontFamily: "Poppins-SemiBold" }}>BMI</Text>
+                <Text alignSelf={"flex-end"}>{bmi}</Text>
+              </VStack>
+              <Text color={getBmiColorAndText(bmi).textColor} pl={"20%"}>
+                {getBmiColorAndText(bmi).bmiText}
+              </Text>
+            </HStack>
             <HStack
               // bg={"#00000008"}
               rounded={"lg"}
@@ -261,7 +321,7 @@ function Profile({ navigation }) {
                       fontStyle: "italic",
                     }}
                   >
-                    55 kg
+                    {userProfileData?.weight} kg
                   </Text>
                 </VStack>
               </HStack>
@@ -288,7 +348,7 @@ function Profile({ navigation }) {
                       fontStyle: "italic",
                     }}
                   >
-                    163 cm
+                    {userProfileData?.height} cm
                   </Text>
                 </VStack>
               </HStack>
@@ -321,7 +381,7 @@ function Profile({ navigation }) {
                       fontStyle: "italic",
                     }}
                   >
-                    Female
+                    {userProfileData?.gender == "M" ? "Male" : "Female"}
                   </Text>
                 </VStack>
               </HStack>
@@ -343,7 +403,7 @@ function Profile({ navigation }) {
                       fontStyle: "italic",
                     }}
                   >
-                    25 Years
+                    {getAge(formatDate(userProfileData?.dateOfBirth))} Years
                   </Text>
                 </VStack>
               </HStack>
@@ -381,7 +441,7 @@ function Profile({ navigation }) {
                           fontStyle: "italic",
                         }}
                       >
-                        {item.value}
+                        {userProfileData?.email}
                       </Text>
                     </VStack>
                   </HStack>
@@ -425,6 +485,21 @@ function Profile({ navigation }) {
                       </Text>
                     </VStack>
                   </HStack>
+                  {item.route && (
+                    <IconButton
+                      variant="ghost"
+                      icon={
+                        <MaterialIcons
+                          name="navigate-next"
+                          size={34}
+                          color={colors.primary["600"]}
+                        />
+                      }
+                      onPress={() => {
+                        navigation.navigate(item.route);
+                      }}
+                    />
+                  )}
                 </HStack>
               );
             })}
