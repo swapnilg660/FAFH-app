@@ -42,7 +42,7 @@ function Basic() {
           textAlign="center"
         >
           <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
-            Sign in
+            Food Away From Home
           </MDTypography>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
@@ -75,8 +75,7 @@ function Basic() {
             </MDBox>
             <MDBox mt={3} mb={1} textAlign="center">
               <MDTypography variant="button" color="text">
-                Don't have an account?
-                Please contact Swapnil if you want to be an Admin.
+                Don't have an account? Please contact Swapnil if you want to be an Admin.
               </MDTypography>
             </MDBox>
           </MDBox>

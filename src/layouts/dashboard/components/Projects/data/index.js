@@ -85,7 +85,7 @@ export default function data() {
         function: <Job title="Client" description="email here..." />,
         status: (
           <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-            Phoone number
+            Phone number
           </MDTypography>
         ),
         employed: (
