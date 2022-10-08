@@ -63,7 +63,7 @@ export const signUp = async (data) => {
         // alert("Sign Up Successful");
         // WriteData(userId, Fname, Sname, Email, Photo)
         if (data.stayLoggedIn) {
-          await SecureStore.setItemAsync("userToken", JSON.stringify(token));
+          await SecureStore.setItemAsync("userToken", token);
           await SecureStore.setItemAsync("userFirstTime", "true");
         }
       })

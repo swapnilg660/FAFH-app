@@ -42,6 +42,7 @@ import {
 } from "../../../Components/customSvgIcon";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AuthContext, { HomeContext } from "../../../hooks/context";
+import { mongoCreateUser } from "../../../services/mongoDB/users";
 
 function Home({ navigation }) {
   const { colors } = useTheme();
@@ -246,6 +247,7 @@ function Home({ navigation }) {
                       // }
                       colorScheme="tertiary"
                       onPress={() => {
+                        mongoCreateUser({});
                         setActionSheetVisible(true);
                       }}
                       _text={{
