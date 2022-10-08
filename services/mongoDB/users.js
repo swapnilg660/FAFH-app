@@ -70,3 +70,49 @@ export const getUser = async () => {
 
   return userData;
 };
+
+//please pass the current water value as glass
+export const drinkWater = async (glass) => {
+  let token = await SecureStore.getItemAsync("userToken");
+  var requestOptions = {
+    method: "POST",
+    redirect: "follow",
+  };
+
+  fetch(`${dbUrl}/drinkWater?userToken=${token}&glass=${glass}`, requestOptions)
+    .then((response) => response.text())
+    .then((result) => console.log(result))
+    .catch((error) => console.log("error", error));
+};
+
+export const getWater = async (setWater, water) => {
+  let token = await SecureStore.getItemAsync("userToken");
+  var requestOptions = {
+    method: "POST",
+    redirect: "follow",
+  };
+
+  fetch(`${dbUrl}/getWater?userToken=${token}`, requestOptions)
+    .then((response) => response.json())
+    .then((result) => {
+      console.log("water", result);
+      if (result.success) {
+        setWater({
+          ...water,
+          current: result.data.water,
+        });
+      } else {
+        setWater({
+          ...water,
+          current: 0,
+        });
+      }
+    })
+    .catch((error) => {
+      console.log("error", error);
+      setWater({
+        ...water,
+        current: 0,
+      });
+    });
+};

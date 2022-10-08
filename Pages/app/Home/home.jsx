@@ -42,7 +42,11 @@ import {
 } from "../../../Components/customSvgIcon";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AuthContext, { HomeContext } from "../../../hooks/context";
-import { mongoCreateUser } from "../../../services/mongoDB/users";
+import {
+  drinkWater,
+  getWater,
+  mongoCreateUser,
+} from "../../../services/mongoDB/users";
 
 function Home({ navigation }) {
   const { colors } = useTheme();
@@ -52,7 +56,7 @@ function Home({ navigation }) {
     data: [0.4, 0.6, 0.8],
     // map:[colors.secondary[500], colors.primary[200], colors.primary[500]]
   };
-  const [waterIntake, setWaterIntake] = useState({ current: 2, goal: 5 });
+  const [waterIntake, setWaterIntake] = useState({ current: 0, goal: 8 });
   const [stepsCounter, setStepsCounter] = useState({
     current: waterIntake.current * 360,
     goal: 6000,
@@ -106,7 +110,7 @@ function Home({ navigation }) {
 
   useEffect(() => {
     userFirstTime();
-
+    getWater(setWaterIntake, waterIntake);
     return () => {
       console.log("unmounting");
     };
@@ -325,6 +329,7 @@ function Home({ navigation }) {
                         }
                         onPress={() => {
                           if (waterIntake.current > 0) {
+                            drinkWater(waterIntake.current - 1);
                             setWaterIntake({
                               ...waterIntake,
                               current: waterIntake.current - 1,
@@ -345,6 +350,7 @@ function Home({ navigation }) {
                         icon={<AntDesign name="plus" size={24} color="white" />}
                         onPress={() => {
                           if (waterIntake.current < waterIntake.goal) {
+                            drinkWater(waterIntake.current + 1);
                             setWaterIntake({
                               ...waterIntake,
                               current: waterIntake.current + 1,
