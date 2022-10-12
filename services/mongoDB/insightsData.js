@@ -18,7 +18,7 @@ export const getDailyInsights = async (setDailyInsights) => {
       console.log("result: ", result);
       setDailyInsights(result);
     })
-    .catch((error) => console.log("error", error));
+    .catch((error) => console.log("Error Getting daily nutrients", error));
 };
 
 export const getTopRestaurants = async (setTopRestaurants) => {
@@ -30,9 +30,9 @@ export const getTopRestaurants = async (setTopRestaurants) => {
     body: formdata,
     redirect: "follow",
   };
-  console.log(`${dbUrl}/getTopRestaurants?userId=${token}`)
+  // console.log(`${dbUrl}/getTopRestaurants?userId=${token}`)
 
-  fetch(`https://glacial-refuge-38575.herokuapp.com/getTopRestaurants?userId=tadaa`, requestOptions)
+  fetch(`https://glacial-refuge-38575.herokuapp.com/getTopRestaurants?userId=${token}`, requestOptions)
     .then((response) => response.json())
     .then((result) => setTopRestaurants(result.data))
     .catch((error) => console.log("error getting restaurants: ", error));

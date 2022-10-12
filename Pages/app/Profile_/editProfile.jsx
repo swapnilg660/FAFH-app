@@ -28,7 +28,7 @@ import ToastComponent from "../../../services/CustomToast";
 
 function EditProfile({ navigation, route }) {
   const { colors } = useTheme();
-  const { actionType } = route.params;
+  const { actionType, userProfileData } = route.params;
   const [openImagePicker, setOpenImagePicker] = React.useState(false);
   const { profilePicture } = React.useContext(ProfileContext);
   const toast = useToast();
@@ -41,12 +41,11 @@ function EditProfile({ navigation, route }) {
   //form states
   const initialValues = {
     // current user's name
-    name: "Sam Micheal",
-    email: "sammicheal@gmail.com",
-    cell: convertCell("+1 234 567 890"),
-    height: "163",
+    name: userProfileData.fullName,
+    email: userProfileData.email,
+    height: `${userProfileData.height}`,
     heightUnit: "cm",
-    weight: "55",
+    weight: `${userProfileData.weight}`,
     weightUnit: "kg",
   };
 
@@ -119,9 +118,7 @@ function EditProfile({ navigation, route }) {
         <Avatar
           size={"xl"}
           source={{
-            uri: profilePicture
-              ? profilePicture
-              : "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
+            uri: profilePicture ? profilePicture : userProfileData?.avatar,
           }}
         >
           SM
@@ -207,7 +204,7 @@ function EditProfile({ navigation, route }) {
                   </FormControl.ErrorMessage>
                 </FormControl>
 
-                <FormControl isInvalid={touched.cell && errors.cell}>
+                {/* <FormControl isInvalid={touched.cell && errors.cell}>
                   <FormControl.Label>
                     <Text color={"black"}>Cell.no</Text>
                   </FormControl.Label>
@@ -253,7 +250,7 @@ function EditProfile({ navigation, route }) {
                   <FormControl.ErrorMessage>
                     {touched.cell && errors.cell}
                   </FormControl.ErrorMessage>
-                </FormControl>
+                </FormControl> */}
 
                 <HStack space={2}>
                   <FormControl

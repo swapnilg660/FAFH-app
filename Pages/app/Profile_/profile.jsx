@@ -94,28 +94,30 @@ function Profile({ navigation }) {
 
   //calculate bmi
   const calcBmi = () => {
-    const heightInMeters = userProfileData.height / 100;
-    const bmi = userProfileData.weight / (heightInMeters * heightInMeters);
+    const heightInMeters = userProfileData?.height / 100;
+    const bmi = userProfileData?.weight / (heightInMeters * heightInMeters);
     setBmi(bmi.toFixed(2));
   };
 
   const formatDate = (date) => {
-    date = date.split(" ");
-    let yyyy = date[2];
-    let mm = new Date(`${date[0]} 1, 2022`).getMonth() + 1;
-    // mm = mm.toString().length == 1 ? `0${mm}` : mm;
-    let dd = date[1];
-    dd = dd.substring(0, dd.length - 2);
-    // dd = dd.toString().length == 1 ? `0${dd}` : dd;
-    return `${yyyy},${mm},${dd}`;
+    if (date) {
+      date = date.split(" ");
+      let yyyy = date[2];
+      let mm = new Date(`${date[0]} 1, 2022`).getMonth() + 1;
+      let dd = date[1];
+      dd = dd.substring(0, dd.length - 2);
+
+      return `${yyyy},${mm},${dd}`;
+    }
   };
   const getAge = (date) => {
-    let [yyyy, mm, dd] = date.split(",");
-    date = new Date(yyyy, mm, dd);
-    console.log("DATE:", date);
-    var diff = Date.now() - date.getTime();
-    var age = new Date(diff);
-    return Math.abs(age.getUTCFullYear() - 1970) + 1;
+    if (date) {
+      let [yyyy, mm, dd] = date.split(",");
+      date = new Date(yyyy, mm - 1, dd);
+      var diff = Date.now() - date.getTime();
+      var age = new Date(diff);
+      return Math.abs(age.getUTCFullYear() - 1970);
+    }
   };
 
   const getBmiColorAndText = (bmi) => {
@@ -145,8 +147,6 @@ function Profile({ navigation }) {
   };
   useEffect(() => {
     calcBmi();
-    // console.log("USER DATA => ", userProfileData);
-    //cleanup
     return () => {};
   }, []);
 
@@ -210,6 +210,7 @@ function Profile({ navigation }) {
                 onPress={() => {
                   navigation.navigate("EditProfile", {
                     actionType: "Edit Profile",
+                    userProfileData: userProfileData,
                   });
                 }}
               >
@@ -228,7 +229,11 @@ function Profile({ navigation }) {
                 <Avatar
                   size={"xl"}
                   source={{
-                    uri: profilePicture,
+                    uri: userProfileData.avatar
+                      ? userProfileData.avatar
+                      : profilePicture
+                      ? profilePicture
+                      : null,
                   }}
                 >
                   <Center h="100%" w="100%" rounded="full">
@@ -290,7 +295,6 @@ function Profile({ navigation }) {
               </Text>
             </HStack>
             <HStack
-              // bg={"#00000008"}
               rounded={"lg"}
               p={2}
               space="7"
@@ -354,7 +358,6 @@ function Profile({ navigation }) {
               </HStack>
             </HStack>
             <HStack
-              // bg={"#00000008"}
               rounded={"lg"}
               p={2}
               space="7"
@@ -496,7 +499,9 @@ function Profile({ navigation }) {
                         />
                       }
                       onPress={() => {
-                        navigation.navigate(item.route);
+                        navigation.navigate(item.route, {
+                          userProfileData: userProfileData,
+                        });
                       }}
                     />
                   )}

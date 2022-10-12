@@ -21,7 +21,7 @@ export const signIn = async (data) => {
         // alert("Sign In Successful");
         // WriteData(userId, Fname, Sname, Email, Photo)
         if (data.stayLoggedIn) {
-          await SecureStore.setItemAsync("userToken", data?.email);
+          await SecureStore.setItemAsync("userToken", token);
         }
       })
       .catch((error) => {
@@ -60,7 +60,7 @@ export const signUp = async (data) => {
         // alert("Sign Up Successful");
         // WriteData(userId, Fname, Sname, Email, Photo)
         if (data.stayLoggedIn) {
-          await SecureStore.setItemAsync("userToken", data?.email);
+          await SecureStore.setItemAsync("userToken", token);
           await SecureStore.setItemAsync("userFirstTime", "true");
         }
       })

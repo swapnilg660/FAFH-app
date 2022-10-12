@@ -13,10 +13,12 @@ import * as ImagePicker from "expo-image-picker";
 import { FontAwesome } from "@expo/vector-icons";
 import uploadFile from "../../../services/testUploadFile";
 import { ProfileContext } from "./profileStack";
+import { uploadAvatar } from "../../../services/mongoDB/users";
 
 function UploadProfilePic({ isOpen, setIsOpen }) {
   const [image, setImage] = React.useState(null);
-  const {setProfilePicture} = React.useContext(ProfileContext);
+  const [imageObject, setImageObject] = React.useState(null);
+  const { setProfilePicture } = React.useContext(ProfileContext);
 
   const onUpload = async (image) => {
     if (image) {
@@ -32,11 +34,13 @@ function UploadProfilePic({ isOpen, setIsOpen }) {
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
-      base64: true,
+      // base64: true,
+      exif: true,
     });
 
     if (!result.cancelled) {
       setImage(result.uri);
+      setImageObject(result);
     }
   };
 
@@ -130,8 +134,10 @@ function UploadProfilePic({ isOpen, setIsOpen }) {
               // variant={image ? "solid" : "ghost"}
               variant="solid"
               colorScheme={!image ? "muted" : "primary"}
-              onPress={() => {
-                // onUpload(image);
+              onPress={async () => {
+                uploadAvatar(imageObject)
+                  .then((e) => console.log(e))
+                  .catch((e) => console.log(e));
                 setProfilePicture(image);
                 setIsOpen(false);
               }}

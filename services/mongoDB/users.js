@@ -1,8 +1,9 @@
 import * as SecureStore from "expo-secure-store";
-
+import mime from "mime";
+import { Platform } from "react-native";
 // mangoDB backend code url
 const dbUrl = "https://glacial-refuge-38575.herokuapp.com";
-
+const platform = Platform.OS;
 // current logged user token
 let token = SecureStore.getItemAsync("userToken");
 
@@ -56,13 +57,13 @@ export const updateUser = (userId, fields) => {
 // Get user data when logged in
 export const getUser = async (setUserProfileData, email) => {
   var requestOptions = {
-    method: "GET",
+    method: "POST",
     redirect: "follow",
   };
-  console.log("email:", email,"SetUserProfileData:", setUserProfileData);
-  email = "S@gmail.com";
+  let token = await SecureStore.getItemAsync("userToken");
+  // console.log("email:", email,"SetUserProfileData:", setUserProfileData);
 
-  await fetch(`${dbUrl}/getUser?email=${email}`, requestOptions)
+  await fetch(`${dbUrl}/getUser?userToken=${token}`, requestOptions)
     .then((response) => response.json())
     .then((result) => setUserProfileData(result.data))
     .catch((error) => console.log("error", error));
@@ -92,7 +93,6 @@ export const getWater = async (setWater, water) => {
   fetch(`${dbUrl}/getWater?userToken=${token}`, requestOptions)
     .then((response) => response.json())
     .then((result) => {
-      console.log("water", result);
       if (result.success) {
         setWater({
           ...water,
@@ -115,12 +115,13 @@ export const getWater = async (setWater, water) => {
 };
 
 // pass the image data you get from image picker, exif must be set to true on the image picker
-const uploadAvatar = async (image) => {
+export const uploadAvatar = async (image) => {
+  console.log("[UPLOADING URI]:", image);
   var formdata = new FormData();
   var token = await SecureStore.getItemAsync("userToken");
   formdata.append("userToken", token);
   formdata.append("avatar", {
-    // originagl data to pass
+    // original data to pass
     uri: image.uri,
     name: image.uri.split("/").pop(),
     type: platform === "android" ? mime.getType(image.uri) : "jpeg",
@@ -135,8 +136,8 @@ const uploadAvatar = async (image) => {
     redirect: "follow",
   };
 
-  fetch(`localhost:5000/updateAvatar`, requestOptions)
+  fetch(`${dbUrl}/updateAvatar`, requestOptions)
     .then((response) => response.text())
-    .then((result) => console.log(result))
+    .then((result) => console.log("RESULT FROM UPLOADING AVATAR:",result))
     .catch((error) => console.log("error", error));
 };

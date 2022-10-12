@@ -30,11 +30,12 @@ import {
 } from "./insightSvg";
 import Category from "./categoryComponent";
 import SelectedCategory from "./selectedCategory";
-import { getTopRestaurants } from "../../../services/mongoDB/insightsData";
+import { getDailyInsights, getTopRestaurants } from "../../../services/mongoDB/insightsData";
 
 function Insights({ navigation }) {
   const { colors } = useTheme();
   const [topRestaurants, setTopRestaurants] = React.useState(null);
+  const [dailyCalories, setDailyCalories] = React.useState(null);
 
   //categories data
   const [categories, setCategories] = React.useState([
@@ -93,7 +94,8 @@ function Insights({ navigation }) {
   useEffect(() => {
     //getting top restaurants
     getTopRestaurants(setTopRestaurants);
-    console.log("TOP RESTAURANTS :", topRestaurants);
+    //getting daily calories
+    getDailyInsights(setDailyCalories);
   }, []);
 
   return (
@@ -233,7 +235,7 @@ function Insights({ navigation }) {
                   style={{ fontFamily: "Poppins-Light" }}
                 >
                   {/* {value} */}
-                  320 Calories
+                  {dailyCalories} Calories
                 </Heading>
               </VStack>
               <PieChartInsights

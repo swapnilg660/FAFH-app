@@ -112,7 +112,6 @@ function Home({ navigation }) {
     userFirstTime();
     getWater(setWaterIntake, waterIntake);
     return () => {
-      console.log("unmounting");
     };
   }, []);
   return (

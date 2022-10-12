@@ -46,7 +46,6 @@ export default function App() {
           return token;
         } else {
           dispatch({ type: "SIGN_IN", token });
-
           getUser(setUserProfileData, data.email);
           return "Success";
         }
