@@ -14,19 +14,43 @@ import {
   Button,
   VStack,
   Spinner,
+  useToast,
+  Image,
 } from "native-base";
 import { SafeAreaView } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import * as ImagePicker from "expo-image-picker";
+import ToastComponent from "../../../services/CustomToast";
 
 function ReportBug({ navigation }) {
   const { colors } = useTheme();
+  const [image, setImage] = React.useState(null);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      aspect: [4, 3],
+      quality: 1,
+      allowsMultipleSelection: true,
+      // base64: true,
+      exif: true,
+    });
+
+    if (!result.cancelled) {
+      setImage(result);
+      console.log("Image from Gallery", result);
+    }
+  };
+
   const initialValues = {
     comment: "",
     title: "",
   };
+  const toast = useToast();
 
   const validationSchema = Yup.object({
     comment: Yup.string().required("Required"),
@@ -37,13 +61,13 @@ function ReportBug({ navigation }) {
     console.log(values);
     actions.setSubmitting(true);
     setTimeout(() => {
-      formikActions.setSubmitting(false);
+      actions.setSubmitting(false);
       toast.show({
         placement: "top",
         render: () => (
           <ToastComponent
             state={true ? "Success" : "Error"}
-            message={true ? "Profile Updated Successfully" : res}
+            message={true ? "Bug reported successfully" : res}
           />
         ),
       });
@@ -89,7 +113,7 @@ function ReportBug({ navigation }) {
           </Heading>
         </HStack>
         {/* Formik form to report a bug */}
-        <Box mx="5" bg="white" p="4" rounded="lg">
+        <Box mx="5" bg="white" rounded="lg">
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
@@ -151,7 +175,6 @@ function ReportBug({ navigation }) {
                     <Input
                       multiline={true}
                       value={comment}
-                      height={200}
                       onChangeText={handleChange("comment")}
                       onBlur={handleBlur("comment")}
                       p={2}
@@ -165,14 +188,18 @@ function ReportBug({ navigation }) {
                     </FormControl.ErrorMessage>
                   </FormControl>
 
-                  <Box>
+                  <VStack>
                     <VStack space={1}>
                       <Heading
                         style={{ fontFamily: "Poppins-SemiBold" }}
                         color={"black"}
                         fontSize={"lg"}
+                        pt={3}
                       >
                         Attach a screenshot
+                        <Text fontSize={"sm"} fontStyle="italic">
+                          (optional)
+                        </Text>
                       </Heading>
                       <Text
                         style={{ fontFamily: "Poppins-Regular" }}
@@ -186,7 +213,7 @@ function ReportBug({ navigation }) {
                         <Button
                           colorScheme="primary"
                           onPress={() => {
-                            console.log("hello");
+                            pickImage();
                           }}
                           leftIcon={
                             <MaterialIcons
@@ -200,7 +227,27 @@ function ReportBug({ navigation }) {
                         </Button>
                       </Center>
                     </VStack>
-                  </Box>
+                  </VStack>
+                  <ScrollView horizontal mt={5}>
+                    <HStack space="3" alignItems="center">
+                      {[1, 2, 344, 5, 5, 5].map((item, index) => {
+                        return (
+                          <Box key={index} borderColor="muted.400" rounded="lg">
+                            <Image
+                              source={{
+                                uri: "https://picsum.photos/200/300",
+                              }}
+                              alt="Alternate Text"
+                              resizeMode="cover"
+                              borderRadius={10}
+                              h={300}
+                              w={300}
+                            />
+                          </Box>
+                        );
+                      })}
+                    </HStack>
+                  </ScrollView>
 
                   <Center>
                     <Button

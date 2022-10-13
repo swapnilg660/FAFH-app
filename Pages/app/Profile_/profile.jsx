@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import { ScrollView, Animated } from "react-native";
+import { ScrollView, Animated, RefreshControl } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import {
   Center,
@@ -41,15 +41,32 @@ import { ProfileContext } from "./profileStack";
 import { color } from "react-native-reanimated";
 
 function Profile({ navigation }) {
-  const { userProfileData } = useContext(AuthContext);
+  const {
+    userProfileData,
+    setUserProfileData,
+    // hasProfileChanged,
+    // setHasProfileChanged,
+    signOut,
+    userToken,
+    getUser,
+  } = useContext(AuthContext);
   const { profilePicture } = useContext(ProfileContext);
   const { colors } = useTheme();
   const { height, width } = useWindowDimensions();
-  const { signOut, userToken } = useContext(AuthContext);
+  const {} = useContext(AuthContext);
   const scrollY = new Animated.Value(0);
   const diffClamp = Animated.diffClamp(scrollY, 0, 100);
 
   const [editActionSheet, setEditActionSheet] = React.useState(false);
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    getUser(setUserProfileData).then(() => {
+      setRefreshing(false);
+      calcBmi();
+    });
+  }, []);
 
   const contactData = [
     {
@@ -147,6 +164,7 @@ function Profile({ navigation }) {
   };
   useEffect(() => {
     calcBmi();
+
     return () => {};
   }, []);
 
@@ -182,6 +200,9 @@ function Profile({ navigation }) {
       <ScrollView
         onScroll={(e) => scrollY.setValue(e.nativeEvent.contentOffset.y)}
         scrollEventThrottle={32}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       >
         {/* Title */}
         <Animated.View
@@ -229,7 +250,7 @@ function Profile({ navigation }) {
                 <Avatar
                   size={"xl"}
                   source={{
-                    uri: userProfileData.avatar
+                    uri: userProfileData?.avatar
                       ? userProfileData.avatar
                       : profilePicture
                       ? profilePicture
@@ -456,56 +477,74 @@ function Profile({ navigation }) {
           <Box rounded={"lg"} bg={"#00000008"} p="2">
             {aboutData.map((item, index) => {
               return (
-                <HStack
-                  rounded={"lg"}
-                  p={2}
-                  space="7"
-                  px={5}
-                  alignItems="center"
-                  justifyContent={"space-between"}
-                  key={index}
+                <Pressable
+                  _pressed={
+                    item.route && {
+                      opacity: 0.5,
+                      borderWidth: 1,
+                      borderColor: "primary.600",
+                      borderRadius: 10,
+                    }
+                  }
+                  onPress={() => {
+                    if (item.route) {
+                      navigation.navigate(item.route, {
+                        userProfileData: userProfileData,
+                      });
+                    }
+                  }}
                 >
-                  <HStack space="3" alignItems="center">
-                    <Center bg="primary.600" p="1.5" rounded="full">
-                      {item.icon}
-                    </Center>
+                  <HStack
+                    rounded={"lg"}
+                    p={2}
+                    space="7"
+                    px={5}
+                    alignItems="center"
+                    justifyContent={"space-between"}
+                    key={index}
+                  >
+                    <HStack space="3" alignItems="center">
+                      <Center bg="primary.600" p="1.5" rounded="full">
+                        {item.icon}
+                      </Center>
 
-                    <VStack>
-                      <Text
-                        style={{
-                          fontFamily: "Poppins-SemiBold",
+                      <VStack>
+                        <Text
+                          style={{
+                            fontFamily: "Poppins-SemiBold",
+                          }}
+                        >
+                          {item.title}
+                        </Text>
+                        <Text
+                          color="muted.500"
+                          style={{
+                            fontStyle: "italic",
+                          }}
+                        >
+                          {item.value}
+                        </Text>
+                      </VStack>
+                    </HStack>
+                    {item.route && (
+                      <IconButton
+                        variant="ghost"
+                        icon={
+                          <MaterialIcons
+                            name="navigate-next"
+                            size={34}
+                            color={colors.primary["600"]}
+                          />
+                        }
+                        onPress={() => {
+                          navigation.navigate(item.route, {
+                            userProfileData: userProfileData,
+                          });
                         }}
-                      >
-                        {item.title}
-                      </Text>
-                      <Text
-                        color="muted.500"
-                        style={{
-                          fontStyle: "italic",
-                        }}
-                      >
-                        {item.value}
-                      </Text>
-                    </VStack>
+                      />
+                    )}
                   </HStack>
-                  {item.route && (
-                    <IconButton
-                      variant="ghost"
-                      icon={
-                        <MaterialIcons
-                          name="navigate-next"
-                          size={34}
-                          color={colors.primary["600"]}
-                        />
-                      }
-                      onPress={() => {
-                        navigation.navigate(item.route, {
-                          userProfileData: userProfileData,
-                        });
-                      }}
-                    />
-                  )}
-                </HStack>
+                </Pressable>
               );
             })}
           </Box>

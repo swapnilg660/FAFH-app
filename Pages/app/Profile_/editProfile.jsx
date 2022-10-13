@@ -25,6 +25,7 @@ import { Formik } from "formik";
 import UploadProfilePic from "./uploadProfilePic";
 import { ProfileContext } from "./profileStack";
 import ToastComponent from "../../../services/CustomToast";
+import AuthContext from "../../../hooks/context";
 
 function EditProfile({ navigation, route }) {
   const { colors } = useTheme();
@@ -32,12 +33,8 @@ function EditProfile({ navigation, route }) {
   const [openImagePicker, setOpenImagePicker] = React.useState(false);
   const { profilePicture } = React.useContext(ProfileContext);
   const toast = useToast();
+  const { setHasProfileChanged } = React.useContext(AuthContext);
 
-  const convertCell = (cell) =>
-    cell
-      .split("")
-      .filter((e) => Number.isInteger(parseInt(e)))
-      .join("");
   //form states
   const initialValues = {
     // current user's name
@@ -51,14 +48,8 @@ function EditProfile({ navigation, route }) {
 
   // Object for error handling
   const validationSchema = Yup.object({
-    name: Yup.string()
-      .trim()
-      .required("Required")
-      .min(3, "Must be at least 3 characters"),
-    email: Yup.string().trim().email("Invalid email").required("Required"),
-
-    // cell: Yup.string().matches(new RegExp("[0-9]{10}"), "Invalid Cell Number"),
-    cell: Yup.string().required("Required"),
+    name: Yup.string().trim().min(3, "Must be at least 3 characters"),
+    email: Yup.string().trim().email("Invalid email"),
     height: Yup.number()
       .typeError("The Height must be a number")
       .min(1, "Must be at least 1"),
@@ -68,6 +59,7 @@ function EditProfile({ navigation, route }) {
   });
 
   useEffect(() => {
+    setHasProfileChanged(false);
     return () => {
       // cleanup
     };
@@ -84,6 +76,7 @@ function EditProfile({ navigation, route }) {
         <Pressable
           onPress={() => {
             navigation.goBack();
+            setHasProfileChanged(true);
           }}
         >
           <Center bg="primary.600" p="2" pl={2.5} rounded="full">
@@ -143,12 +136,16 @@ function EditProfile({ navigation, route }) {
                 render: () => (
                   <ToastComponent
                     state={true ? "Success" : "Error"}
-                    message={true ? "Profile Updated Successfully" : res}
+                    message={
+                      true
+                        ? "Profile Updated Successfully,\nRefresh to see the changes"
+                        : res
+                    }
                   />
                 ),
               });
               navigation.goBack();
-            }, 2000);
+            }, 1000);
             // console.log(values);
           }}
         >

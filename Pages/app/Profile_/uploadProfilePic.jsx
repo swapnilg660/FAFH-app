@@ -6,26 +6,25 @@ import {
   Text,
   Image,
   Pressable,
+  Spinner,
 } from "native-base";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import * as ImagePicker from "expo-image-picker";
 // import { Image } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import uploadFile from "../../../services/testUploadFile";
 import { ProfileContext } from "./profileStack";
 import { uploadAvatar } from "../../../services/mongoDB/users";
+import AuthContext from "../../../hooks/context";
 
 function UploadProfilePic({ isOpen, setIsOpen }) {
   const [image, setImage] = React.useState(null);
   const [imageObject, setImageObject] = React.useState(null);
   const { setProfilePicture } = React.useContext(ProfileContext);
+  const { getUser, setUserProfileData } = useContext(AuthContext);
+  const [isLoading, setIsLoading] = React.useState(false);
 
-  const onUpload = async (image) => {
-    if (image) {
-      await uploadFile(image);
-      setIsOpen(false);
-    }
-  };
+ 
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -135,14 +134,18 @@ function UploadProfilePic({ isOpen, setIsOpen }) {
               variant="solid"
               colorScheme={!image ? "muted" : "primary"}
               onPress={async () => {
+                setIsLoading(true);
                 uploadAvatar(imageObject)
                   .then((e) => console.log(e))
                   .catch((e) => console.log(e));
-                setProfilePicture(image);
-                setIsOpen(false);
+                getUser(setUserProfileData).then(() => {
+                  setIsLoading(false);
+                  setProfilePicture(image);
+                  setIsOpen(false);
+                });
               }}
             >
-              Save
+              {isLoading ? <Spinner size="sm" color={"white"} /> : "Save"}
             </Button>
           </Button.Group>
         </Modal.Footer>

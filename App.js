@@ -35,6 +35,8 @@ export default function App() {
   });
 
   const [userProfileData, setUserProfileData] = useState(null);
+  const [hasProfileChanged, setHasProfileChanged] = useState(false);
+
   const contextData = useMemo(
     () => ({
       signIn: async (data) => {
@@ -46,7 +48,7 @@ export default function App() {
           return token;
         } else {
           dispatch({ type: "SIGN_IN", token });
-          getUser(setUserProfileData, data.email);
+          getUser(setUserProfileData);
           return "Success";
         }
       },
@@ -63,7 +65,7 @@ export default function App() {
           return token;
         } else {
           dispatch({ type: "SIGN_UP", token });
-          getUser(setUserProfileData, data.email);
+          getUser(setUserProfileData);
           return "Success";
         }
       },
@@ -72,6 +74,9 @@ export default function App() {
         dispatch({ type: "GOOGLE_SIGN_IN", token: token });
       },
       userToken: userData.userToken,
+      getUser: async (setUserProfileData) => {
+        await getUser(setUserProfileData);
+      },
     }),
     []
   );
@@ -79,7 +84,7 @@ export default function App() {
     let userToken;
     try {
       userToken = await SecureStore.getItemAsync("userToken");
-      getUser(setUserProfileData, userToken);
+      getUser(setUserProfileData);
     } catch (e) {
       // Restoring token failed
       console.log(e);
@@ -103,7 +108,15 @@ export default function App() {
 
   return (
     <NativeBaseProvider theme={FAFHTHEME}>
-      <AuthContext.Provider value={{ ...contextData, userProfileData }}>
+      <AuthContext.Provider
+        value={{
+          ...contextData,
+          userProfileData,
+          setUserProfileData,
+          hasProfileChanged,
+          setHasProfileChanged,
+        }}
+      >
         <NavigationContainer>
           {userData.userToken == null ? <AuthStack /> : <AppStack />}
         </NavigationContainer>
