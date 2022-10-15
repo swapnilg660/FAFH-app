@@ -26,30 +26,31 @@ import UploadProfilePic from "./uploadProfilePic";
 import { ProfileContext } from "./profileStack";
 import ToastComponent from "../../../services/CustomToast";
 import AuthContext from "../../../hooks/context";
+import { updateUser } from "../../../services/mongoDB/users";
 
 function EditProfile({ navigation, route }) {
   const { colors } = useTheme();
-  const { actionType, userProfileData } = route.params;
+  const { actionType } = route.params;
   const [openImagePicker, setOpenImagePicker] = React.useState(false);
   const { profilePicture } = React.useContext(ProfileContext);
   const toast = useToast();
-  const { setHasProfileChanged } = React.useContext(AuthContext);
+  const { userProfileData, setUserProfileData, getUser } =
+    React.useContext(AuthContext);
 
   //form states
   const initialValues = {
     // current user's name
-    name: userProfileData.fullName,
-    email: userProfileData.email,
-    height: `${userProfileData.height}`,
+    name: userProfileData?.fullName,
+    profession: userProfileData?.profession,
+    height: `${userProfileData?.height}`,
     heightUnit: "cm",
-    weight: `${userProfileData.weight}`,
+    weight: `${userProfileData?.weight}`,
     weightUnit: "kg",
   };
 
   // Object for error handling
   const validationSchema = Yup.object({
     name: Yup.string().trim().min(3, "Must be at least 3 characters"),
-    email: Yup.string().trim().email("Invalid email"),
     height: Yup.number()
       .typeError("The Height must be a number")
       .min(1, "Must be at least 1"),
@@ -59,7 +60,6 @@ function EditProfile({ navigation, route }) {
   });
 
   useEffect(() => {
-    setHasProfileChanged(false);
     return () => {
       // cleanup
     };
@@ -111,7 +111,9 @@ function EditProfile({ navigation, route }) {
         <Avatar
           size={"xl"}
           source={{
-            uri: profilePicture ? profilePicture : userProfileData?.avatar,
+            uri: userProfileData?.avatar
+              ? userProfileData?.avatar
+              : profilePicture,
           }}
         >
           SM
@@ -127,26 +129,34 @@ function EditProfile({ navigation, route }) {
           initialValues={initialValues}
           validationSchema={validationSchema}
           onSubmit={(values, formikActions) => {
-            // handleSubmit(values, formikActions);
+            let fieldsToChange = {
+              fullName: values.name,
+              profession: values.profession,
+              height: values.height,
+              weight: values.weight,
+            };
+
             formikActions.setSubmitting(true);
-            setTimeout(() => {
-              formikActions.setSubmitting(false);
-              toast.show({
-                placement: "top",
-                render: () => (
-                  <ToastComponent
-                    state={true ? "Success" : "Error"}
-                    message={
-                      true
-                        ? "Profile Updated Successfully,\nRefresh to see the changes"
-                        : res
-                    }
-                  />
-                ),
+            updateUser(fieldsToChange).then(() => {
+              getUser(setUserProfileData).then(() => {
+                formikActions.setSubmitting(false);
+
+                toast.show({
+                  placement: "top",
+                  render: () => (
+                    <ToastComponent
+                      state={true ? "Success" : "Error"}
+                      message={
+                        true
+                          ? "Profile Updated Successfully,\nRefresh to see the changes"
+                          : res
+                      }
+                    />
+                  ),
+                });
+                navigation.goBack();
               });
-              navigation.goBack();
-            }, 1000);
-            // console.log(values);
+            });
           }}
         >
           {({
@@ -159,7 +169,7 @@ function EditProfile({ navigation, route }) {
             errors,
             isSubmitting,
           }) => {
-            const { name, email, cell, weight, height } = values;
+            const { name, profession, cell, weight, height } = values;
             return (
               <>
                 <FormControl isInvalid={touched.name && errors.name}>
@@ -171,7 +181,7 @@ function EditProfile({ navigation, route }) {
                     onChangeText={handleChange("name")}
                     onBlur={handleBlur("name")}
                     p={2}
-                    placeholder="Heritier Kaumbu"
+                    placeholder="How should we call you?"
                     placeholderTextColor="gray.400"
                     _input={{ color: "black" }}
                     fontWeight={"300"}
@@ -181,74 +191,27 @@ function EditProfile({ navigation, route }) {
                     {touched.name && errors.name}
                   </FormControl.ErrorMessage>
                 </FormControl>
-                <FormControl isInvalid={touched.email && errors.email}>
+                <FormControl
+                  isInvalid={touched.profession && errors.profession}
+                >
                   <FormControl.Label>
-                    <Text color={"black"}>Email</Text>
+                    <Text color={"black"}>Profession</Text>
                   </FormControl.Label>
                   <Input
-                    value={email}
-                    onChangeText={handleChange("email")}
-                    onBlur={handleBlur("email")}
+                    value={profession}
+                    onChangeText={handleChange("profession")}
+                    onBlur={handleBlur("profession")}
                     p={2}
-                    placeholder="email@example.com"
+                    placeholder="Your profession"
                     placeholderTextColor="gray.400"
                     _input={{ color: "black" }}
                     fontWeight={"300"}
                     fontSize={"md"}
                   />
                   <FormControl.ErrorMessage>
-                    {touched.email && errors.email}
+                    {touched.profession && errors.profession}
                   </FormControl.ErrorMessage>
                 </FormControl>
-
-                {/* <FormControl isInvalid={touched.cell && errors.cell}>
-                  <FormControl.Label>
-                    <Text color={"black"}>Cell.no</Text>
-                  </FormControl.Label>
-                  <Input
-                    value={cell}
-                    onChangeText={handleChange("cell")}
-                    onBlur={handleBlur("cell")}
-                    p={2}
-                    placeholder="0123456789"
-                    placeholderTextColor="gray.400"
-                    _input={{ color: "black" }}
-                    fontWeight={"300"}
-                    fontSize={"md"}
-                    rightElement={
-                      <FormControl
-                        backgroundColor={"primary.600"}
-                        width={"30%"}
-                        p={0}
-                      >
-                        <Select
-                          maxWidth="80"
-                          accessibilityLabel="Country code"
-                          placeholder="Code"
-                          placeholderTextColor={"white"}
-                          onValueChange={(itemValue) => {
-                            setFieldValue("weightUnit", itemValue);
-                          }}
-                          onBlur={handleBlur("weightUnit")}
-                          _selectedItem={{
-                            bg: "primary.100",
-                            endIcon: <CheckIcon size={5} />,
-                            borderRadius: "20",
-                          }}
-                          color={"white"}
-                          borderColor={"primary.600"}
-                        >
-                          <Select.Item label="+91" value="India" />
-                          <Select.Item label="+27" value="South Africa" />
-                        </Select>
-                      </FormControl>
-                    }
-                  />
-                  <FormControl.ErrorMessage>
-                    {touched.cell && errors.cell}
-                  </FormControl.ErrorMessage>
-                </FormControl> */}
-
                 <HStack space={2}>
                   <FormControl
                     width={"50%"}
@@ -367,17 +330,6 @@ function EditProfile({ navigation, route }) {
             );
           }}
         </Formik>
-
-        {/* <FormControl isInvalid>
-          <FormControl.Label>First Name</FormControl.Label>
-          <Input p={2} placeholder="Is it react?" />
-          <FormControl.HelperText>
-            We'll keep this between us.
-          </FormControl.HelperText>
-          <FormControl.ErrorMessage>
-            Something is wrong.
-          </FormControl.ErrorMessage>
-        </FormControl> */}
       </VStack>
     </SafeAreaView>
   );

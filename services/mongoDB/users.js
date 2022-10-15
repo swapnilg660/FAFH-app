@@ -5,7 +5,6 @@ import { Platform } from "react-native";
 const dbUrl = "https://glacial-refuge-38575.herokuapp.com";
 const platform = Platform.OS;
 // current logged user token
-let token = SecureStore.getItemAsync("userToken");
 
 // create new user using firebase token
 export const mongoCreateUser = async (data) => {
@@ -35,12 +34,14 @@ export const mongoCreateUser = async (data) => {
 };
 
 // update user information
-export const updateUser = (userId, fields) => {
-  let userToken = SecureStore.getItemAsync("userToken");
+export const updateUser = async (fields) => {
+  let token = await SecureStore.getItemAsync("userToken");
+  console.log("TOKEN:", token);
   var formdata = new FormData();
-  Object.keys(fields).map((item) => {
-    formdata.append(item, fields[item]);
-  });
+
+  for (let field in fields) {
+    formdata.append(field, fields[field]);
+  }
 
   var requestOptions = {
     method: "POST",
@@ -48,7 +49,10 @@ export const updateUser = (userId, fields) => {
     redirect: "follow",
   };
 
-  fetch(`${dbUrl}/updateUser?userToken=${token}`, requestOptions)
+  fetch(
+    "https://glacial-refuge-38575.herokuapp.com/updateUser?userToken=" + token,
+    requestOptions
+  )
     .then((response) => response.text())
     .then((result) => console.log(result))
     .catch((error) => console.log("error", error));
@@ -138,6 +142,41 @@ export const uploadAvatar = async (image) => {
 
   fetch(`${dbUrl}/updateAvatar`, requestOptions)
     .then((response) => response.text())
-    .then((result) => console.log("RESULT FROM UPLOADING AVATAR:",result))
+    .then((result) => console.log("RESULT FROM UPLOADING AVATAR:", result))
+    .catch((error) => console.log("error", error));
+};
+export const reportBug = async (data) => {
+  const { title, comment, screenshots } = data;
+  let userId = await SecureStore.getItemAsync("userToken");
+  var formdata = new FormData();
+  formdata.append("userId", userId);
+  formdata.append("title", title);
+  formdata.append("message", comment);
+  if (screenshots.length > 0) {
+    c = 1;
+    for (var screenshot of screenshots) {
+      // console.log(`[SCREENSHOT]_${c}_:`, screenshot);
+      formdata.append(`picture_${c}`, {
+        // original data to pass
+        uri: screenshot.uri,
+        name: screenshot.uri.split("/").pop(),
+        type: platform === "android" ? mime.getType(screenshot.uri) : "jpeg",
+        // customize data for FAFH backend
+        filepath: screenshot.uri,
+        originalFilename: screenshot.uri.split("/").pop(),
+      });
+      c++;
+    }
+  }
+
+  var requestOptions = {
+    method: "POST",
+    body: formdata,
+    redirect: "follow",
+  };
+
+  fetch(`${dbUrl}/reportBug`, requestOptions)
+    .then((response) => response.text())
+    .then((result) => console.log(result))
     .catch((error) => console.log("error", error));
 };

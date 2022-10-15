@@ -24,10 +24,11 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import * as ImagePicker from "expo-image-picker";
 import ToastComponent from "../../../services/CustomToast";
+import { reportBug } from "../../../services/mongoDB/users";
 
 function ReportBug({ navigation }) {
   const { colors } = useTheme();
-  const [image, setImage] = React.useState(null);
+  const [images, setImages] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -41,8 +42,11 @@ function ReportBug({ navigation }) {
     });
 
     if (!result.cancelled) {
-      setImage(result);
-      console.log("Image from Gallery", result);
+      if (result.selected) {
+        setImages(result.selected);
+      } else {
+        setImages([result]);
+      }
     }
   };
 
@@ -58,9 +62,13 @@ function ReportBug({ navigation }) {
   });
 
   const handleSubmit = (values, actions) => {
-    console.log(values);
+    let bugData = {
+      ...values,
+      screenshots: images,
+    };
+    // console.log("DATA TO SEND TO REPORT BUG =>", bugData);
     actions.setSubmitting(true);
-    setTimeout(() => {
+    reportBug(bugData).then(() => {
       actions.setSubmitting(false);
       toast.show({
         placement: "top",
@@ -72,11 +80,13 @@ function ReportBug({ navigation }) {
         ),
       });
       navigation.goBack();
-    }, 2000);
-    // actions.resetForm()
+    });
   };
-
-  useEffect(() => {});
+  useEffect(() => {
+    return () => {
+      setImages(null);
+    };
+  }, []);
 
   return (
     <>
@@ -230,12 +240,46 @@ function ReportBug({ navigation }) {
                   </VStack>
                   <ScrollView horizontal mt={5}>
                     <HStack space="3" alignItems="center">
-                      {[1, 2, 344, 5, 5, 5].map((item, index) => {
+                      {images?.map((item, index) => {
                         return (
-                          <Box key={index} borderColor="muted.400" rounded="lg">
+                          <Box
+                            key={index}
+                            borderColor="muted.400"
+                            rounded="lg"
+                            position={"relative"}
+                          >
+                            <Pressable
+                              _pressed={{
+                                bg: "red.900",
+                              }}
+                              bg="danger.700"
+                              zIndex={1}
+                              position={"absolute"}
+                              top={2}
+                              right={2}
+                              rounded={"full"}
+                              onPress={() => {
+                                let newImages = images.filter(
+                                  (image) => image.uri !== item.uri
+                                );
+                                setImages(newImages);
+                              }}
+                            >
+                              <Center
+                                rounded="full"
+                                borderColor={"muted.400"}
+                                p="2"
+                              >
+                                <Ionicons
+                                  name="close"
+                                  size={24}
+                                  color={colors.white}
+                                />
+                              </Center>
+                            </Pressable>
                             <Image
                               source={{
-                                uri: "https://picsum.photos/200/300",
+                                uri: item.uri,
                               }}
                               alt="Alternate Text"
                               resizeMode="cover"

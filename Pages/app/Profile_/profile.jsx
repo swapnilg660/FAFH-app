@@ -44,8 +44,6 @@ function Profile({ navigation }) {
   const {
     userProfileData,
     setUserProfileData,
-    // hasProfileChanged,
-    // setHasProfileChanged,
     signOut,
     userToken,
     getUser,
@@ -164,9 +162,12 @@ function Profile({ navigation }) {
   };
   useEffect(() => {
     calcBmi();
+    for(let field in userProfileData){
+      console.log(field, userProfileData[field])
+    }
 
     return () => {};
-  }, []);
+  }, [userProfileData]);
 
   return (
     <SafeAreaView
@@ -433,6 +434,10 @@ function Profile({ navigation }) {
               </HStack>
             </HStack>
           </Box>
+
+          <Text>Settings</Text>
+          <Box rounded={"lg"} bg={"#00000008"} p="2"></Box>
+
           <Text>Contact Information</Text>
           <Box rounded={"lg"} bg={"#00000008"} p="2">
             {contactData.map((item, index) => {
@@ -473,11 +478,13 @@ function Profile({ navigation }) {
               );
             })}
           </Box>
+
           <Text>About Us</Text>
           <Box rounded={"lg"} bg={"#00000008"} p="2">
             {aboutData.map((item, index) => {
               return (
                 <Pressable
+                  key={index}
                   _pressed={
                     item.route && {
                       opacity: 0.5,
@@ -501,7 +508,6 @@ function Profile({ navigation }) {
                     px={5}
                     alignItems="center"
                     justifyContent={"space-between"}
-                    key={index}
                   >
                     <HStack space="3" alignItems="center">
                       <Center bg="primary.600" p="1.5" rounded="full">
@@ -620,7 +626,10 @@ function Profile({ navigation }) {
                 key={index}
                 rounded={"lg"}
                 onPress={() => {
-                  navigation.navigate(item.route, { actionType: item.title });
+                  navigation.navigate(item.route, {
+                    actionType: item.title,
+                    userProfileData: userProfileData,
+                  });
                   setEditActionSheet(false);
                 }}
               >
