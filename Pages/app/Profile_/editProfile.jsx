@@ -76,7 +76,6 @@ function EditProfile({ navigation, route }) {
         <Pressable
           onPress={() => {
             navigation.goBack();
-            setHasProfileChanged(true);
           }}
         >
           <Center bg="primary.600" p="2" pl={2.5} rounded="full">

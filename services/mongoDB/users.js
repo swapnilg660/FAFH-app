@@ -155,7 +155,7 @@ export const reportBug = async (data) => {
   if (screenshots.length > 0) {
     c = 1;
     for (var screenshot of screenshots) {
-      // console.log(`[SCREENSHOT]_${c}_:`, screenshot);
+
       formdata.append(`picture_${c}`, {
         // original data to pass
         uri: screenshot.uri,

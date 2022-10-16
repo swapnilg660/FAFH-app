@@ -15,6 +15,7 @@ import {
   Box,
   Actionsheet,
   IconButton,
+  Select,
 } from "native-base";
 
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -23,6 +24,7 @@ import {
   Entypo,
   FontAwesome,
   FontAwesome5,
+  Ionicons,
   MaterialCommunityIcons,
   MaterialIcons,
   Zocial,
@@ -41,13 +43,8 @@ import { ProfileContext } from "./profileStack";
 import { color } from "react-native-reanimated";
 
 function Profile({ navigation }) {
-  const {
-    userProfileData,
-    setUserProfileData,
-    signOut,
-    userToken,
-    getUser,
-  } = useContext(AuthContext);
+  const { userProfileData, setUserProfileData, signOut, userToken, getUser } =
+    useContext(AuthContext);
   const { profilePicture } = useContext(ProfileContext);
   const { colors } = useTheme();
   const { height, width } = useWindowDimensions();
@@ -106,6 +103,7 @@ function Profile({ navigation }) {
   ];
 
   const [bmi, setBmi] = React.useState(0);
+  const [waterGoal, setWaterGoal] = React.useState(0);
 
   //calculate bmi
   const calcBmi = () => {
@@ -162,9 +160,6 @@ function Profile({ navigation }) {
   };
   useEffect(() => {
     calcBmi();
-    for(let field in userProfileData){
-      console.log(field, userProfileData[field])
-    }
 
     return () => {};
   }, [userProfileData]);
@@ -220,6 +215,9 @@ function Profile({ navigation }) {
               alignItems="center"
               justifyContent={"center"}
               m={2}
+              bg={"primary.30"}
+              rounded="xl"
+              p={5}
             >
               <Pressable
                 _pressed={{
@@ -294,12 +292,13 @@ function Profile({ navigation }) {
           </Box>
         </Animated.View>
         {/* Profile Options */}
-        <VStack space="3" p={3} h={height * 1.15} bg={"white"}>
+        <VStack space="3" p={3} h={height * 1.45} bg={"white"}>
           <Text>Physical Information</Text>
-          <Box rounded={"lg"} bg={"#00000008"} p="2">
+          <VStack space={2} rounded={"lg"} p="2">
             <HStack
               bg={getBmiColorAndText(bmi).bmiColor}
               rounded={"lg"}
+              h={"65px"}
               p={2}
               space="7"
               px={5}
@@ -317,6 +316,8 @@ function Profile({ navigation }) {
               </Text>
             </HStack>
             <HStack
+              h={"65px"}
+              bg="#00000008"
               rounded={"lg"}
               p={2}
               space="7"
@@ -380,6 +381,8 @@ function Profile({ navigation }) {
               </HStack>
             </HStack>
             <HStack
+              h={"65px"}
+              bg="#00000008"
               rounded={"lg"}
               p={2}
               space="7"
@@ -433,16 +436,57 @@ function Profile({ navigation }) {
                 </VStack>
               </HStack>
             </HStack>
-          </Box>
+          </VStack>
 
           <Text>Settings</Text>
-          <Box rounded={"lg"} bg={"#00000008"} p="2"></Box>
+          <VStack rounded={"lg"} p="2">
+            <HStack
+              space="2"
+              alignItems="center"
+              justifyContent={"space-between"}
+              h={"65px"}
+              rounded={"lg"}
+              bg="#00000008"
+              p={2}
+              px={5}
+            >
+              <HStack space="3" alignItems="center">
+                <Center bg="primary.600" p="1.5" rounded="full">
+                  <Ionicons name="water" size={24} color="white" />
+                </Center>
+
+                <Text
+                  style={{
+                    fontFamily: "Poppins-SemiBold",
+                  }}
+                >
+                  Set a water Goal
+                </Text>
+              </HStack>
+              <Center>
+                <Select
+                  selectedValue={waterGoal}
+                  placeholder="Glasses"
+                  minWidth="115px"
+                  onValueChange={(itemValue) => setWaterGoal(itemValue)}
+                >
+                  <Select.Item label="3 Glasses" value="3" />
+                  <Select.Item label="4 Glasses" value="4" />
+                  <Select.Item label="5 Glasses" value="5" />
+                  <Select.Item label="6 Glasses" value="6" />
+                  <Select.Item label="7 Glasses" value="7" />
+                </Select>
+              </Center>
+            </HStack>
+          </VStack>
 
           <Text>Contact Information</Text>
-          <Box rounded={"lg"} bg={"#00000008"} p="2">
+          <VStack space={2} rounded={"lg"} p="2">
             {contactData.map((item, index) => {
               return (
                 <HStack
+                  h={"65px"}
+                  bg="#00000008"
                   rounded={"lg"}
                   p={2}
                   space="7"
@@ -477,13 +521,16 @@ function Profile({ navigation }) {
                 </HStack>
               );
             })}
-          </Box>
+          </VStack>
 
           <Text>About Us</Text>
-          <Box rounded={"lg"} bg={"#00000008"} p="2">
+          <VStack space={2} rounded={"lg"} p="2">
             {aboutData.map((item, index) => {
               return (
                 <Pressable
+                  rounded={"lg"}
+                  bg="#00000008"
+                  h={"65px"}
                   key={index}
                   _pressed={
                     item.route && {
@@ -502,7 +549,6 @@ function Profile({ navigation }) {
                   }}
                 >
                   <HStack
-                    rounded={"lg"}
                     p={2}
                     space="7"
                     px={5}
@@ -553,7 +599,7 @@ function Profile({ navigation }) {
                 </Pressable>
               );
             })}
-          </Box>
+          </VStack>
 
           <Center>
             <Button
