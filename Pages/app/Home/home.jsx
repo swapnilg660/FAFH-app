@@ -36,11 +36,8 @@ import {
   FAFH_logo,
   HomeFat,
   ProteinHome,
-  RecordFoodIcon,
-  StepsIcon,
   WeightIcon,
 } from "../../../Components/customSvgIcon";
-import { SafeAreaView } from "react-native-safe-area-context";
 import AuthContext, { HomeContext } from "../../../hooks/context";
 import {
   drinkWater,
@@ -67,7 +64,7 @@ function Home({ navigation }) {
 
   // Additional Information Modal
   const [modalVisible, setModalVisible] = useState(false);
-  const { userToken } = useContext(AuthContext);
+  const { userProfileData } = useContext(AuthContext);
   const { setMeals } = useContext(HomeContext);
   const [tipsVisible, setTipsVisible] = useState(true);
   const userFirstTime = async () => {
@@ -111,8 +108,7 @@ function Home({ navigation }) {
   useEffect(() => {
     userFirstTime();
     getWater(setWaterIntake, waterIntake);
-    return () => {
-    };
+    return () => {};
   }, []);
   return (
     <>
@@ -151,19 +147,37 @@ function Home({ navigation }) {
                 justifyContent={"space-between"}
                 alignItems="flex-end"
               >
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("InsightsStack", {
+                      nutrient: "protein",
+                    })
+                  }
+                >
                   <Center>
                     <ProteinHome />
                     <Text style={styles.activitiesText}>Protein</Text>
                   </Center>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("InsightsStack", {
+                      nutrient: "carbs",
+                    })
+                  }
+                >
                   <Center>
                     <Carbs />
                     <Text style={styles.activitiesText}>Carbs</Text>
                   </Center>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("InsightsStack", {
+                      nutrient: "fat",
+                    })
+                  }
+                >
                   <Center>
                     <HomeFat />
                     <Text style={styles.activitiesText}>Fat</Text>
@@ -454,7 +468,7 @@ function Home({ navigation }) {
                 </HStack>
                 <HStack justifyContent={"space-between"} alignItems={"center"}>
                   <Text ml={2} pt={1} style={{ fontFamily: "Poppins-Light" }}>
-                    <Heading>52 </Heading>
+                    <Heading>{userProfileData?.weight} </Heading>
                     kg
                   </Text>
                 </HStack>
