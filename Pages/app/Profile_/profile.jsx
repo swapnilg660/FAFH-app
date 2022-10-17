@@ -409,7 +409,7 @@ function Profile({ navigation }) {
                       fontStyle: "italic",
                     }}
                   >
-                    {userProfileData?.gender == "M" ? "Male" : "Female"}
+                    {userProfileData?.gender}
                   </Text>
                 </VStack>
               </HStack>

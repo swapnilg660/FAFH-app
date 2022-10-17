@@ -51,7 +51,7 @@ function EditProfile({ navigation, route }) {
     weightUnit: "kg",
     // doB: moment("1990-01-01").format("MMMM Do YYYY"),
     doB: `${userProfileData?.dateOfBirth}`,
-    gender: `${userProfileData?.gender[0]}`,
+    gender: `${userProfileData?.gender}`,
   };
 
   // Object for error handling
@@ -231,8 +231,7 @@ function EditProfile({ navigation, route }) {
                       }}
                       mt={1}
                       onValueChange={(itemValue) => {
-                        setFieldValue("gender", itemValue);
-                        console.log("Gender:", itemValue);
+                         setFieldValue("gender", itemValue);
                       }}
                     >
                       <Select.Item label="Male" value="Male" />
