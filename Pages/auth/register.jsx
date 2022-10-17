@@ -78,7 +78,7 @@ function Register({ navigation }) {
     password: "",
     confirmPassword: "",
     cell: "",
-    doB: moment().format("MMMM Do YYYY"),
+    doB: moment("1990-01-01").format("MMMM Do YYYY"),
     gender: "",
     height: "",
     heightUnit: "cm",
@@ -205,9 +205,9 @@ function Register({ navigation }) {
                   confirmPassword,
                   cell,
                   doB,
+                  gender,
                   weight,
                   height,
-                  gender,
                 } = values;
                 return (
                   <>

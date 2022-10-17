@@ -57,11 +57,11 @@ function Profile({ navigation }) {
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
+    calcBmi();
     getUser(setUserProfileData).then(() => {
       setRefreshing(false);
-      calcBmi();
     });
-  }, []);
+  }, [userProfileData]);
 
   const contactData = [
     {
