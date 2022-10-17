@@ -180,3 +180,15 @@ export const reportBug = async (data) => {
     .then((result) => console.log(result))
     .catch((error) => console.log("error", error));
 };
+
+
+export const getDailyQoute = async (setDailyQoute) => {
+  fetch("https://type.fit/api/quotes")
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      var random = Math.floor(Math.random() * data.length);
+      setDailyQoute(data[random]);
+    });
+}

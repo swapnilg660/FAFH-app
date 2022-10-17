@@ -94,8 +94,8 @@ function Register({ navigation }) {
       stayLoggedIn: true,
       setToken,
     }).then((res) => {
-      
-      mongoCreateUser(data);
+      console.log("firebase res", res);
+      if (res == "Success") mongoCreateUser(data);
       formikActions.setSubmitting(false);
       setFeedback(res);
       toast.show({
