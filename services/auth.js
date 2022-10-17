@@ -3,11 +3,6 @@ import firebase from "firebase";
 import { mongoCreateUser } from "./mongoDB/users";
 // import "react-toastify/dist/ReactToastify.css";
 
-function WriteData(userId, Fname, Sname, Email, Photo) {
-  firebase.firestore().collection("Users").doc(userId).set({
-    // store the user data in the database firestore
-  });
-}
 
 //SignIn using email and address
 export const signIn = async (data) => {
@@ -57,8 +52,6 @@ export const signUp = async (data) => {
       .then(async (res) => {
         token = res.user.uid;
 
-        // alert("Sign Up Successful");
-        // WriteData(userId, Fname, Sname, Email, Photo)
         if (data.stayLoggedIn) {
           await SecureStore.setItemAsync("userToken", token);
           await SecureStore.setItemAsync("userFirstTime", "true");

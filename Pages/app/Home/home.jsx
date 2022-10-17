@@ -41,23 +41,26 @@ import {
 import AuthContext, { HomeContext } from "../../../hooks/context";
 import {
   drinkWater,
+  getDailyQoute,
   getWater,
   mongoCreateUser,
 } from "../../../services/mongoDB/users";
+import { getDailyInsights } from "../../../services/mongoDB/insightsData";
 
 function Home({ navigation }) {
   const { colors } = useTheme();
   const { height, width } = useWindowDimensions();
-  const data = {
+  const [data, setData] = useState({
     labels: ["Protein", "Carbs", "Fat"], // optional
-    data: [0.4, 0.6, 0.8],
+    data: [0, 0, 0],
     // map:[colors.secondary[500], colors.primary[200], colors.primary[500]]
-  };
+  });
   const [waterIntake, setWaterIntake] = useState({ current: 0, goal: 8 });
   const [stepsCounter, setStepsCounter] = useState({
     current: waterIntake.current * 360,
     goal: 6000,
   });
+  const [quote, setQuote] = useState({});
 
   // Type of food ActionSheet variables
   const [actionSheetVisible, setActionSheetVisible] = useState(false);
@@ -108,6 +111,8 @@ function Home({ navigation }) {
   useEffect(() => {
     userFirstTime();
     getWater(setWaterIntake, waterIntake);
+    getDailyInsights(setData);
+    getDailyQoute(setQuote);
     return () => {};
   }, []);
   return (
@@ -206,8 +211,12 @@ function Home({ navigation }) {
             {tipsVisible && (
               <View style={styles.tipsContainer}>
                 <View style={styles.messageContainer}>
-                  <Text style={styles.tipsTitle}>Tip of the Day!</Text>
-                  <Text style={styles.tipsText}>"Drink more water"</Text>
+                  <Text style={styles.tipsTitle}>
+                    {quote.author ? `~${quote.author}` : "Loading..."}
+                  </Text>
+                  <Text style={styles.tipsText}>
+                    {quote.text ? quote.text : "Loading..."}
+                  </Text>
                 </View>
                 <Image
                   style={styles.tipsImage}
@@ -252,7 +261,7 @@ function Home({ navigation }) {
                         fontFamily: "Poppins-Light",
                       }}
                     >
-                      <Title>234</Title> cal
+                      <Title>{data.data[data.data.length - 1]}</Title> cal
                     </Text>
                   </View>
                   <View>
