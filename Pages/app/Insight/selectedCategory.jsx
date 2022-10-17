@@ -11,6 +11,7 @@ import {
 import { BarChartCat } from "./categoryCharts";
 import { array } from "yup";
 import { ScrollView } from "react-native-gesture-handler";
+import Carrousel from "../../../Components/carrousel";
 
 function SelectedCategory({ category }) {
   const { colors } = useTheme();
@@ -94,10 +95,16 @@ function SelectedCategory({ category }) {
           </Button>
         ))}
       </HStack>
-      
-      <Heading mt={5} style={{
-        fontFamily: "Poppins-SemiBold"
-      }}>Calorie Intake</Heading>
+      <Text mt={5}>Filter Nutrients</Text>
+      <Carrousel defaultElement="All" />
+      <Heading
+        mt={5}
+        style={{
+          fontFamily: "Poppins-SemiBold",
+        }}
+      >
+        Calorie Intake
+      </Heading>
       <Box
         alignSelf={"center"}
         m={2}

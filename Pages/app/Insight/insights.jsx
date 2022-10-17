@@ -30,7 +30,17 @@ import {
 } from "./insightSvg";
 import Category from "./categoryComponent";
 import SelectedCategory from "./selectedCategory";
-import { getDailyInsights, getTopRestaurants } from "../../../services/mongoDB/insightsData";
+import {
+  getDailyInsights,
+  getTopRestaurants,
+} from "../../../services/mongoDB/insightsData";
+import {
+  BreakfastIcon,
+  DinnerIcon,
+  DrinkIcon,
+  LunchIcon,
+  SnackIcon,
+} from "../../../Components/customSvgIcon";
 
 function Insights({ navigation }) {
   const { colors } = useTheme();
@@ -89,6 +99,44 @@ function Insights({ navigation }) {
       selected: false,
     },
   ]);
+  const [occasions, setOccasions] = React.useState([
+    {
+      name: "Breakfast",
+      Icon: BreakfastIcon,
+      bg: "primary.100",
+      blurred: false,
+      selected: false,
+    },
+    {
+      name: "Lunch",
+      Icon: LunchIcon,
+      bg: "green.200",
+      blurred: false,
+      selected: false,
+    },
+    {
+      name: "Dinner",
+      Icon: DinnerIcon,
+      bg: "muted.400",
+      blurred: false,
+      selected: false,
+    },
+
+    {
+      name: "Snacks",
+      Icon: SnackIcon,
+      bg: "secondary.100",
+      blurred: false,
+      selected: false,
+    },
+    {
+      name: "Drinks",
+      Icon: DrinkIcon,
+      bg: "blue.200",
+      blurred: false,
+      selected: false,
+    },
+  ]);
   const CategoriesScrollRef = React.useRef();
 
   useEffect(() => {
@@ -134,7 +182,7 @@ function Insights({ navigation }) {
             justifyContent={"space-between"}
             px={3}
           >
-            {categories.map((category, index) => (
+            {occasions.map((category, index) => (
               <Category
                 key={index}
                 name={category.name}
@@ -178,76 +226,77 @@ function Insights({ navigation }) {
         </ScrollView>
         {/* Main VStack for all charts */}
         <VStack px={5} mt={5} space="5">
+          {/* Show selected categories if they exist */}
           {categories.some((c) => c.selected) ? (
             <SelectedCategory category={categories.filter((c) => c.selected)} />
           ) : (
             <VStack p={3} bg="primary.30" rounded="lg">
-            <Box my={2}>
-              <Text style={{ fontFamily: "Poppins-Light" }}>Carbs</Text>
-              <Progress.Bar
-                progress={65 / 100}
-                width={Dimensions.get("window").width * 0.8}
-                height={8}
-                color={colors.primary[500]}
-                unfilledColor={colors.primary[50]}
-                borderWidth={0}
-              />
-            </Box>
-            <Box my={2}>
-              <Text style={{ fontFamily: "Poppins-Light" }}>Protein</Text>
-              <Progress.Bar
-                progress={35 / 100}
-                width={Dimensions.get("window").width * 0.8}
-                height={8}
-                color={colors.secondary[500]}
-                unfilledColor={colors.secondary[50]}
-                borderWidth={0}
-              />
-            </Box>
-            <Box my={2}>
-              <Text style={{ fontFamily: "Poppins-Light" }}>Fat</Text>
-              <Progress.Bar
-                progress={49 / 100}
-                width={Dimensions.get("window").width * 0.8}
-                height={8}
-                color={colors.red[600]}
-                unfilledColor={colors.red[50]}
-                borderWidth={0}
-              />
-            </Box>
-            <HStack
-              my={5}
-              bg="primary.50"
-              rounded={"xl"}
-              p={3}
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <VStack space="1">
-                <Heading
-                  color={"muted.400"}
-                  style={{ fontFamily: "Poppins-SemiBold" }}
-                >
-                  Total Calories
-                </Heading>
-                <Heading
-                  fontSize={"lg"}
-                  style={{ fontFamily: "Poppins-Light" }}
-                >
-                  {/* {value} */}
-                  {dailyCalories} Calories
-                </Heading>
-              </VStack>
-              <PieChartInsights
-                td={1}
-                colors={[
-                  colors.primary["500"],
-                  colors.secondary["500"],
-                  colors.danger["500"],
-                ]}
-              />
-            </HStack>
-          </VStack>
+              <Box my={2}>
+                <Text style={{ fontFamily: "Poppins-Light" }}>Carbs</Text>
+                <Progress.Bar
+                  progress={65 / 100}
+                  width={Dimensions.get("window").width * 0.8}
+                  height={8}
+                  color={colors.primary[500]}
+                  unfilledColor={colors.primary[50]}
+                  borderWidth={0}
+                />
+              </Box>
+              <Box my={2}>
+                <Text style={{ fontFamily: "Poppins-Light" }}>Protein</Text>
+                <Progress.Bar
+                  progress={35 / 100}
+                  width={Dimensions.get("window").width * 0.8}
+                  height={8}
+                  color={colors.secondary[500]}
+                  unfilledColor={colors.secondary[50]}
+                  borderWidth={0}
+                />
+              </Box>
+              <Box my={2}>
+                <Text style={{ fontFamily: "Poppins-Light" }}>Fat</Text>
+                <Progress.Bar
+                  progress={49 / 100}
+                  width={Dimensions.get("window").width * 0.8}
+                  height={8}
+                  color={colors.red[600]}
+                  unfilledColor={colors.red[50]}
+                  borderWidth={0}
+                />
+              </Box>
+              <HStack
+                my={5}
+                bg="primary.50"
+                rounded={"xl"}
+                p={3}
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <VStack space="1">
+                  <Heading
+                    color={"muted.400"}
+                    style={{ fontFamily: "Poppins-SemiBold" }}
+                  >
+                    Total Calories
+                  </Heading>
+                  <Heading
+                    fontSize={"lg"}
+                    style={{ fontFamily: "Poppins-Light" }}
+                  >
+                    {/* {value} */}
+                    {dailyCalories} Calories
+                  </Heading>
+                </VStack>
+                <PieChartInsights
+                  td={1}
+                  colors={[
+                    colors.primary["500"],
+                    colors.secondary["500"],
+                    colors.danger["500"],
+                  ]}
+                />
+              </HStack>
+            </VStack>
           )}
           {/* Expenditure */}
           <Heading

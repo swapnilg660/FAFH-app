@@ -59,13 +59,12 @@ export const updateUser = async (fields) => {
 };
 
 // Get user data when logged in
-export const getUser = async (setUserProfileData, email) => {
+export const getUser = async (setUserProfileData) => {
   var requestOptions = {
     method: "POST",
     redirect: "follow",
   };
   let token = await SecureStore.getItemAsync("userToken");
-  // console.log("email:", email,"SetUserProfileData:", setUserProfileData);
 
   await fetch(`${dbUrl}/getUser?userToken=${token}`, requestOptions)
     .then((response) => response.json())
