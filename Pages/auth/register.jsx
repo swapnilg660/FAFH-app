@@ -501,6 +501,14 @@ function Register({ navigation }) {
                 );
               }}
             </Formik>
+            <VStack space="0" alignItems="center">
+              <Text textAlign={"center"} underline fontSize="md">
+                Terms And Conditions Bla bla bla
+              </Text>
+              <Text textAlign={"center"} underline fontSize="md">
+                Policy and Use of Data
+              </Text>
+            </VStack>
           </Box>
         </Animated.View>
       </ScrollView>

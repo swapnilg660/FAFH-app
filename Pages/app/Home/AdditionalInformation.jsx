@@ -240,15 +240,6 @@ export default function AdditionalInformation({ navigation, setShowModal }) {
                 >
                   Skip
                 </Button>
-
-                <VStack space="0" alignItems="center">
-                  <Text textAlign={"center"} underline fontSize="md">
-                    Terms And Conditions Bla bla bla
-                  </Text>
-                  <Text textAlign={"center"} underline fontSize="md">
-                    Policy and Use of Data
-                  </Text>
-                </VStack>
               </VStack>
             );
           }}
