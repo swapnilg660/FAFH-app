@@ -47,7 +47,7 @@ function Insights({ navigation }) {
   const [topRestaurants, setTopRestaurants] = React.useState(null);
   const [dailyCalories, setDailyCalories] = React.useState(null);
 
-  //categories data
+  //Nutrition types
   const [categories, setCategories] = React.useState([
     {
       name: "Carbs",
@@ -99,6 +99,7 @@ function Insights({ navigation }) {
       selected: false,
     },
   ]);
+  // occasion types
   const [occasions, setOccasions] = React.useState([
     {
       name: "Breakfast",
@@ -137,7 +138,7 @@ function Insights({ navigation }) {
       selected: false,
     },
   ]);
-  const CategoriesScrollRef = React.useRef();
+  const OccasionScrollRef = React.useRef();
 
   useEffect(() => {
     //getting top restaurants
@@ -163,7 +164,7 @@ function Insights({ navigation }) {
           <MaterialIcons name="arrow-forward-ios" size={24} color="black" />
         </HStack>
 
-        {/* Categories */}
+        {/* Occasions */}
         <Heading
           m={4}
           style={{ fontFamily: "Poppins-Regular" }}
@@ -172,7 +173,7 @@ function Insights({ navigation }) {
           Occasions
         </Heading>
         <ScrollView
-          ref={CategoriesScrollRef}
+          ref={OccasionScrollRef}
           horizontal
           showsHorizontalScrollIndicator={false}
         >
@@ -182,33 +183,33 @@ function Insights({ navigation }) {
             justifyContent={"space-between"}
             px={3}
           >
-            {occasions.map((category, index) => (
+            {occasions.map((occasion, index) => (
               <Category
                 key={index}
-                name={category.name}
-                Icon={category.Icon}
-                bg={category.bg}
-                blurred={category.blurred}
-                selected={category.selected}
+                name={occasion.name}
+                Icon={occasion.Icon}
+                bg={occasion.bg}
+                blurred={occasion.blurred}
+                selected={occasion.selected}
                 onPress={() => {
-                  CategoriesScrollRef.current.scrollTo({
+                  OccasionScrollRef.current.scrollTo({
                     x: 0,
                     animated: true,
                   });
-                  let newCategories = [...categories];
+                  let newCategories = [...occasions];
                   newCategories[index].selected =
                     !newCategories[index].selected;
-                  if (newCategories.some((category) => category.selected)) {
-                    newCategories = newCategories.map((category, i) => {
-                      //if this category is selected don't blur it
-                      return category.selected
-                        ? { ...category, blurred: false }
-                        : { ...category, blurred: true };
+                  if (newCategories.some((occasion) => occasion.selected)) {
+                    newCategories = newCategories.map((occasion, i) => {
+                      //if this occasion is selected don't blur it
+                      return occasion.selected
+                        ? { ...occasion, blurred: false }
+                        : { ...occasion, blurred: true };
                     });
                   } else {
-                    newCategories = newCategories.map((category, i) => {
-                      category.blurred = false;
-                      return category;
+                    newCategories = newCategories.map((occasion, i) => {
+                      occasion.blurred = false;
+                      return occasion;
                     });
                   }
 
@@ -218,7 +219,7 @@ function Insights({ navigation }) {
                     b = b.selected ? 2 : 1;
                     return b - a;
                   });
-                  setCategories(newCategories);
+                  setOccasions(newCategories);
                 }}
               />
             ))}
@@ -226,9 +227,9 @@ function Insights({ navigation }) {
         </ScrollView>
         {/* Main VStack for all charts */}
         <VStack px={5} mt={5} space="5">
-          {/* Show selected categories if they exist */}
-          {categories.some((c) => c.selected) ? (
-            <SelectedCategory category={categories.filter((c) => c.selected)} />
+          {/* Show selected occasion if they exist */}
+          {occasions.some((c) => c.selected) ? (
+            <SelectedCategory category={occasions.filter((c) => c.selected)} />
           ) : (
             <VStack p={3} bg="primary.30" rounded="lg">
               <Box my={2}>

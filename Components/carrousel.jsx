@@ -1,27 +1,29 @@
 import { Center, HStack, Pressable, ScrollView, Text } from "native-base";
 import React, { useEffect } from "react";
-function Carrousel(dataFilter, defaultElement, style) {
+function Carrousel({dataFilter, defaultElement, style}) {
   const [filterList, setFilterList] = React.useState(["All"]);
-  dataFilter = [
-    "All",
-    "Indian",
-    "Chinese",
-    "Italian",
-    "Mexican",
-    "Thai",
-    "Japanese",
-    "American",
-    "French",
-    "Spanish",
-    "German",
-    "Greek",
-    "Nordic",
-    "Eastern European",
-    "Caribbean",
-    "Middle Eastern",
-    "South American",
-    "African",
-  ];
+  if (!dataFilter.length > 0) {
+    dataFilter = [
+      "All",
+      "Indian",
+      "Chinese",
+      "Italian",
+      "Mexican",
+      "Thai",
+      "Japanese",
+      "American",
+      "French",
+      "Spanish",
+      "German",
+      "Greek",
+      "Nordic",
+      "Eastern European",
+      "Caribbean",
+      "Middle Eastern",
+      "South American",
+      "African",
+    ];
+  }
   useEffect(() => {
     console.log("dataFilter", dataFilter);
   });

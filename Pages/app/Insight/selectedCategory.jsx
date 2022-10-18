@@ -96,7 +96,10 @@ function SelectedCategory({ category }) {
         ))}
       </HStack>
       <Text mt={5}>Filter Nutrients</Text>
-      <Carrousel defaultElement="All" />
+      <Carrousel
+        dataFilter={["All", "Protein", "Fat", "Carbs"]}
+        defaultElement="All"
+      />
       <Heading
         mt={5}
         style={{

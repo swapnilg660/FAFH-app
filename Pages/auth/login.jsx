@@ -262,7 +262,6 @@ function Login({ navigation }) {
                     <Pressable
                       onPress={() => {
                         //Login code
-                        console.log("Fb Login");
                       }}
                     >
                       <FacebookIcon width="70" />
@@ -273,20 +272,16 @@ function Login({ navigation }) {
                     <Text style={{ fontFamily: "Poppins-SemiBold" }}>
                       Don't have an account ?
                     </Text>
-                    <Pressable
+                    {/* Ghost button to register page */}
+                    <Button
+                      variant={"link"}
+                      colorScheme="secondary"
                       onPress={() => {
-                        console.log("Go to register page");
                         navigation.navigate("Register");
                       }}
                     >
-                      <Text
-                        color={"secondary.500"}
-                        my="5"
-                        style={{ fontFamily: "Poppins-SemiBold" }}
-                      >
-                        Register
-                      </Text>
-                    </Pressable>
+                      Register
+                    </Button>
                   </Row>
                 </>
               );
