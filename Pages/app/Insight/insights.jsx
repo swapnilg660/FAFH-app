@@ -169,7 +169,7 @@ function Insights({ navigation }) {
           style={{ fontFamily: "Poppins-Regular" }}
           fontSize={"2xl"}
         >
-          Categories
+          Occasions
         </Heading>
         <ScrollView
           ref={CategoriesScrollRef}

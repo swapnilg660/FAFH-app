@@ -31,6 +31,8 @@ import { updateUser } from "../../../services/mongoDB/users";
 import { DatePickerComponent } from "../../auth/register";
 import moment from "moment";
 
+import { LinearGradient } from "expo-linear-gradient";
+
 function EditProfile({ navigation, route }) {
   const { colors } = useTheme();
   const { actionType } = route.params;
@@ -121,7 +123,20 @@ function EditProfile({ navigation, route }) {
               : profilePicture,
           }}
         >
-          SM
+          <Center h="100%" w="100%" rounded="full">
+            <LinearGradient
+              style={{
+                position: "absolute",
+                left: 0,
+                right: 0,
+                top: 0,
+                height: "100%",
+                borderRadius: 100,
+              }}
+              // Background Linear Gradient
+              colors={[colors.primary["100"], colors.primary["500"]]}
+            />
+          </Center>
         </Avatar>
       </Pressable>
       <UploadProfilePic
@@ -231,7 +246,7 @@ function EditProfile({ navigation, route }) {
                       }}
                       mt={1}
                       onValueChange={(itemValue) => {
-                         setFieldValue("gender", itemValue);
+                        setFieldValue("gender", itemValue);
                       }}
                     >
                       <Select.Item label="Male" value="Male" />

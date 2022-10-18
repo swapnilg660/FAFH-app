@@ -77,7 +77,6 @@ function Register({ navigation }) {
     email: "",
     password: "",
     confirmPassword: "",
-    cell: "",
     doB: moment("1990-01-01").format("MMMM Do YYYY"),
     gender: "",
     height: "",
@@ -126,7 +125,6 @@ function Register({ navigation }) {
       .required("Required")
       .oneOf([Yup.ref("password"), null], "Passwords must match"),
     // cell: Yup.string().matches(new RegExp("[0-9]{10}"), "Invalid Cell Number"),
-    cell: Yup.string().required("Required"),
     doB: Yup.string().required("Required"),
     height: Yup.number()
       .typeError("The Height must be a number")
@@ -203,7 +201,6 @@ function Register({ navigation }) {
                   email,
                   password,
                   confirmPassword,
-                  cell,
                   doB,
                   gender,
                   weight,
@@ -331,58 +328,6 @@ function Register({ navigation }) {
                         {touched.confirmPassword && errors.confirmPassword}
                       </FormControl.ErrorMessage>
                     </FormControl>
-                    <FormControl
-                      isRequired
-                      isInvalid={touched.cell && errors.cell}
-                    >
-                      <FormControl.Label>
-                        <Text color={"black"}>Cell.no</Text>
-                      </FormControl.Label>
-                      <Input
-                        value={cell}
-                        onChangeText={handleChange("cell")}
-                        onBlur={handleBlur("cell")}
-                        p={2}
-                        placeholder="0123456789"
-                        placeholderTextColor="gray.400"
-                        _input={{ color: "black" }}
-                        fontWeight={"300"}
-                        fontSize={"md"}
-                        rightElement={
-                          <FormControl
-                            backgroundColor={"primary.600"}
-                            width={"30%"}
-                            p={0}
-                          >
-                            <Select
-                              maxWidth="80"
-                              accessibilityLabel="Country code"
-                              placeholder="Code"
-                              placeholderTextColor={"white"}
-                              // selectedValue={values.weightUnit}
-                              // defaultValue={values.weightUnit}
-                              onValueChange={(itemValue) => {
-                                setFieldValue("weightUnit", itemValue);
-                              }}
-                              onBlur={handleBlur("weightUnit")}
-                              _selectedItem={{
-                                bg: "primary.100",
-                                endIcon: <CheckIcon size={5} />,
-                                borderRadius: "20",
-                              }}
-                              color={"white"}
-                              borderColor={"primary.600"}
-                            >
-                              <Select.Item label="+91" value="India" />
-                              <Select.Item label="+27" value="South Africa" />
-                            </Select>
-                          </FormControl>
-                        }
-                      />
-                      <FormControl.ErrorMessage>
-                        {touched.cell && errors.cell}
-                      </FormControl.ErrorMessage>
-                    </FormControl>
                     <DatePickerComponent
                       doB={doB}
                       setFieldValue={setFieldValue}
@@ -508,10 +453,13 @@ function Register({ navigation }) {
                           setFieldValue("gender", itemValue)
                         }
                       >
-                        <Select.Item label="Male" value="M" />
-                        <Select.Item label="Female" value="F" />
-                        <Select.Item label="Other" value="O" />
-                        <Select.Item label="Prefer not to say" value="C" />
+                        <Select.Item label="Male" value="Male" />
+                        <Select.Item label="Female" value="Female" />
+                        <Select.Item label="Other" value="Other" />
+                        <Select.Item
+                          label="Prefer not to say"
+                          value="Prefer not to say"
+                        />
                       </Select>
                       <FormControl.ErrorMessage
                         leftIcon={<WarningOutlineIcon size="xs" />}
@@ -613,6 +561,7 @@ export const DatePickerComponent = ({ handleSubmit, doB, setFieldValue }) => {
       </FormControl>
 
       <DateTimePickerModal
+        themeVariant="light"
         isVisible={isDatePickerVisible}
         mode="date"
         onConfirm={handleConfirm}
