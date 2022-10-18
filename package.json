@@ -11,6 +11,9 @@
     "dev": "npx expo start"
   },
   "dependencies": {
+    "@chartiful/react-native-chart-builder": "^0.1.8",
+    "@chartiful/react-native-line-graph": "^0.1.2",
+    "@chartiful/react-native-vertical-bar-graph": "^0.1.2",
     "@expo/vector-icons": "^13.0.0",
     "@expo/webpack-config": "^0.17.0",
     "@react-native-async-storage/async-storage": "~1.17.3",

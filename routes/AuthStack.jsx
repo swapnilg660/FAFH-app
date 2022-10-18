@@ -49,6 +49,7 @@ function AuthStack() {
           headerTitle: "",
           headerStyle: { backgroundColor: "transparent" },
           headerTintColor: colors.primary,
+          headerShown: false,
         }}
       />
       <Stack.Screen name="ForgotPassword" component={ForgotPassword} />

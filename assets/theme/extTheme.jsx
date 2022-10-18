@@ -45,7 +45,7 @@ const FAFHTHEME = extendTheme({
   },
   config: {
     // Changing initialColorMode to 'dark' AND it's working
-    // initialColorMode: "dark",
+    initialColorMode: "light",
   },
   fontConfig: {
     Poppins: {

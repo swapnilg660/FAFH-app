@@ -204,7 +204,7 @@ function Profile({ navigation }) {
         <Animated.View
           style={{
             opacity: diffClamp.interpolate({
-              inputRange: [0, 50],
+              inputRange: [0, 120],
               outputRange: [1, 0],
             }),
           }}
