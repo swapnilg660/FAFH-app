@@ -35,7 +35,7 @@ export default function AdditionalInformation({ navigation, setShowModal }) {
   const initialValues = {
     country: "",
     industry: "",
-    job: "",
+    profession: "",
     jobTime: "",
   };
   // const saveAdditionalInformation = useContext(AuthContext);
@@ -45,7 +45,7 @@ export default function AdditionalInformation({ navigation, setShowModal }) {
     updateUser(userToken, data);
 
     formikAction.setSubmitting(false);
-    formikAction.resetForm();
+    // formikAction.resetForm();
     // close the modal on success
     // toast.show({
     //   placement: "top",
@@ -95,7 +95,7 @@ export default function AdditionalInformation({ navigation, setShowModal }) {
             errors,
             isSubmitting,
           }) => {
-            const { country, jobTime, job, industry } = values;
+            const { country, jobTime, profession, industry } = values;
 
             return (
               <VStack
@@ -180,9 +180,9 @@ export default function AdditionalInformation({ navigation, setShowModal }) {
                   </FormControl.Label>
                   <Input
                     borderColor={"primary.100"}
-                    value={job}
-                    onChangeText={handleChange("job")}
-                    onBlur={handleBlur("job")}
+                    value={profession}
+                    onChangeText={handleChange("profession")}
+                    onBlur={handleBlur("profession")}
                     p={2}
                     fontWeight={"300"}
                     fontSize={"md"}
