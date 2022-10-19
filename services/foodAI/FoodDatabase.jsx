@@ -30,7 +30,7 @@ export const getSuggestions = (word, setSuggestions) => {
   )
     .then((response) => response.json())
     .then((result) => {
-      // console.log(result);
+      console.log("suggeestion: ", result);
       setSuggestions(result.slice(0, 5));
     })
     .catch((error) => console.log("error", error));

@@ -36,6 +36,7 @@ function ConfirmMeal({ navigation, route }) {
   const [userSuggestion, setUserSuggestion] = React.useState("");
   const [isSuggestedFoodLoaded, setIsSuggestedFoodLoaded] = useState(true);
   const [isOtherInvalid, setIsOtherInvalid] = useState(false);
+  const [itemNutrition, setItemNutrition] = useState({});
 
   const handleAddMeal = () => {
     if (Object.values(selectedFood).includes(true)) {
@@ -45,21 +46,20 @@ function ConfirmMeal({ navigation, route }) {
         return;
       }
       setIsOtherInvalid(false);
-
+      Object.keys(selectedFood).forEach((key) => {
+        if (selectedFood[key] === true) {
+          setMeals((prev) => [
+            ...prev,
+            {
+              name: key,
+              nutritionalInfo: {},
+              image: photo,
+            },
+          ]);
+        }
+      });
       // setSelectedFood({ ...selectedFood, Other: userSuggestion });
-      setMeals((prev) => [
-        ...prev,
-        {
-          // photo: photo,
-          nutritionalInfo: "nutritionalInfo we get from AI",
-          userSuggestion: {
-            ...Object.keys(selectedFood).filter(
-              (key) => selectedFood[key] === true
-            ),
-            Other: userSuggestion,
-          },
-        },
-      ]);
+
       navigation.navigate("CapturedMeal", {
         occasion: foodType,
       });
@@ -67,6 +67,10 @@ function ConfirmMeal({ navigation, route }) {
       alert("Please select at least one suggestion");
     }
   };
+
+  useEffect(() => {
+    console.log("selectedFood", selectedFood);
+  }, [selectedFood]);
 
   const getFood = (foundFood) => {
     if (foundFood?.length > 0) {
