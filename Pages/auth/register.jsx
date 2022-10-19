@@ -237,7 +237,7 @@ function Register({ navigation }) {
                           onChangeText={handleChange("name")}
                           onBlur={handleBlur("name")}
                           p={2}
-                          placeholder="Heritier Kaumbu"
+                          placeholder="e.g Heritier Kaumbu"
                           placeholderTextColor="gray.400"
                           _input={{ color: "black" }}
                           fontWeight={"300"}
@@ -510,7 +510,7 @@ function Register({ navigation }) {
                             }}
                             value={agreement}
                           ></Checkbox>
-                          <Text textAlign={"center"} fontSize="md">
+                          <Text textAlign={"center"} fontSize="xs">
                             By registering you agree to our
                           </Text>
                         </HStack>
