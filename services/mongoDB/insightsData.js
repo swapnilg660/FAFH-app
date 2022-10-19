@@ -2,7 +2,7 @@ import * as SecureStore from "expo-secure-store";
 // Our database url <-- currently using localhost
 const dbUrl = "https://glacial-refuge-38575.herokuapp.com";
 
-// This function is amde to work with home page and insights page, please specify the route you calling it from.
+// This function is made to work with home page and insights page, please specify the route you calling it from.
 export const getDailyInsights = async (setDailyInsights, route = "home") => {
   let token = await SecureStore.getItemAsync("userToken");
   var formdata = new FormData();
@@ -12,8 +12,9 @@ export const getDailyInsights = async (setDailyInsights, route = "home") => {
     body: formdata,
     redirect: "follow",
   };
+  console.log("token", token);
 
-  fetch(`${dbUrl}/getDailyNutrients?userId=tadaa`, requestOptions)
+  fetch(`${dbUrl}/getDailyNutrients?userId=${token}`, requestOptions)
     .then((response) => response.json())
     .then((result) => {
       if (route == "home") {

@@ -12,8 +12,56 @@ import { BarChartCat } from "./categoryCharts";
 import { array } from "yup";
 import { ScrollView } from "react-native-gesture-handler";
 import Carrousel from "../../../Components/carrousel";
+import { InsightContext } from "./insightStack";
+import BarGraphAll from "./barGraph";
 
-function SelectedCategory({ category }) {
+function SelectedCategory({ nutrient }) {
+  const { filterList } = React.useContext(InsightContext);
+  //Nutrition types
+  const [nutrients, setNutrients] = React.useState([
+    {
+      name: "Carbs",
+      bg: "primary.600",
+      blurred: false,
+      selected: false,
+    },
+    {
+      name: "Fruits",
+      bg: "yellow.700",
+      blurred: false,
+      selected: false,
+    },
+    {
+      name: "Vegetables",
+      bg: "green.400",
+      blurred: false,
+      selected: false,
+    },
+    {
+      name: "Cereals",
+      bg: "secondary.200",
+      blurred: false,
+      selected: false,
+    },
+    {
+      name: "Protein",
+      bg: "red.400",
+      blurred: false,
+      selected: false,
+    },
+    {
+      name: "Fat",
+      bg: "yellow.300",
+      blurred: false,
+      selected: false,
+    },
+    {
+      name: "Dairy",
+      bg: "blue.700",
+      blurred: false,
+      selected: false,
+    },
+  ]);
   const { colors } = useTheme();
   const [period, setPeriod] = React.useState([
     { name: "Daily", selected: false },
@@ -56,7 +104,7 @@ function SelectedCategory({ category }) {
     },
   ];
 
-  category = category.map((e) => {
+  nutrient = nutrients.map((e) => {
     return {
       ...e,
       data: dataWeek.map((e) => {
@@ -64,7 +112,11 @@ function SelectedCategory({ category }) {
       }),
     };
   });
-  useEffect(() => {}, [category]);
+  useEffect(() => {
+    console.log("FilterList", filterList);
+  }, [filterList]);
+
+  const dataToShowOnChart = nutrient.filter((e) => filterList.includes(e.name));
 
   return (
     <>
@@ -97,7 +149,7 @@ function SelectedCategory({ category }) {
       </HStack>
       <Text mt={5}>Filter Nutrients</Text>
       <Carrousel
-        dataFilter={["All", "Protein", "Fat", "Carbs"]}
+        dataFilter={nutrients.map((e) => e.name)}
         defaultElement="All"
       />
       <Heading
@@ -118,7 +170,21 @@ function SelectedCategory({ category }) {
         justifyContent={"center"}
         alignItems={"center"}
       >
-        <BarChartCat data={category} />
+        {filterList.length == 1 && filterList[0] == "All" ? (
+          <BarGraphAll
+            data={{
+              Mon: 12,
+              Tue: 10,
+              Wed: 15,
+              Thu: 20,
+              Fri: 25,
+              Sat: 30,
+              Sun: 35,
+            }}
+          />
+        ) : (
+          <BarChartCat data={dataToShowOnChart} />
+        )}
         <HStack
           justifyContent={"center"}
           alignItems={"center"}
@@ -129,46 +195,24 @@ function SelectedCategory({ category }) {
           space={2}
           flexWrap="wrap"
         >
-          {category.map((item) => (
-            <HStack key={item.name} alignItems={"center"}>
-              <Center bg={item.bg} m={1} p="1.5" rounded={"full"}></Center>
-              <Text color={"primary.600"}>{item.name}</Text>
+          {nutrient.map((item) => {
+            if (filterList.includes(item.name)) {
+              return (
+                <HStack key={item.name} alignItems={"center"}>
+                  <Center bg={item.bg} m={1} p="1.5" rounded={"full"}></Center>
+                  <Text color={"primary.600"}>{item.name}</Text>
+                </HStack>
+              );
+            } else return null;
+          })}
+
+          {filterList.length == 1 && filterList[0] == "All" ? (
+            <HStack alignItems={"center"}>
+              <Text color={"primary.600"}>Average Calories</Text>
             </HStack>
-          ))}
+          ) : null}
         </HStack>
       </Box>
-
-      {/* <Heading mt={5}>Money spent on: {category.map((e) => `${e.name},`)}</Heading>
-
-      <Box
-        alignSelf={"center"}
-        m={2}
-        p={5}
-        rounded={10}
-        width={"100%"}
-        bg="secondary.30"
-        justifyContent={"center"}
-        alignItems={"center"}
-      >
-        <BarChartCat data={category} type="money"/>
-        <HStack
-          justifyContent={"center"}
-          alignItems={"center"}
-          width="100%"
-          bg={"muted.100"}
-          p={2}
-          rounded={"md"}
-          space={2}
-          flexWrap="wrap"
-        >
-          {category.map((item) => (
-            <HStack key={item.name} alignItems={"center"}>
-              <Center bg={item.bg} m={1} p="1.5" rounded={"full"}></Center>
-              <Text color={"primary.600"}>{item.name}</Text>
-            </HStack>
-          ))}
-        </HStack>
-      </Box> */}
     </>
   );
 }

@@ -1,7 +1,8 @@
 import { Center, HStack, Pressable, ScrollView, Text } from "native-base";
 import React, { useEffect } from "react";
-function Carrousel({dataFilter, defaultElement, style}) {
-  const [filterList, setFilterList] = React.useState(["All"]);
+import { InsightContext } from "../Pages/app/Insight/insightStack";
+function Carrousel({ dataFilter }) {
+  const { filterList, setFilterList } = React.useContext(InsightContext);
   if (!dataFilter.length > 0) {
     dataFilter = [
       "All",
@@ -24,11 +25,9 @@ function Carrousel({dataFilter, defaultElement, style}) {
       "African",
     ];
   }
-  useEffect(() => {
-    console.log("dataFilter", dataFilter);
-  });
+
   return (
-    <HStack style={style}>
+    <HStack>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}

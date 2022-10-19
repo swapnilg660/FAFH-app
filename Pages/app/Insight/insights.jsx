@@ -47,58 +47,7 @@ function Insights({ navigation }) {
   const [topRestaurants, setTopRestaurants] = React.useState(null);
   const [dailyCalories, setDailyCalories] = React.useState(null);
 
-  //Nutrition types
-  const [categories, setCategories] = React.useState([
-    {
-      name: "Carbs",
-      Icon: CarbsIcon,
-      bg: "primary.600",
-      blurred: false,
-      selected: false,
-    },
-    {
-      name: "Fruits",
-      Icon: FruitIcon,
-      bg: "yellow.700",
-      blurred: false,
-      selected: false,
-    },
-    {
-      name: "Vegetables",
-      Icon: VegsIcon,
-      bg: "green.400",
-      blurred: false,
-      selected: false,
-    },
-    {
-      name: "Cereals",
-      Icon: CerealIcon,
-      bg: "secondary.200",
-      blurred: false,
-      selected: false,
-    },
-    {
-      name: "Protein",
-      Icon: ProteinIcon,
-      bg: "red.400",
-      blurred: false,
-      selected: false,
-    },
-    {
-      name: "Fat",
-      Icon: FatIcon,
-      bg: "yellow.300",
-      blurred: false,
-      selected: false,
-    },
-    {
-      name: "Dairy",
-      Icon: DairyIcon,
-      bg: "blue.700",
-      blurred: false,
-      selected: false,
-    },
-  ]);
+  
   // occasion types
   const [occasions, setOccasions] = React.useState([
     {
