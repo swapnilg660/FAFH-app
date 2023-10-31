@@ -2,7 +2,7 @@ import * as SecureStore from "expo-secure-store";
 import mime from "mime";
 import { Platform } from "react-native";
 // mangoDB backend code url
-const dbUrl = "https://glacial-refuge-38575.herokuapp.com";
+import { BASE_URL } from "../../config";
 const platform = Platform.OS;
 // current logged user token
 
@@ -15,10 +15,6 @@ export const mongoCreateUser = async (data) => {
   formdata.append("email", data.email);
   formdata.append("phoneNumber", data.cell);
   formdata.append("dateOfBirth", data.doB);
-  formdata.append("weight", data.weight);
-  formdata.append("heightUnit", data.height);
-  formdata.append("weightUnit", data.weightUnit);
-  formdata.append("height", data.height);
   formdata.append("gender", data.gender);
 
   var requestOptions = {
@@ -27,7 +23,7 @@ export const mongoCreateUser = async (data) => {
     redirect: "follow",
   };
 
-  fetch(`${dbUrl}/createUser`, requestOptions)
+  fetch(`${BASE_URL}/createUser`, requestOptions)
     .then((response) => response.text())
     .then((result) => console.log("user successfully created:", result))
     .catch((error) => console.log("error creating user:", error));
@@ -49,10 +45,7 @@ export const updateUser = async (fields) => {
     redirect: "follow",
   };
 
-  fetch(
-    "https://glacial-refuge-38575.herokuapp.com/updateUser?userToken=" + token,
-    requestOptions
-  )
+  fetch("https://glacial-refuge-38575.herokuapp.com/updateUser?userToken=" + token, requestOptions)
     .then((response) => response.text())
     .then((result) => console.log(result))
     .catch((error) => console.log("error", error));
@@ -66,7 +59,7 @@ export const getUser = async (setUserProfileData) => {
   };
   let token = await SecureStore.getItemAsync("userToken");
 
-  await fetch(`${dbUrl}/getUser?userToken=${token}`, requestOptions)
+  await fetch(`${BASE_URL}/getUser?userToken=${token}`, requestOptions)
     .then((response) => response.json())
     .then((result) => setUserProfileData(result.data))
     .catch((error) => console.log("error", error));
@@ -80,7 +73,7 @@ export const drinkWater = async (glass) => {
     redirect: "follow",
   };
 
-  fetch(`${dbUrl}/drinkWater?userToken=${token}&glass=${glass}`, requestOptions)
+  fetch(`${BASE_URL}/drinkWater?userToken=${token}&glass=${glass}`, requestOptions)
     .then((response) => response.text())
     .then((result) => console.log(result))
     .catch((error) => console.log("error", error));
@@ -93,7 +86,7 @@ export const getWater = async (setWater, water) => {
     redirect: "follow",
   };
 
-  fetch(`${dbUrl}/getWater?userToken=${token}`, requestOptions)
+  fetch(`${BASE_URL}/getWater?userToken=${token}`, requestOptions)
     .then((response) => response.json())
     .then((result) => {
       if (result.success) {
@@ -139,7 +132,7 @@ export const uploadAvatar = async (image) => {
     redirect: "follow",
   };
 
-  fetch(`${dbUrl}/updateAvatar`, requestOptions)
+  fetch(`${BASE_URL}/updateAvatar`, requestOptions)
     .then((response) => response.text())
     .then((result) => console.log("RESULT FROM UPLOADING AVATAR:", result))
     .catch((error) => console.log("error", error));
@@ -154,7 +147,6 @@ export const reportBug = async (data) => {
   if (screenshots.length > 0) {
     c = 1;
     for (var screenshot of screenshots) {
-
       formdata.append(`picture_${c}`, {
         // original data to pass
         uri: screenshot.uri,
@@ -174,12 +166,11 @@ export const reportBug = async (data) => {
     redirect: "follow",
   };
 
-  fetch(`${dbUrl}/reportBug`, requestOptions)
+  fetch(`${BASE_URL}/reportBug`, requestOptions)
     .then((response) => response.text())
     .then((result) => console.log(result))
     .catch((error) => console.log("error", error));
 };
-
 
 export const getDailyQoute = async (setDailyQoute) => {
   fetch("https://type.fit/api/quotes")
@@ -190,4 +181,4 @@ export const getDailyQoute = async (setDailyQoute) => {
       var random = Math.floor(Math.random() * data.length);
       setDailyQoute(data[random]);
     });
-}
+};

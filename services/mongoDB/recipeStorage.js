@@ -4,7 +4,7 @@ import React from "react";
 export const RecipesContext = React.createContext();
 
 //db url
-const dbUrl = "https://glacial-refuge-38575.herokuapp.com";
+import { BASE_URL } from "../../config";
 
 // Store recipes in MongoDB
 export const saveRecipe = (recipe) => {
@@ -35,7 +35,7 @@ export const saveRecipe = (recipe) => {
     redirect: "follow",
   };
 
-  fetch(`${dbUrl}/saveRecipe`, requestOptions)
+  fetch(`${BASE_URL}/saveRecipe`, requestOptions)
     .then((response) => response.text())
     .then((result) => console.log(result))
     .catch((error) => console.log("error", error));

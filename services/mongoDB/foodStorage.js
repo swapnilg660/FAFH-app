@@ -1,7 +1,7 @@
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 // Our database url <-- currently using localhost
-const dbUrl = "https://glacial-refuge-38575.herokuapp.com";
+import { BASE_URL } from "../../config";
 
 export const recordCustomeMeal = async (data, occasion) => {
   console.log("saving to database");
@@ -18,7 +18,7 @@ export const recordCustomeMeal = async (data, occasion) => {
     redirect: "follow",
   };
 
-  fetch(`${dbUrl}/storeCustomeMeal`, requestOptions)
+  fetch(`${BASE_URL}/storeCustomeMeal`, requestOptions)
     .then((response) => response.text())
     .then((result) => console.log(result))
     .catch((error) => console.log("error", error));
@@ -45,7 +45,7 @@ export const recordFood = async (occasion, mealArray, isFAFH, cost) => {
     redirect: "follow",
   };
 
-  fetch(`${dbUrl}/storeMealsRecord`, requestOptions)
+  fetch(`${BASE_URL}/storeMealsRecord`, requestOptions)
     .then((response) => response.json())
     .then((result) => console.log(result))
     .catch((error) => console.log("error: ", error));
@@ -58,7 +58,7 @@ export const getCustomMeals = (setCustomMeals) => {
     redirect: "follow",
   };
 
-  fetch(`${dbUrl}/getCustomeMeals?userId=${token}`, requestOptions)
+  fetch(`${BASE_URL}/getCustomeMeals?userId=${token}`, requestOptions)
     .then((response) => response.json())
     .then((result) => {
       console.log("custom meals found:", result);

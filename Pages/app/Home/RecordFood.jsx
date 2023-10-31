@@ -18,11 +18,7 @@ import {
   VStack,
 } from "native-base";
 import { SafeAreaView } from "react-native-safe-area-context";
-import {
-  AntDesign,
-  MaterialCommunityIcons,
-  MaterialIcons,
-} from "@expo/vector-icons";
+import { AntDesign, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { Octicons } from "@expo/vector-icons";
 import { useEffect, useRef, useState } from "react";
 import { Animated, Image, StyleSheet, useWindowDimensions } from "react-native";
@@ -32,12 +28,9 @@ import AlertComponent from "../../../Components/alert";
 import ToastComponent from "../../../services/CustomToast";
 import noFood from "../../../assets/images/noFood.png";
 import { getFood, getSuggestions } from "../../../services/foodAI/FoodDatabase";
-import {
-  createTable,
-  getCustomMeal,
-  getDBConnection,
-} from "../../../services/localDB/localDB";
+import { createTable, getCustomMeal, getDBConnection } from "../../../services/localDB/localDB";
 import { getCustomMeals } from "../../../services/mongoDB/foodStorage";
+import { Camera, CameraType } from "expo-camera";
 function RecordFood({ navigation, route }) {
   // Fake data, we need a GET request to get this data
 
@@ -47,6 +40,7 @@ function RecordFood({ navigation, route }) {
   const { height, width } = useWindowDimensions();
   const rotateFab = useRef(new Animated.Value(0)).current;
   const toast = useToast();
+  const [permission, requestPermission] = Camera.useCameraPermissions();
 
   //   Alert Component Data
   const [alertVisible, setAlertVisible] = useState(false);
@@ -70,6 +64,11 @@ function RecordFood({ navigation, route }) {
       useNativeDriver: true,
     }).start();
   };
+
+  if (permission?.granted) {
+    console.log("Permission granted");
+    // navigation.navigate();
+  }
 
   const { colors } = useTheme();
 
@@ -101,26 +100,14 @@ function RecordFood({ navigation, route }) {
             }}
           >
             <Center bg="primary.600" p="2" pl={2.5} rounded="full">
-              <MaterialIcons
-                name="arrow-back-ios"
-                size={24}
-                color={colors["white"]}
-              />
+              <MaterialIcons name="arrow-back-ios" size={24} color={colors["white"]} />
             </Center>
           </Pressable>
-          <Heading style={{ fontFamily: "Poppins-SemiBold" }}>
-            {foodType}
-          </Heading>
+          <Heading style={{ fontFamily: "Poppins-SemiBold" }}>{foodType}</Heading>
         </HStack>
 
         {/* Tab value */}
-        <HStack
-          bg="secondary.30"
-          m={3}
-          mt={0}
-          rounded="full"
-          flexWrap={"nowrap"}
-        >
+        <HStack bg="secondary.30" m={3} mt={0} rounded="full" flexWrap={"nowrap"}>
           <Pressable
             w={"50%"}
             onPress={() => {
@@ -350,15 +337,7 @@ function RecordFood({ navigation, route }) {
         </SwiperFlatList>
       </ScrollView>
       {/* My FAB */}
-      <Center
-        shadow={"5"}
-        position={"absolute"}
-        bottom={3}
-        right={3}
-        w="50px"
-        p={0}
-        zIndex={10}
-      >
+      <Center shadow={"5"} position={"absolute"} bottom={3} right={3} w="50px" p={0} zIndex={10}>
         <Box alignItems="center">
           <Stagger
             visible={stagger}
@@ -394,44 +373,26 @@ function RecordFood({ navigation, route }) {
             }}
           >
             <IconButton
-              onPress={() =>
-                navigation.navigate("UploadPicture", { foodType: foodType })
-              }
+              onPress={() => navigation.navigate("UploadPicture", { foodType: foodType })}
               mb="4"
               variant="solid"
               rounded="full"
-              icon={
-                <MaterialCommunityIcons
-                  size={24}
-                  name="camera"
-                  color={colors["white"]}
-                />
-              }
+              icon={<MaterialCommunityIcons size={24} name="camera" color={colors["white"]} />}
             />
 
             <IconButton
-              onPress={() =>
-                navigation.navigate("AddNewFood", { foodType: foodType })
-              }
+              onPress={() => navigation.navigate("AddNewFood", { foodType: foodType })}
               mb="4"
               variant="solid"
               rounded="full"
               icon={<AddFoodIcon />}
             />
             <IconButton
-              onPress={() =>
-                navigation.navigate("UploadPicture", { foodType: foodType })
-              }
+              onPress={() => navigation.navigate("UploadPicture", { foodType: foodType })}
               mb="4"
               variant="solid"
               rounded="full"
-              icon={
-                <MaterialCommunityIcons
-                  name="barcode-scan"
-                  size={24}
-                  color={colors.white}
-                />
-              }
+              icon={<MaterialCommunityIcons name="barcode-scan" size={24} color={colors.white} />}
             />
           </Stagger>
         </Box>

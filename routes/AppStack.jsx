@@ -10,20 +10,13 @@ const Tab = createBottomTabNavigator();
 
 function AppStack() {
   return (
-    <Tab.Navigator
-      tabBar={(props) => <TabBarComponent {...props} />}
-      screenOptions={{ headerShown: false }}
-    >
-      <Tab.Screen
-        name="HomeStack"
-        component={HomeStack}
-        options={{ title: "Home" }}
-      />
-      <Tab.Screen
+    <Tab.Navigator tabBar={(props) => <TabBarComponent {...props} />} screenOptions={{ headerShown: false }}>
+      <Tab.Screen name="HomeStack" component={HomeStack} options={{ title: "Home" }} />
+      {/* <Tab.Screen
         name="InsightsStack"
         component={InsightsStack}
         options={{ title: "Insights" }}
-      />
+      /> */}
       <Tab.Screen name="Profile" component={ProfileStack} />
     </Tab.Navigator>
   );

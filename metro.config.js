@@ -1,3 +1,5 @@
+const { getDefaultConfig } = require("metro-config");
+
 module.exports = {
   transformer: {
     getTransformOptions: async () => ({
@@ -12,3 +14,19 @@ module.exports = {
     sourceExts: ["jsx", "js", "ts", "tsx", "cjs"],
   },
 };
+
+module.exports = (async () => {
+  const {
+    resolver: { sourceExts, assetExts },
+  } = await getDefaultConfig();
+  return {
+    transformer: {
+      assetPlugins: ["expo-asset/tools/hashAssetFiles"],
+    },
+    resolver: {
+      extraNodeModules: {
+        "react-native-gesture-handler": require.resolve("react-native-gesture-handler"),
+      },
+    },
+  };
+})();

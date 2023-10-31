@@ -43,8 +43,7 @@ import { ProfileContext } from "./profileStack";
 import { color } from "react-native-reanimated";
 
 function Profile({ navigation }) {
-  const { userProfileData, setUserProfileData, signOut, userToken, getUser } =
-    useContext(AuthContext);
+  const { userProfileData, setUserProfileData, signOut, userToken, getUser } = useContext(AuthContext);
   const { profilePicture } = useContext(ProfileContext);
   const { colors } = useTheme();
   const { height, width } = useWindowDimensions();
@@ -79,25 +78,17 @@ function Profile({ navigation }) {
     {
       title: "About",
       icon: <Entypo name="info" size={18} color={colors.white} />,
-      value: "FERL, Food Away From Home",
+      value: "FERL, FoodLog",
     },
     {
       title: "Report a bug",
-      icon: (
-        <MaterialCommunityIcons name="bug" size={18} color={colors.white} />
-      ),
+      icon: <MaterialCommunityIcons name="bug" size={18} color={colors.white} />,
       value: "Report a bug, Give feedback",
       route: "ReportBug",
     },
     {
       title: "Terms and Conditions",
-      icon: (
-        <MaterialCommunityIcons
-          name="file-document"
-          size={18}
-          color={colors.white}
-        />
-      ),
+      icon: <MaterialCommunityIcons name="file-document" size={18} color={colors.white} />,
       value: "Terms and Conditions, Ethical Clearance",
     },
   ];
@@ -170,14 +161,7 @@ function Profile({ navigation }) {
         backgroundColor: colors.white,
       }}
     >
-      <HStack
-        bg="white"
-        space="3"
-        alignItems="center"
-        justifyContent={"space-between"}
-        my={3}
-        mx={5}
-      >
+      <HStack bg="white" space="3" alignItems="center" justifyContent={"space-between"} my={3} mx={5}>
         <Heading style={{ fontFamily: "Poppins-SemiBold" }}>Profile</Heading>
         <Pressable
           _pressed={{
@@ -196,9 +180,7 @@ function Profile({ navigation }) {
       <ScrollView
         onScroll={(e) => scrollY.setValue(e.nativeEvent.contentOffset.y)}
         scrollEventThrottle={32}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
         {/* Title */}
         <Animated.View
@@ -210,15 +192,7 @@ function Profile({ navigation }) {
           }}
         >
           <Box pb={2} bg={"white"}>
-            <HStack
-              space="3"
-              alignItems="center"
-              justifyContent={"center"}
-              m={2}
-              bg={"primary.30"}
-              rounded="xl"
-              p={5}
-            >
+            <HStack space="3" alignItems="center" justifyContent={"center"} m={2} bg={"primary.30"} rounded="xl" p={5}>
               <Pressable
                 _pressed={{
                   opacity: 0.5,
@@ -238,22 +212,14 @@ function Profile({ navigation }) {
                   <AntDesign
                     name="camera"
                     size={34}
-                    color={
-                      profilePicture
-                        ? colors.primary["100"]
-                        : colors.secondary["600"]
-                    }
+                    color={profilePicture ? colors.primary["100"] : colors.secondary["600"]}
                   />
                 </Center>
 
                 <Avatar
                   size={"xl"}
                   source={{
-                    uri: userProfileData?.avatar
-                      ? userProfileData.avatar
-                      : profilePicture
-                      ? profilePicture
-                      : null,
+                    uri: userProfileData?.avatar ? userProfileData.avatar : profilePicture ? profilePicture : null,
                   }}
                 >
                   <Center h="100%" w="100%" rounded="full">
@@ -283,9 +249,7 @@ function Profile({ navigation }) {
                   {userProfileData?.fullName}
                 </Heading>
                 <Text color={"muted.500"}>
-                  {userProfileData?.profession
-                    ? userProfileData.profession
-                    : "No profession set"}
+                  {userProfileData?.profession ? userProfileData.profession : "No profession set"}
                 </Text>
               </VStack>
             </HStack>
@@ -327,11 +291,7 @@ function Profile({ navigation }) {
             >
               <HStack space="3" alignItems="center">
                 <Center bg="primary.600" p="1.5" rounded="full">
-                  <MaterialCommunityIcons
-                    name="weight-kilogram"
-                    size={20}
-                    color="white"
-                  />
+                  <MaterialCommunityIcons name="weight-kilogram" size={20} color="white" />
                 </Center>
 
                 <VStack>
@@ -354,11 +314,7 @@ function Profile({ navigation }) {
               </HStack>
               <HStack space="3" alignItems="center">
                 <Center bg="primary.600" p="1.5" rounded="full">
-                  <MaterialCommunityIcons
-                    name="human-male-height"
-                    size={20}
-                    color="white"
-                  />
+                  <MaterialCommunityIcons name="human-male-height" size={20} color="white" />
                 </Center>
 
                 <VStack>
@@ -548,13 +504,7 @@ function Profile({ navigation }) {
                     }
                   }}
                 >
-                  <HStack
-                    p={2}
-                    space="7"
-                    px={5}
-                    alignItems="center"
-                    justifyContent={"space-between"}
-                  >
+                  <HStack p={2} space="7" px={5} alignItems="center" justifyContent={"space-between"}>
                     <HStack space="3" alignItems="center">
                       <Center bg="primary.600" p="1.5" rounded="full">
                         {item.icon}
@@ -581,13 +531,7 @@ function Profile({ navigation }) {
                     {item.route && (
                       <IconButton
                         variant="ghost"
-                        icon={
-                          <MaterialIcons
-                            name="navigate-next"
-                            size={34}
-                            color={colors.primary["600"]}
-                          />
-                        }
+                        icon={<MaterialIcons name="navigate-next" size={34} color={colors.primary["600"]} />}
                         onPress={() => {
                           navigation.navigate(item.route, {
                             userProfileData: userProfileData,
@@ -606,9 +550,7 @@ function Profile({ navigation }) {
               my={10}
               colorScheme="secondary"
               onPress={() => signOut()}
-              rightIcon={
-                <AntDesign name="logout" size={24} color={colors["white"]} />
-              }
+              rightIcon={<AntDesign name="logout" size={24} color={colors["white"]} />}
             >
               Log out
             </Button>
@@ -621,44 +563,23 @@ function Profile({ navigation }) {
         </VStack>
       </ScrollView>
 
-      <Actionsheet
-        isOpen={editActionSheet}
-        onClose={() => setEditActionSheet(false)}
-      >
+      <Actionsheet isOpen={editActionSheet} onClose={() => setEditActionSheet(false)}>
         <Actionsheet.Content>
           {[
             {
               title: "Edit Profile",
               route: "EditProfile",
-              icon: (
-                <FontAwesome5
-                  name="user-edit"
-                  size={24}
-                  color={colors.primary["700"]}
-                />
-              ),
+              icon: <FontAwesome5 name="user-edit" size={24} color={colors.primary["700"]} />,
             },
             {
               title: "Change Password",
               route: "changePassword",
-              icon: (
-                <AntDesign
-                  name="lock"
-                  size={24}
-                  color={colors.primary["700"]}
-                />
-              ),
+              icon: <AntDesign name="lock" size={24} color={colors.primary["700"]} />,
             },
             {
               title: "Delete Account",
               route: "deleteAccount",
-              icon: (
-                <MaterialIcons
-                  name="delete"
-                  size={24}
-                  color={colors["white"]}
-                />
-              ),
+              icon: <MaterialIcons name="delete" size={24} color={colors["white"]} />,
             },
           ].map((item, index) => {
             return (
@@ -666,8 +587,7 @@ function Profile({ navigation }) {
                 my={1}
                 bg={item.route == "deleteAccount" ? "danger.700" : "muted.100"}
                 _text={{
-                  color:
-                    item.route == "deleteAccount" ? "white" : "primary.600",
+                  color: item.route == "deleteAccount" ? "white" : "primary.600",
                 }}
                 key={index}
                 rounded={"lg"}

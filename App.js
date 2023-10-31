@@ -22,6 +22,8 @@ import { getUser } from "./services/mongoDB/users";
 export default function App() {
   //Load fonts
   const fontsLoaded = useFonts();
+
+  console.log("Value of fontsLoaded: ", fontsLoaded);
   if (!fontsLoaded) {
     return null;
   }
@@ -99,7 +101,7 @@ export default function App() {
 
   useEffect(() => {
     // Fetch the token from storage then navigate to our appropriate screen
-    restoreSavedUser();
+    // restoreSavedUser();
     //fix memory leak
     return () => {
       //
@@ -117,9 +119,7 @@ export default function App() {
           setHasProfileChanged,
         }}
       >
-        <NavigationContainer>
-          {userData.userToken == null ? <AuthStack /> : <AppStack />}
-        </NavigationContainer>
+        <NavigationContainer>{userData.userToken == null ? <AuthStack /> : <AppStack />}</NavigationContainer>
       </AuthContext.Provider>
     </NativeBaseProvider>
   );

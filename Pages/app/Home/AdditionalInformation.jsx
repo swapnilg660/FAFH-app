@@ -11,6 +11,7 @@ import {
   Heading,
   Icon,
   Input,
+  Row,
   ScrollView,
   Select,
   Slide,
@@ -37,6 +38,10 @@ export default function AdditionalInformation({ navigation, setShowModal }) {
     industry: "",
     profession: "",
     jobTime: "",
+    height: "",
+    heightUnit: "cm",
+    weight: "",
+    weightUnit: "kg",
   };
   // const saveAdditionalInformation = useContext(AuthContext);
 
@@ -85,17 +90,8 @@ export default function AdditionalInformation({ navigation, setShowModal }) {
             handleSubmit(values, formikActions);
           }}
         >
-          {({
-            handleChange,
-            setFieldValue,
-            handleBlur,
-            handleSubmit,
-            values,
-            touched,
-            errors,
-            isSubmitting,
-          }) => {
-            const { country, jobTime, profession, industry } = values;
+          {({ handleChange, setFieldValue, handleBlur, handleSubmit, values, touched, errors, isSubmitting }) => {
+            const { country, jobTime, profession, industry, weight, height, weightUnit, heightUnit } = values;
 
             return (
               <VStack
@@ -108,42 +104,25 @@ export default function AdditionalInformation({ navigation, setShowModal }) {
                 // borderWidth={1}
               >
                 <Center mb={2}>
-                  <Heading
-                    fontWeight={"400"}
-                    fontSize={"2xl"}
-                    color={"darkText"}
-                  >
+                  <Heading fontWeight={"400"} fontSize={"2xl"} color={"darkText"}>
                     Additional Information
                   </Heading>
-                  <Text
-                    fontWeight={"200"}
-                    textAlign={"center"}
-                    color={"darkText"}
-                    m={4}
-                  >
-                    This information is need for the application to work best
-                    for you 😉
+                  <Text fontWeight={"200"} textAlign={"center"} color={"darkText"} m={4}>
+                    This information is need for the application to work best for you 😉
                   </Text>
                 </Center>
                 <FormControl isRequired>
                   <FormControl.Label fontWeight={"300"}>
                     <Text color={"black"}>In which country do you reside?</Text>
                   </FormControl.Label>
-                  <SelectCountry
-                    country={country}
-                    setFieldValue={setFieldValue}
-                  />
-                  <FormControl.ErrorMessage
-                    leftIcon={<WarningOutlineIcon size="xs" />}
-                  >
+                  <SelectCountry country={country} setFieldValue={setFieldValue} />
+                  <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
                     Please make a selection!
                   </FormControl.ErrorMessage>
                 </FormControl>
 
                 <FormControl isRequired>
-                  <FormControl.Label>
-                    In which industry do you work?
-                  </FormControl.Label>
+                  <FormControl.Label>In which industry do you work?</FormControl.Label>
                   <Select
                     borderColor={"primary.100"}
                     selectedValue={industry}
@@ -155,9 +134,7 @@ export default function AdditionalInformation({ navigation, setShowModal }) {
                       borderRadius: "20",
                     }}
                     mt={1}
-                    onValueChange={(itemValue) =>
-                      setFieldValue("industry", itemValue)
-                    }
+                    onValueChange={(itemValue) => setFieldValue("industry", itemValue)}
                     placeholder="Choose an Industry"
                     minWidth="64"
                   >
@@ -167,17 +144,12 @@ export default function AdditionalInformation({ navigation, setShowModal }) {
                     <Select.Item label="Construction" value="Construction" />
                     <Select.Item label="Health" value="Health" />
                     <Select.Item label="Education" value="Education" />
-                    <Select.Item
-                      label="Information Technology"
-                      value="Information Technology"
-                    />
+                    <Select.Item label="Information Technology" value="Information Technology" />
                   </Select>
                 </FormControl>
 
                 <FormControl isRequired>
-                  <FormControl.Label>
-                    What is your current job title?
-                  </FormControl.Label>
+                  <FormControl.Label>What is your current job title?</FormControl.Label>
                   <Input
                     borderColor={"primary.100"}
                     value={profession}
@@ -189,9 +161,7 @@ export default function AdditionalInformation({ navigation, setShowModal }) {
                   />
                 </FormControl>
                 <FormControl isRequired>
-                  <FormControl.Label>
-                    How long have you been working?
-                  </FormControl.Label>
+                  <FormControl.Label>How long have you been working?</FormControl.Label>
                   <Select
                     borderColor={"primary.100"}
                     selectedValue={jobTime}
@@ -203,9 +173,7 @@ export default function AdditionalInformation({ navigation, setShowModal }) {
                       borderRadius: "20",
                     }}
                     mt={1}
-                    onValueChange={(itemValue) =>
-                      setFieldValue("jobTime", itemValue)
-                    }
+                    onValueChange={(itemValue) => setFieldValue("jobTime", itemValue)}
                     placeholder="Choose a time frame"
                     minWidth="64"
                   >
@@ -217,19 +185,91 @@ export default function AdditionalInformation({ navigation, setShowModal }) {
                     <Select.Item label="20+ years" value="20+" />
                   </Select>
                 </FormControl>
+                <Row space={2}>
+                  <FormControl width={"50%"} isInvalid={touched.weight && errors.weight}>
+                    <FormControl.Label>
+                      <Text color={"black"}>Weight</Text>
+                    </FormControl.Label>
+                    <Input
+                      value={weight}
+                      onValueChange={(itemValue) => setFieldValue("weight", itemValue)}
+                      onBlur={handleBlur("weight")}
+                      placeholder="0.0"
+                      fontWeight={"300"}
+                      fontSize={"md"}
+                      rightElement={
+                        <FormControl backgroundColor={"primary.600"} width={"50%"} p={0}>
+                          <Select
+                            maxWidth="100"
+                            accessibilityLabel="Measurement Unit"
+                            placeholder="Unit"
+                            placeholderTextColor={"white"}
+                            selectedValue={weightUnit}
+                            defaultValue={weightUnit}
+                            onValueChange={(itemValue) => {
+                              setFieldValue("weightUnit", itemValue);
+                            }}
+                            onBlur={handleBlur("weightUnit")}
+                            _selectedItem={{
+                              bg: "primary.100",
+                              endIcon: <CheckIcon size={5} />,
+                              borderRadius: "20",
+                            }}
+                            color={"white"}
+                            borderColor={"primary.600"}
+                          >
+                            <Select.Item label="Kg" value="kg" />
+                            <Select.Item label="Ibs" value="Ibs" />
+                          </Select>
+                        </FormControl>
+                      }
+                    />
+                    <FormControl.ErrorMessage>{touched.weight && errors.weight}</FormControl.ErrorMessage>
+                  </FormControl>
+                  <FormControl width={"50%"} isInvalid={touched.height && errors.height}>
+                    <FormControl.Label>
+                      <Text color={"black"}>Height</Text>
+                    </FormControl.Label>
+                    <Input
+                      value={height}
+                      onChangeText={(itemValue) => setFieldValue("height", itemValue)}
+                      onBlur={handleBlur("height")}
+                      placeholder="0.0"
+                      fontWeight={"300"}
+                      fontSize={"md"}
+                      rightElement={
+                        <FormControl backgroundColor={"primary.600"} width={"50%"} p={0}>
+                          <Select
+                            maxWidth="100"
+                            accessibilityLabel="Measurement Unit"
+                            placeholder="Unit"
+                            placeholderTextColor={"white"}
+                            selectedValue={values.heightUnit}
+                            defaultValue={values.heightUnit}
+                            onValueChange={(itemValue) => {
+                              setFieldValue("heightUnit", itemValue);
+                            }}
+                            onBlur={handleBlur("heightUnit")}
+                            _selectedItem={{
+                              bg: "primary.100",
+                              endIcon: <CheckIcon size={5} />,
+                              borderRadius: "20",
+                            }}
+                            color={"white"}
+                            borderColor={"primary.600"}
+                          >
+                            <Select.Item label="Cm" value="cm" />
+                            <Select.Item label="Feet" value="feet" />
+                          </Select>
+                        </FormControl>
+                      }
+                    />
+                    <FormControl.ErrorMessage>{touched.height && errors.height}</FormControl.ErrorMessage>
+                  </FormControl>
+                </Row>
 
-                <Button
-                  shadow={3}
-                  size="md"
-                  colorScheme="primary"
-                  mt={5}
-                  onPress={!isSubmitting ? handleSubmit : null}
-                >
-                  {isSubmitting ? (
-                    <Spinner size="sm" color={"white"} />
-                  ) : (
-                    "Save"
-                  )}
+                <Button shadow={3} size="md" colorScheme="primary" mt={5} onPress={!isSubmitting ? handleSubmit : null}>
+                  {isSubmitting ? <Spinner size="sm" color={"white"} /> : "Save"}
                 </Button>
                 <Button
                   colorScheme="secondary"
@@ -276,9 +316,7 @@ const SelectCountry = ({ country, setFieldValue }) => {
               placeholder="Search..."
               onChangeText={(e) => {
                 setCountriesToBeDisplayed(() =>
-                  countries.filter((country) =>
-                    country.name.toLowerCase().includes(e.toLowerCase())
-                  )
+                  countries.filter((country) => country.name.toLowerCase().includes(e.toLowerCase()))
                 );
               }}
             />
@@ -289,9 +327,7 @@ const SelectCountry = ({ country, setFieldValue }) => {
       {countries.map((country, index) => (
         <Select.Item
           key={index}
-          leftIcon={
-            <CountryFlag key={index} isoCode={country.code} size={25} />
-          }
+          leftIcon={<CountryFlag key={index} isoCode={country.code} size={25} />}
           label={country.name}
           value={country.code}
         />

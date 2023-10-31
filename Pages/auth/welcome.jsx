@@ -3,15 +3,7 @@ import * as SecureStore from "expo-secure-store";
 import { Image, useWindowDimensions, Animated } from "react-native";
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import useFonts from "../../hooks/useFonts";
-import {
-  Button,
-  Center,
-  Text,
-  useTheme,
-  VStack,
-  HStack,
-  Box,
-} from "native-base";
+import { Button, Center, Text, useTheme, VStack, HStack, Box } from "native-base";
 import { FAFH_logo, HomeIconForLogo } from "../../Components/customSvgIcon";
 
 function Welcome({ navigation }) {
@@ -87,31 +79,24 @@ function Welcome({ navigation }) {
           ],
         }}
       >
-        <Box
-          mt={-height / 7}
-          rounded="full"
-          w="200px"
-          h="200px"
-          alignSelf="center"
-          position="relative"
-        >
+        <Box mt={-height / 7} rounded="full" w="200px" h="200px" alignSelf="center" position="relative">
           <Center>
             <FAFH_logo fill={colors.primary["600"]} width={110} height={110} />
           </Center>
-          <HStack space="2" alignItems="center">
-            <Text color="primary.600" fontSize="22">
-              F<Text color={"secondary.500"}>OO</Text>D
-            </Text>
-            <Text color="primary.600" fontSize="22">
-              AWAY
-            </Text>
-            <HStack  alignItems="center">
-              <Text fontSize="22" color="primary.600">
-                FROM
+          <Center>
+            <HStack space="2" alignItems="center" ml={5}>
+              <Text color="primary.600" fontSize="22">
+                F<Text color={"secondary.500"}>OO</Text>D
               </Text>
-              <HomeIconForLogo />
+
+              <HStack alignItems="center">
+                <Text fontSize="22" color="primary.600">
+                  LOG
+                </Text>
+                <HomeIconForLogo />
+              </HStack>
             </HStack>
-          </HStack>
+          </Center>
         </Box>
 
         <Center>
@@ -122,12 +107,7 @@ function Welcome({ navigation }) {
           >
             FAFH
           </Text> */}
-          <Text
-            color={"primary.600"}
-            px="20"
-            textAlign="center"
-            style={{ fontFamily: "Poppins-Light" }}
-          >
+          <Text color={"primary.600"} px="20" textAlign="center" style={{ fontFamily: "Poppins-Light" }}>
             Tracking food and beverages you consume away from home
           </Text>
         </Center>

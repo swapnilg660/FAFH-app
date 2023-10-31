@@ -31,20 +31,9 @@ import { useWindowDimensions } from "react-native";
 import { Alert, Modal } from "react-native";
 import AdditionalInformation from "./AdditionalInformation";
 import * as SecureStore from "expo-secure-store";
-import {
-  Carbs,
-  FAFH_logo,
-  HomeFat,
-  ProteinHome,
-  WeightIcon,
-} from "../../../Components/customSvgIcon";
+import { Carbs, FAFH_logo, HomeFat, ProteinHome, WeightIcon } from "../../../Components/customSvgIcon";
 import AuthContext, { HomeContext } from "../../../hooks/context";
-import {
-  drinkWater,
-  getDailyQoute,
-  getWater,
-  mongoCreateUser,
-} from "../../../services/mongoDB/users";
+import { drinkWater, getDailyQoute, getWater, mongoCreateUser } from "../../../services/mongoDB/users";
 import { getDailyInsights } from "../../../services/mongoDB/insightsData";
 
 function Home({ navigation }) {
@@ -55,6 +44,7 @@ function Home({ navigation }) {
     data: [0, 0, 0],
     // map:[colors.secondary[500], colors.primary[200], colors.primary[500]]
   });
+
   const [waterIntake, setWaterIntake] = useState({ current: 0, goal: 8 });
   const [stepsCounter, setStepsCounter] = useState({
     current: waterIntake.current * 360,
@@ -71,9 +61,7 @@ function Home({ navigation }) {
   const { setMeals } = useContext(HomeContext);
   const [tipsVisible, setTipsVisible] = useState(true);
   const userFirstTime = async () => {
-    const userFirstTime = JSON.parse(
-      await SecureStore.getItemAsync("userFirstTime")
-    );
+    const userFirstTime = JSON.parse(await SecureStore.getItemAsync("userFirstTime"));
 
     if (userFirstTime) {
       setModalVisible(true);
@@ -122,8 +110,9 @@ function Home({ navigation }) {
         height={height * 0.15}
         safeArea
         p={2}
+        space={5}
         alignItems={"center"}
-        justifyContent={"space-around"}
+        justifyContent={"center"}
         position={"absolute"}
         top={0}
         zIndex={10}
@@ -132,12 +121,8 @@ function Home({ navigation }) {
         shadow={5}
       >
         <FAFH_logo fill={colors.primary[600]} />
-        <Text
-          color={"primary.700"}
-          fontSize={"2xl"}
-          style={{ fontFamily: "Poppins-SemiBold" }}
-        >
-          Food Away From Home
+        <Text color={"primary.700"} fontSize={"2xl"} style={{ fontFamily: "Poppins-SemiBold" }}>
+          FoodLog
         </Text>
       </HStack>
 
@@ -147,11 +132,7 @@ function Home({ navigation }) {
           <HStack py={2}>
             <VStack w="55%" ml={7}>
               <Text style={styles.activitiesTitle}>Daily Calories</Text>
-              <HStack
-                w={"100%"}
-                justifyContent={"space-between"}
-                alignItems="flex-end"
-              >
+              <HStack w={"100%"} justifyContent={"space-between"} alignItems="flex-end">
                 <TouchableOpacity
                   onPress={() =>
                     navigation.navigate("InsightsStack", {
@@ -211,17 +192,10 @@ function Home({ navigation }) {
             {tipsVisible && (
               <View style={styles.tipsContainer}>
                 <View style={styles.messageContainer}>
-                  <Text style={styles.tipsTitle}>
-                    {quote.author ? `~${quote.author}` : "Loading..."}
-                  </Text>
-                  <Text style={styles.tipsText}>
-                    {quote.text ? quote.text : "Loading..."}
-                  </Text>
+                  <Text style={styles.tipsTitle}>{quote.author ? `~${quote.author}` : "Loading..."}</Text>
+                  <Text style={styles.tipsText}>{quote.text ? quote.text : "Loading..."}</Text>
                 </View>
-                <Image
-                  style={styles.tipsImage}
-                  source={require("../../../assets/images/standing.png")}
-                />
+                <Image style={styles.tipsImage} source={require("../../../assets/images/standing.png")} />
                 <Ionicons
                   onPress={() => {
                     setTipsVisible(false);
@@ -247,11 +221,7 @@ function Home({ navigation }) {
                 borderColor={colors["primary"]["100"]}
               >
                 <Title style={styles.cardTitle}>
-                  <Ionicons
-                    name="restaurant-outline"
-                    size={20}
-                    color={colors["secondary"]["500"]}
-                  />
+                  <Ionicons name="restaurant-outline" size={20} color={colors["secondary"]["500"]} />
                   Food
                 </Title>
                 <Card.Content style={styles.cardContent}>
@@ -293,20 +263,18 @@ function Home({ navigation }) {
                 }}
               >
                 <Actionsheet.Content>
-                  {["Breakfast", "Lunch", "Dinner", "Snack", "Drink"].map(
-                    (item) => {
-                      return (
-                        <Actionsheet.Item
-                          key={item}
-                          onPress={() => {
-                            recordFoodClick(item);
-                          }}
-                        >
-                          {item}
-                        </Actionsheet.Item>
-                      );
-                    }
-                  )}
+                  {["Breakfast", "Lunch", "Dinner", "Snack", "Drink"].map((item) => {
+                    return (
+                      <Actionsheet.Item
+                        key={item}
+                        onPress={() => {
+                          recordFoodClick(item);
+                        }}
+                      >
+                        {item}
+                      </Actionsheet.Item>
+                    );
+                  })}
                 </Actionsheet.Content>
               </Actionsheet>
 
@@ -322,21 +290,10 @@ function Home({ navigation }) {
                 borderWidth={0.5}
                 borderColor={colors["primary"]["100"]}
               >
-                <HStack
-                  space={2}
-                  justifyContent={"space-between"}
-                  alignItems={"center"}
-                >
+                <HStack space={2} justifyContent={"space-between"} alignItems={"center"}>
                   <HStack>
-                    <Entypo
-                      name="cup"
-                      size={24}
-                      color={colors.secondary[500]}
-                    />
-                    <Text
-                      style={{ fontFamily: "Poppins-Regular" }}
-                      fontSize={"16"}
-                    >
+                    <Entypo name="cup" size={24} color={colors.secondary[500]} />
+                    <Text style={{ fontFamily: "Poppins-Regular" }} fontSize={"16"}>
                       Water Intake
                     </Text>
                   </HStack>
@@ -346,9 +303,7 @@ function Home({ navigation }) {
                         size={"8"}
                         rounded="full"
                         variant="solid"
-                        icon={
-                          <AntDesign name="minus" size={24} color="white" />
-                        }
+                        icon={<AntDesign name="minus" size={24} color="white" />}
                         onPress={() => {
                           if (waterIntake.current > 0) {
                             drinkWater(waterIntake.current - 1);
@@ -409,7 +364,7 @@ function Home({ navigation }) {
                 </HStack>
               </VStack>
               {/* Find Recipes*/}
-              <VStack
+              {/* <VStack
                 space={2}
                 rounded={"md"}
                 bg={"primary.50"}
@@ -422,11 +377,7 @@ function Home({ navigation }) {
               >
                 <View style={styles.cardContent}>
                   <Title style={styles.cardTitle}>
-                    <MaterialCommunityIcons
-                      name="food-apple-outline"
-                      size={30}
-                      color={colors["secondary"]["500"]}
-                    />
+                    <MaterialCommunityIcons name="food-apple-outline" size={30} color={colors["secondary"]["500"]} />
                     Recipes
                   </Title>
                   <Card.Content>
@@ -446,7 +397,7 @@ function Home({ navigation }) {
                     </Button>
                   </Card.Content>
                 </View>
-              </VStack>
+              </VStack> */}
               {/* Body Composition */}
               <VStack
                 space={2}
@@ -459,18 +410,10 @@ function Home({ navigation }) {
                 borderWidth={0.5}
                 borderColor={colors["primary"]["100"]}
               >
-                <HStack
-                  space={2}
-                  justifyContent={"space-between"}
-                  alignItems={"center"}
-                >
+                <HStack space={2} justifyContent={"space-between"} alignItems={"center"}>
                   <HStack>
                     <WeightIcon fill={colors["secondary"]["500"]} />
-                    <Text
-                      style={{ fontFamily: "Poppins-Regular" }}
-                      fontSize={"16"}
-                      ml={3}
-                    >
+                    <Text style={{ fontFamily: "Poppins-Regular" }} fontSize={"16"} ml={3}>
                       Body Composition
                     </Text>
                   </HStack>

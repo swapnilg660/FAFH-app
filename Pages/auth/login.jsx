@@ -81,6 +81,7 @@ function Login({ navigation }) {
       .min(6, "Must be at least 6 characters")
       .required("Required"),
   });
+
   useEffect(() => {
     Animated.timing(popInAnimation, {
       toValue: 0,
@@ -92,6 +93,7 @@ function Login({ navigation }) {
       popInAnimation.stopAnimation();
     };
   }, []);
+  
   return (
     <ScrollView border="2" bg={"primary.50"} safeAreaTop pt={10}>
       <Center mt={20} mb={10}>
