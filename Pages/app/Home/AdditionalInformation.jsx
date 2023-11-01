@@ -27,10 +27,10 @@ import useCountries from "use-countries";
 import CountryFlag from "react-native-country-flag";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import AuthContext from "../../../hooks/context";
-import { updateUser } from "../../../services/mongoDB/users";
+import { getUser, updateUser } from "../../../services/mongoDB/users";
 
 export default function AdditionalInformation({ navigation, setShowModal }) {
-  const { saveAdditionalInformation, userToken } = useContext(AuthContext);
+  const { saveAdditionalInformation, userToken, setUserProfileData } = useContext(AuthContext);
   const { window_height } = useWindowDimensions();
   const toast = useToast();
   const initialValues = {
@@ -50,6 +50,8 @@ export default function AdditionalInformation({ navigation, setShowModal }) {
     updateUser(userToken, data);
 
     formikAction.setSubmitting(false);
+    setShowModal(false);
+    getUser(setUserProfileData);
     // formikAction.resetForm();
     // close the modal on success
     // toast.show({
@@ -136,7 +138,7 @@ export default function AdditionalInformation({ navigation, setShowModal }) {
                     mt={1}
                     onValueChange={(itemValue) => setFieldValue("industry", itemValue)}
                     placeholder="Choose an Industry"
-                    minWidth="64"
+                    // minWidth="64"
                   >
                     <Select.Item label="Agriculture" value="Agriculture" />
                     <Select.Item label="Commerce" value="Commerce" />
@@ -146,6 +148,9 @@ export default function AdditionalInformation({ navigation, setShowModal }) {
                     <Select.Item label="Education" value="Education" />
                     <Select.Item label="Information Technology" value="Information Technology" />
                   </Select>
+                  <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
+                    Please make a selection!
+                  </FormControl.ErrorMessage>
                 </FormControl>
 
                 <FormControl isRequired>
@@ -204,8 +209,8 @@ export default function AdditionalInformation({ navigation, setShowModal }) {
                             accessibilityLabel="Measurement Unit"
                             placeholder="Unit"
                             placeholderTextColor={"white"}
-                            selectedValue={weightUnit}
-                            defaultValue={weightUnit}
+                            selectedValue={values.weightUnit}
+                            defaultValue={values.weightUnit}
                             onValueChange={(itemValue) => {
                               setFieldValue("weightUnit", itemValue);
                             }}
@@ -326,7 +331,7 @@ const SelectCountry = ({ country, setFieldValue }) => {
     >
       {countries.map((country, index) => (
         <Select.Item
-          key={index}
+          key={Math.floor(Math.random() * 100000)}
           leftIcon={<CountryFlag key={index} isoCode={country.code} size={25} />}
           label={country.name}
           value={country.code}

@@ -7,8 +7,8 @@ const platform = Platform.OS;
 // current logged user token
 
 // create new user using firebase token
-export const mongoCreateUser = async (data) => {
-  let userToken = await SecureStore.getItemAsync("userToken");
+export const mongoCreateUser = async (data, userToken) => {
+  // let userToken = await SecureStore.getItemAsync("userToken");
   var formdata = new FormData();
   formdata.append("userToken", userToken);
   formdata.append("fullName", data.name);
@@ -25,8 +25,8 @@ export const mongoCreateUser = async (data) => {
 
   fetch(`${BASE_URL}/createUser`, requestOptions)
     .then((response) => response.text())
-    .then((result) => console.log("user successfully created:", result))
-    .catch((error) => console.log("error creating user:", error));
+    .then((result) => console.log("user successfully created (MangoDB): ", result))
+    .catch((error) => console.log("error creating user mangoDB: ", error));
 };
 
 // update user information
@@ -45,7 +45,7 @@ export const updateUser = async (fields) => {
     redirect: "follow",
   };
 
-  fetch("https://glacial-refuge-38575.herokuapp.com/updateUser?userToken=" + token, requestOptions)
+  fetch(`${BASE_URL}/updateUser?userToken=` + token, requestOptions)
     .then((response) => response.text())
     .then((result) => console.log(result))
     .catch((error) => console.log("error", error));
@@ -61,8 +61,11 @@ export const getUser = async (setUserProfileData) => {
 
   await fetch(`${BASE_URL}/getUser?userToken=${token}`, requestOptions)
     .then((response) => response.json())
-    .then((result) => setUserProfileData(result.data))
-    .catch((error) => console.log("error", error));
+    .then((result) => {
+      console.log("Found user: " + JSON.stringify(result));
+      setUserProfileData(result.data);
+    })
+    .catch((error) => console.log("Error signing in user: ", error));
 };
 
 //please pass the current water value as glass

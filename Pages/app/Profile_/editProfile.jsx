@@ -36,11 +36,11 @@ import { LinearGradient } from "expo-linear-gradient";
 function EditProfile({ navigation, route }) {
   const { colors } = useTheme();
   const { actionType } = route.params;
+  console.log("route: " + route);
   const [openImagePicker, setOpenImagePicker] = React.useState(false);
   const { profilePicture } = React.useContext(ProfileContext);
   const toast = useToast();
-  const { userProfileData, setUserProfileData, getUser } =
-    React.useContext(AuthContext);
+  const { userProfileData, setUserProfileData, getUser } = React.useContext(AuthContext);
 
   //form states
   const initialValues = {
@@ -59,12 +59,8 @@ function EditProfile({ navigation, route }) {
   // Object for error handling
   const validationSchema = Yup.object({
     name: Yup.string().trim().min(3, "Must be at least 3 characters"),
-    height: Yup.number()
-      .typeError("The Height must be a number")
-      .min(1, "Must be at least 1"),
-    weight: Yup.number()
-      .typeError("The Weight must be a number")
-      .min(1, "Must be at least 1"),
+    height: Yup.number().typeError("The Height must be a number").min(1, "Must be at least 1"),
+    weight: Yup.number().typeError("The Weight must be a number").min(1, "Must be at least 1"),
   });
 
   useEffect(() => {
@@ -87,16 +83,10 @@ function EditProfile({ navigation, route }) {
           }}
         >
           <Center bg="primary.600" p="2" pl={2.5} rounded="full">
-            <MaterialIcons
-              name="arrow-back-ios"
-              size={24}
-              color={colors["white"]}
-            />
+            <MaterialIcons name="arrow-back-ios" size={24} color={colors["white"]} />
           </Center>
         </Pressable>
-        <Heading style={{ fontFamily: "Poppins-SemiBold" }}>
-          {actionType}
-        </Heading>
+        <Heading style={{ fontFamily: "Poppins-SemiBold" }}>{actionType}</Heading>
       </HStack>
 
       <Pressable
@@ -118,9 +108,7 @@ function EditProfile({ navigation, route }) {
         <Avatar
           size={"xl"}
           source={{
-            uri: userProfileData?.avatar
-              ? userProfileData?.avatar
-              : profilePicture,
+            uri: userProfileData?.avatar ? userProfileData?.avatar : profilePicture,
           }}
         >
           <Center h="100%" w="100%" rounded="full">
@@ -139,10 +127,7 @@ function EditProfile({ navigation, route }) {
           </Center>
         </Avatar>
       </Pressable>
-      <UploadProfilePic
-        isOpen={openImagePicker}
-        setIsOpen={setOpenImagePicker}
-      />
+      <UploadProfilePic isOpen={openImagePicker} setIsOpen={setOpenImagePicker} />
 
       <ScrollView>
         <VStack space="5" p={5}>
@@ -176,16 +161,7 @@ function EditProfile({ navigation, route }) {
               });
             }}
           >
-            {({
-              handleChange,
-              setFieldValue,
-              handleBlur,
-              handleSubmit,
-              values,
-              touched,
-              errors,
-              isSubmitting,
-            }) => {
+            {({ handleChange, setFieldValue, handleBlur, handleSubmit, values, touched, errors, isSubmitting }) => {
               const { name, profession, doB, gender, weight, height } = values;
               return (
                 <>
@@ -204,13 +180,9 @@ function EditProfile({ navigation, route }) {
                       fontWeight={"300"}
                       fontSize={"md"}
                     />
-                    <FormControl.ErrorMessage>
-                      {touched.name && errors.name}
-                    </FormControl.ErrorMessage>
+                    <FormControl.ErrorMessage>{touched.name && errors.name}</FormControl.ErrorMessage>
                   </FormControl>
-                  <FormControl
-                    isInvalid={touched.profession && errors.profession}
-                  >
+                  <FormControl isInvalid={touched.profession && errors.profession}>
                     <FormControl.Label>
                       <Text color={"black"}>Profession</Text>
                     </FormControl.Label>
@@ -225,9 +197,7 @@ function EditProfile({ navigation, route }) {
                       fontWeight={"300"}
                       fontSize={"md"}
                     />
-                    <FormControl.ErrorMessage>
-                      {touched.profession && errors.profession}
-                    </FormControl.ErrorMessage>
+                    <FormControl.ErrorMessage>{touched.profession && errors.profession}</FormControl.ErrorMessage>
                   </FormControl>
                   <FormControl maxW="300">
                     <FormControl.Label fontWeight={"300"}>
@@ -254,17 +224,12 @@ function EditProfile({ navigation, route }) {
                       <Select.Item label="Other" value="Other" />
                       <Select.Item label="Prefer not to say" value="None" />
                     </Select>
-                    <FormControl.ErrorMessage
-                      leftIcon={<WarningOutlineIcon size="xs" />}
-                    >
+                    <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
                       Please make a selection!
                     </FormControl.ErrorMessage>
                   </FormControl>
                   <HStack space={2}>
-                    <FormControl
-                      width={"50%"}
-                      isInvalid={touched.weight && errors.weight}
-                    >
+                    <FormControl width={"50%"} isInvalid={touched.weight && errors.weight}>
                       <FormControl.Label>
                         <Text color={"black"}>Weight</Text>
                       </FormControl.Label>
@@ -276,11 +241,7 @@ function EditProfile({ navigation, route }) {
                         fontWeight={"300"}
                         fontSize={"md"}
                         rightElement={
-                          <FormControl
-                            backgroundColor={"primary.600"}
-                            width={"50%"}
-                            p={0}
-                          >
+                          <FormControl backgroundColor={"primary.600"} width={"50%"} p={0}>
                             <Select
                               maxWidth="100"
                               accessibilityLabel="Measurement Unit"
@@ -306,14 +267,9 @@ function EditProfile({ navigation, route }) {
                           </FormControl>
                         }
                       />
-                      <FormControl.ErrorMessage>
-                        {touched.weight && errors.weight}
-                      </FormControl.ErrorMessage>
+                      <FormControl.ErrorMessage>{touched.weight && errors.weight}</FormControl.ErrorMessage>
                     </FormControl>
-                    <FormControl
-                      width={"50%"}
-                      isInvalid={touched.height && errors.height}
-                    >
+                    <FormControl width={"50%"} isInvalid={touched.height && errors.height}>
                       <FormControl.Label>
                         <Text color={"black"}>Height</Text>
                       </FormControl.Label>
@@ -325,11 +281,7 @@ function EditProfile({ navigation, route }) {
                         fontWeight={"300"}
                         fontSize={"md"}
                         rightElement={
-                          <FormControl
-                            backgroundColor={"primary.600"}
-                            width={"50%"}
-                            p={0}
-                          >
+                          <FormControl backgroundColor={"primary.600"} width={"50%"} p={0}>
                             <Select
                               maxWidth="100"
                               accessibilityLabel="Measurement Unit"
@@ -355,16 +307,10 @@ function EditProfile({ navigation, route }) {
                           </FormControl>
                         }
                       />
-                      <FormControl.ErrorMessage>
-                        {touched.height && errors.height}
-                      </FormControl.ErrorMessage>
+                      <FormControl.ErrorMessage>{touched.height && errors.height}</FormControl.ErrorMessage>
                     </FormControl>
                   </HStack>
-                  <DatePickerComponent
-                    doB={doB}
-                    setFieldValue={setFieldValue}
-                    handleSubmit={handleSubmit}
-                  />
+                  <DatePickerComponent doB={doB} setFieldValue={setFieldValue} handleSubmit={handleSubmit} />
 
                   <Button
                     size="md"
@@ -373,11 +319,7 @@ function EditProfile({ navigation, route }) {
                     my={5}
                     onPress={!isSubmitting ? handleSubmit : null}
                   >
-                    {isSubmitting ? (
-                      <Spinner size="sm" color={"white"} />
-                    ) : (
-                      "Save"
-                    )}
+                    {isSubmitting ? <Spinner size="sm" color={"white"} /> : "Save"}
                   </Button>
                 </>
               );

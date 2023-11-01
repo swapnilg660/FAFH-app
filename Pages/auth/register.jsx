@@ -86,6 +86,7 @@ function Register({ navigation }) {
   };
 
   const { signUp } = React.useContext(AuthContext);
+
   const handleSubmit = (data, formikActions) => {
     console.log("SUBMITTED:", data);
     signUp({
@@ -93,8 +94,6 @@ function Register({ navigation }) {
       stayLoggedIn: true,
       setToken,
     }).then((res) => {
-      console.log("firebase res", res);
-      if (res == "Success") mongoCreateUser(data);
       formikActions.setSubmitting(false);
       setFeedback(res);
       toast.show({

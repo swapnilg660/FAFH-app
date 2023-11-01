@@ -3,7 +3,6 @@ import firebase from "firebase";
 import { mongoCreateUser } from "./mongoDB/users";
 // import "react-toastify/dist/ReactToastify.css";
 
-
 //SignIn using email and address
 export const signIn = async (data) => {
   var token = null;
@@ -51,7 +50,8 @@ export const signUp = async (data) => {
       .createUserWithEmailAndPassword(data?.email, data?.password)
       .then(async (res) => {
         token = res.user.uid;
-
+        await mongoCreateUser(data, token);
+        sleep(500);
         if (data.stayLoggedIn) {
           await SecureStore.setItemAsync("userToken", token);
           await SecureStore.setItemAsync("userFirstTime", "true");
@@ -77,6 +77,7 @@ export const signUp = async (data) => {
   }
 
   // save it to secure store if user wants to stay logged in
+  console.log("Signup token: " + token);
   return token;
 };
 

@@ -18,12 +18,12 @@ import AuthStack from "./routes/AuthStack";
 import AppStack from "./routes/AppStack";
 import useFonts from "./hooks/useFonts";
 import { getUser } from "./services/mongoDB/users";
+import { error } from "webpack-dev-server/lib/utils/colors";
 
 export default function App() {
   //Load fonts
   const fontsLoaded = useFonts();
 
-  console.log("Value of fontsLoaded: ", fontsLoaded);
   if (!fontsLoaded) {
     return null;
   }
@@ -47,10 +47,11 @@ export default function App() {
           token = res;
         });
         if (token?.includes("Error")) {
+          console.log(token);
           return token;
         } else {
-          dispatch({ type: "SIGN_IN", token });
           getUser(setUserProfileData);
+          dispatch({ type: "SIGN_IN", token });
           return "Success";
         }
       },
@@ -66,8 +67,8 @@ export default function App() {
         if (token?.includes("Error")) {
           return token;
         } else {
+          await getUser(setUserProfileData);
           dispatch({ type: "SIGN_UP", token });
-          getUser(setUserProfileData);
           return "Success";
         }
       },
@@ -86,10 +87,12 @@ export default function App() {
     let userToken;
     try {
       userToken = await SecureStore.getItemAsync("userToken");
-      getUser(setUserProfileData);
+      if (userToken) {
+        await getUser(setUserProfileData);
+      }
     } catch (e) {
       // Restoring token failed
-      console.log(e);
+      console.log("Error restoring user: " + e);
     }
 
     // After restoring token, we may need to validate it in production apps
@@ -101,7 +104,7 @@ export default function App() {
 
   useEffect(() => {
     // Fetch the token from storage then navigate to our appropriate screen
-    // restoreSavedUser();
+    restoreSavedUser();
     //fix memory leak
     return () => {
       //
