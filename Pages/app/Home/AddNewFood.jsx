@@ -13,32 +13,15 @@ import {
   useTheme,
   VStack,
 } from "native-base";
-import {
-  ScrollView,
-  Pressable,
-  Dimensions,
-  StyleSheet,
-  useWindowDimensions,
-} from "react-native";
+import { ScrollView, Pressable, Dimensions, StyleSheet, useWindowDimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
 import { HomeContext } from "../../../hooks/context";
-import {
-  getFood,
-  getNutrition,
-  getSuggestions,
-} from "../../../services/foodAI/FoodDatabase";
+import { getFood, getNutrition, getSuggestions } from "../../../services/foodAI/FoodDatabase";
 import { round } from "react-native-reanimated";
 import Collapsible from "react-native-collapsible";
-import {
-  createTable,
-  getDBConnection,
-  saveMeals,
-} from "../../../services/localDB/localDB";
-import {
-  recordCustomeMeal,
-  storeCustomMeals,
-} from "../../../services/mongoDB/foodStorage";
+import { createTable, getDBConnection, saveMeals } from "../../../services/localDB/localDB";
+import { recordCustomeMeal, storeCustomMeals } from "../../../services/mongoDB/foodStorage";
 
 function AddNewFood({ navigation, route }) {
   const [wasFoodSearched, setWasFoodSearched] = React.useState(false);
@@ -89,7 +72,7 @@ function AddNewFood({ navigation, route }) {
       return;
     }
     // timer not working please help find another way to delay search till user is done typing
-    getSuggestions(text, setSuggestions);
+    // getSuggestions(text, setSuggestions);
   };
 
   const handleSearch = (text) => {
@@ -154,12 +137,7 @@ function AddNewFood({ navigation, route }) {
     <>
       <SafeAreaView></SafeAreaView>
       <ScrollView ref={scrollViewRef}>
-        <HStack
-          space="3"
-          alignItems="center"
-          justifyContent={"space-between"}
-          m={5}
-        >
+        <HStack space="3" alignItems="center" justifyContent={"space-between"} m={5}>
           <HStack alignItems={"center"}>
             <Pressable
               onPress={() => {
@@ -167,11 +145,7 @@ function AddNewFood({ navigation, route }) {
               }}
             >
               <Center bg="primary.600" p="2" pl={2.5} rounded="full">
-                <MaterialIcons
-                  name="arrow-back-ios"
-                  size={24}
-                  color={colors["white"]}
-                />
+                <MaterialIcons name="arrow-back-ios" size={24} color={colors["white"]} />
               </Center>
             </Pressable>
             <Heading style={{ fontFamily: "Poppins-SemiBold" }} pl={5}>
@@ -184,12 +158,7 @@ function AddNewFood({ navigation, route }) {
           {wasFoodSearched ? (
             <Center bg="primary.30" py={5} m={3} mx={5} rounded={"xl"}>
               {/* Should be one of the selected search suggestion we get from autocomplete */}
-              <Heading
-                style={{ fontFamily: "Poppins-Medium" }}
-                color="primary.700"
-                textAlign={"center"}
-                px={2}
-              >
+              <Heading style={{ fontFamily: "Poppins-Medium" }} color="primary.700" textAlign={"center"} px={2}>
                 {selectedTitle.label}
                 {/* A very long name of the food that we are looking for */}
               </Heading>
@@ -221,17 +190,8 @@ function AddNewFood({ navigation, route }) {
                   ml={10}
                 >
                   {suggestions.map((suggestion, index) => (
-                    <Pressable
-                      onPress={() => handleSearch(suggestion)}
-                      key={index}
-                    >
-                      <HStack
-                        rounded={"lg"}
-                        bg={colors["secondary"]["30"]}
-                        mt={1}
-                        p="2"
-                        w={"100%"}
-                      >
+                    <Pressable onPress={() => handleSearch(suggestion)} key={index}>
+                      <HStack rounded={"lg"} bg={colors["secondary"]["30"]} mt={1} p="2" w={"100%"}>
                         <Heading
                           color={colors["secondary"]["600"]}
                           style={{ fontFamily: "Poppins-Regular" }}
@@ -272,34 +232,16 @@ function AddNewFood({ navigation, route }) {
 
               <Box width={width} p={5}>
                 <Box p={2} flex={1} rounded="lg">
-                  <Heading
-                    style={{ fontFamily: "Poppins-Medium" }}
-                    fontSize={"lg"}
-                    ml={-4}
-                  >
+                  <Heading style={{ fontFamily: "Poppins-Medium" }} fontSize={"lg"} ml={-4}>
                     {!isSearch ? "" : `Showing results for '${searchValue}'`}
                   </Heading>
                   {food ? (
                     <ScrollView showsVerticalScrollIndicator={false}>
                       {food.map((item, index) => {
                         return (
-                          <HStack
-                            rounded={"lg"}
-                            key={index}
-                            bg={colors["secondary"]["30"]}
-                            mt={1}
-                            p="2"
-                            w={"100%"}
-                          >
+                          <HStack rounded={"lg"} key={index} bg={colors["secondary"]["30"]} mt={1} p="2" w={"100%"}>
                             <Pressable
-                              onPress={() =>
-                                handleFoodClick(
-                                  item.id,
-                                  item.measureUri,
-                                  item.label,
-                                  item.image
-                                )
-                              }
+                              onPress={() => handleFoodClick(item.id, item.measureUri, item.label, item.image)}
                             >
                               <VStack>
                                 <Heading
@@ -310,9 +252,7 @@ function AddNewFood({ navigation, route }) {
                                   {item.label}
                                 </Heading>
                                 <Text fontSize="xs" color={"muted.500"}>
-                                  {roundToTen(item.energy)}{" "}
-                                  {roundToTen(item.protein, 2)}{" "}
-                                  {roundToTen(item.fat)}
+                                  {roundToTen(item.energy)} {roundToTen(item.protein, 2)} {roundToTen(item.fat)}
                                 </Text>
                               </VStack>
                             </Pressable>
@@ -339,11 +279,7 @@ function AddNewFood({ navigation, route }) {
         {wasFoodSearched ? (
           <VStack space="2" px={6} pb={10}>
             {/* Basic nutritional information */}
-            <Heading
-              color={"secondary.700"}
-              style={{ fontFamily: "Poppins-Regular" }}
-              pb={3}
-            >
+            <Heading color={"secondary.700"} style={{ fontFamily: "Poppins-Regular" }} pb={3}>
               Nutrients
             </Heading>
 
@@ -359,11 +295,7 @@ function AddNewFood({ navigation, route }) {
                       justifyContent={"space-between"}
                       alignItems="center"
                     >
-                      <Text
-                        style={{ fontFamily: "Poppins-Light" }}
-                        color={"primary.700"}
-                        fontSize="md"
-                      >
+                      <Text style={{ fontFamily: "Poppins-Light" }} color={"primary.700"} fontSize="md">
                         {nutrition[item].label.split(",")[0]}
                       </Text>
                       <HStack
@@ -374,15 +306,10 @@ function AddNewFood({ navigation, route }) {
                         px={2}
                         width={"30%"}
                       >
-                        <Text
-                          style={{ fontFamily: "Poppins-Light" }}
-                          fontSize="md"
-                        >
+                        <Text style={{ fontFamily: "Poppins-Light" }} fontSize="md">
                           {roundToTen(nutrition[item].quantity)}
                         </Text>
-                        <Text style={{ fontFamily: "Poppins-Light" }}>
-                          {nutrition[item].unit}
-                        </Text>
+                        <Text style={{ fontFamily: "Poppins-Light" }}>{nutrition[item].unit}</Text>
                       </HStack>
                     </HStack>
                   );
@@ -416,18 +343,8 @@ function AddNewFood({ navigation, route }) {
                     justifyContent={"space-between"}
                     alignItems="center"
                   >
-                    <Skeleton
-                      isLoaded={isNutritionalInfoLoaded}
-                      my={1}
-                      h={5}
-                      rounded="md"
-                      startColor="secondary.30"
-                    >
-                      <Text
-                        style={{ fontFamily: "Poppins-Light" }}
-                        color={"primary.700"}
-                        fontSize="md"
-                      >
+                    <Skeleton isLoaded={isNutritionalInfoLoaded} my={1} h={5} rounded="md" startColor="secondary.30">
+                      <Text style={{ fontFamily: "Poppins-Light" }} color={"primary.700"} fontSize="md">
                         {nutrition[item].label.split(",")[0]}
                       </Text>
                     </Skeleton>
@@ -439,15 +356,10 @@ function AddNewFood({ navigation, route }) {
                       px={2}
                       width={"30%"}
                     >
-                      <Text
-                        style={{ fontFamily: "Poppins-Light" }}
-                        fontSize="md"
-                      >
+                      <Text style={{ fontFamily: "Poppins-Light" }} fontSize="md">
                         {roundToTen(nutrition[item].quantity)}
                       </Text>
-                      <Text style={{ fontFamily: "Poppins-Light" }}>
-                        {nutrition[item].unit}
-                      </Text>
+                      <Text style={{ fontFamily: "Poppins-Light" }}>{nutrition[item].unit}</Text>
                     </HStack>
                   </HStack>
                 );
@@ -468,9 +380,7 @@ function AddNewFood({ navigation, route }) {
               }}
               colorScheme={searchQuery.length > 0 ? "secondary" : "muted"}
               _text={{ style: { fontFamily: "Poppins-Regular", fontSize: 17 } }}
-              leftIcon={
-                <MaterialIcons name="search" size={30} color={colors.white} />
-              }
+              leftIcon={<MaterialIcons name="search" size={30} color={colors.white} />}
               w={"40%"}
             >
               Search
@@ -496,13 +406,7 @@ function AddNewFood({ navigation, route }) {
                 _text={{
                   style: { fontFamily: "Poppins-Regular", fontSize: 17 },
                 }}
-                leftIcon={
-                  <MaterialIcons
-                    name="youtube-searched-for"
-                    size={30}
-                    color={colors.white}
-                  />
-                }
+                leftIcon={<MaterialIcons name="youtube-searched-for" size={30} color={colors.white} />}
                 w={"50%"}
                 colorScheme="secondary"
               >
@@ -514,13 +418,7 @@ function AddNewFood({ navigation, route }) {
                 _text={{
                   style: { fontFamily: "Poppins-Regular", fontSize: 17 },
                 }}
-                rightIcon={
-                  <MaterialIcons
-                    name="check-circle"
-                    size={30}
-                    color={colors.white}
-                  />
-                }
+                rightIcon={<MaterialIcons name="check-circle" size={30} color={colors.white} />}
                 w={"40%"}
               >
                 Save

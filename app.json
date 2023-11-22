@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "FAFH",
-    "slug": "FAFH",
+    "name": "FoodLog",
+    "slug": "FoodLog",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -12,22 +12,27 @@
       "backgroundColor": "#ffffff"
     },
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/4a8b8864-444a-4d05-93fa-5f38578e4843"
     },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "app.fafh.uj"
+      "bundleIdentifier": "app.foodlog.uj"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "app.fafh.uj",
-      "softwareKeyboardLayoutMode": "pan"
+      "package": "app.FoodLog.uj",
+      "softwareKeyboardLayoutMode": "pan",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
@@ -35,16 +40,19 @@
     "description": "",
     "extra": {
       "eas": {
-        "projectId": "1a9f2a92-590b-4a16-b534-02ddee167874"
+        "projectId": "4a8b8864-444a-4d05-93fa-5f38578e4843"
       }
     },
     "plugins": [
       [
         "expo-camera",
         {
-          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
+          "cameraPermission": "Allow foodLog to access your camera."
         }
       ]
-    ]
+    ],
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    }
   }
 }

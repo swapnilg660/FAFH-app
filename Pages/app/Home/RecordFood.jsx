@@ -387,13 +387,13 @@ function RecordFood({ navigation, route }) {
               rounded="full"
               icon={<AddFoodIcon />}
             />
-            <IconButton
+            {/* <IconButton
               onPress={() => navigation.navigate("UploadPicture", { foodType: foodType })}
               mb="4"
               variant="solid"
               rounded="full"
               icon={<MaterialCommunityIcons name="barcode-scan" size={24} color={colors.white} />}
-            />
+            /> */}
           </Stagger>
         </Box>
         <Animated.View

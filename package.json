@@ -1,5 +1,5 @@
 {
-  "name": "fafh",
+  "name": "FoodLog",
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
@@ -36,6 +36,7 @@
     "expo-image-manipulator": "~11.0.0",
     "expo-image-picker": "~14.0.2",
     "expo-linear-gradient": "~12.0.1",
+    "expo-localization": "~14.0.0",
     "expo-secure-store": "~12.0.0",
     "expo-sensors": "~12.0.1",
     "expo-splash-screen": "~0.17.5",
@@ -62,6 +63,7 @@
     "react-native-gesture-handler": "2.8.0",
     "react-native-image-resizer": "1.4.5",
     "react-native-loader-kit": "2.0.1",
+    "react-native-localize": "^3.0.3",
     "react-native-modal-datetime-picker": "13.1.2",
     "react-native-onboarding-swiper": "1.2.0",
     "react-native-paper": "4.12.2",

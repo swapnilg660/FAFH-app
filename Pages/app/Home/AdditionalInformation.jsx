@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useWindowDimensions } from "react-native";
 import { Formik } from "formik";
 import {
@@ -31,6 +31,7 @@ import { getUser, updateUser } from "../../../services/mongoDB/users";
 
 export default function AdditionalInformation({ navigation, setShowModal }) {
   const { saveAdditionalInformation, userToken, setUserProfileData } = useContext(AuthContext);
+  [countriesToBeDisplayed, setCountriesToBeDisplayed] =  useState([]);
   const { window_height } = useWindowDimensions();
   const toast = useToast();
   const initialValues = {

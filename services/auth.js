@@ -6,12 +6,14 @@ import { mongoCreateUser } from "./mongoDB/users";
 //SignIn using email and address
 export const signIn = async (data) => {
   var token = null;
+  var status = false;
   try {
     await firebase
       .auth()
       .signInWithEmailAndPassword(data?.email, data?.password)
       .then(async (res) => {
         token = res.user.uid;
+        status = true;
         // alert("Sign In Successful");
         // WriteData(userId, Fname, Sname, Email, Photo)
         if (data.stayLoggedIn) {
@@ -19,6 +21,7 @@ export const signIn = async (data) => {
         }
       })
       .catch((error) => {
+        console.log("Error code: ", error.code);
         //will write code for error
         if (error.code === "auth/user-not-found") {
           // alert("User not found");
@@ -29,7 +32,7 @@ export const signIn = async (data) => {
         } else {
           console.log("Something went wrong", error);
           // alert("Something went wrong", error);
-          token = `${error}`;
+          token = `Incorrect Passwored or Email.\nPlease try again or sign up.`;
         }
       });
   } catch (e) {
@@ -37,7 +40,7 @@ export const signIn = async (data) => {
     alert("Error!", e);
   }
 
-  return token;
+  return { token, status };
 };
 
 export const signUp = async (data) => {
@@ -51,7 +54,6 @@ export const signUp = async (data) => {
       .then(async (res) => {
         token = res.user.uid;
         await mongoCreateUser(data, token);
-        sleep(500);
         if (data.stayLoggedIn) {
           await SecureStore.setItemAsync("userToken", token);
           await SecureStore.setItemAsync("userFirstTime", "true");

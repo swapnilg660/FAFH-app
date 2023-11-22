@@ -19,6 +19,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
 import { HomeContext } from "../../../hooks/context";
 import { recordFood } from "../../../services/mongoDB/foodStorage";
+import { getLocales } from "expo-localization";
 
 function CapturedMeals({ navigation, route }) {
   const { colors } = useTheme();
@@ -29,6 +30,7 @@ function CapturedMeals({ navigation, route }) {
     state: true,
     location: "",
   });
+  const { currencyCode, currencySymbol } = getLocales()[0];
 
   // function to get a random number
   const getRandomNumber = (min, max) => {
@@ -65,7 +67,7 @@ function CapturedMeals({ navigation, route }) {
 
   const handleSubmitMeal = () => {
     let foodId = generateFoodId();
-    recordFood(occasion, meals,isFAFH, totalCost);
+    recordFood(occasion, meals, isFAFH, totalCost);
     Alert.alert("Meal recorded successfully!");
     navigation.navigate("Home");
   };
@@ -108,11 +110,7 @@ function CapturedMeals({ navigation, route }) {
                     />
                   ) : (
                     <Center size={10}>
-                      <MaterialIcons
-                        name="fastfood"
-                        size={30}
-                        color={colors["primary"]["700"]}
-                      />
+                      <MaterialIcons name="fastfood" size={30} color={colors["primary"]["700"]} />
                     </Center>
                   )}
                 </Box>
@@ -123,13 +121,7 @@ function CapturedMeals({ navigation, route }) {
                 colorScheme="danger"
                 variant="solid"
                 borderRightRadius={"lg"}
-                icon={
-                  <MaterialIcons
-                    name="remove-circle"
-                    size={24}
-                    color={colors.white}
-                  />
-                }
+                icon={<MaterialIcons name="remove-circle" size={24} color={colors.white} />}
                 onPress={() => {
                   Alert.alert(
                     "Remove the selected Meal",
@@ -142,9 +134,7 @@ function CapturedMeals({ navigation, route }) {
                       {
                         text: "Yes",
                         onPress: () => {
-                          setMeals((prev) =>
-                            prev.filter((item) => item.name !== meal.name)
-                          );
+                          setMeals((prev) => prev.filter((item) => item.name !== meal.name));
                         },
                       },
                     ],
@@ -155,23 +145,14 @@ function CapturedMeals({ navigation, route }) {
             </HStack>
           );
         })}
-        <HStack
-          pl={3}
-          bg="primary.50"
-          rounded="lg"
-          justifyContent={"space-between"}
-          alignItems={"center"}
-          my={1}
-        >
+        <HStack pl={3} bg="primary.50" rounded="lg" justifyContent={"space-between"} alignItems={"center"} my={1}>
           <Text style={{ fontFamily: "Poppins-Light" }}>Add More</Text>
           <IconButton
             rounded={"none"}
             colorScheme="secondary"
             variant="solid"
             borderRightRadius={"lg"}
-            icon={
-              <MaterialIcons name="add-circle" size={24} color={colors.white} />
-            }
+            icon={<MaterialIcons name="add-circle" size={24} color={colors.white} />}
             onPress={() => {
               navigation.navigate("RecordFood", { foodType: occasion });
             }}
@@ -198,36 +179,34 @@ function CapturedMeals({ navigation, route }) {
                 style={{ fontFamily: "Poppins-Regular" }}
                 fontSize={14}
                 w={"80%"}
-                onChangeText={(text) =>
-                  setIsFAFH({ ...isFAFH, location: text })
-                }
+                onChangeText={(text) => setIsFAFH({ ...isFAFH, location: text })}
               />
             </FormControl>
           ) : null}
         </VStack>
         <HStack space="3" justifyContent={"flex-end"} alignItems="center">
-          <FormControl>
-            <Input
-              borderColor={colors["primary"]["30"]}
-              bg={colors["primary"]["30"]}
-              rounded="2xl"
-              placeholder="Total Cost"
-              style={{ fontFamily: "Poppins-Regular" }}
-              fontSize={16}
-              w={"50%"}
-              leftElement={
-                <Text px={5} pb={2} color={"muted.400"} fontSize="xl">
-                  R
-                </Text>
-              }
-              onChangeText={(text) => setTotalCost(parseInt(text))}
-            />
-            <FormControl.HelperText>
-              {
-                "This helps you track your expenses...\nWe'll keep this between us."
-              }
-            </FormControl.HelperText>
-          </FormControl>
+          {isFAFH.state ? (
+            <FormControl>
+              <Input
+                borderColor={colors["primary"]["30"]}
+                bg={colors["primary"]["30"]}
+                rounded="2xl"
+                placeholder="Total Cost"
+                style={{ fontFamily: "Poppins-Regular" }}
+                fontSize={16}
+                w={"50%"}
+                leftElement={
+                  <Text px={5} pb={2} color={"muted.400"} fontSize="xl">
+                    {currencySymbol}
+                  </Text>
+                }
+                onChangeText={(text) => setTotalCost(parseInt(text))}
+              />
+              <FormControl.HelperText>
+                {"This helps you track your expenses...\nWe'll keep this between us."}
+              </FormControl.HelperText>
+            </FormControl>
+          ) : null}
         </HStack>
         <Center pt={10}>
           <Button.Group>

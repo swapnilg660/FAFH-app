@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { View, StyleSheet, Image, Dimensions } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import * as Progress from "react-native-progress";
+import { getLocales, getCalendars } from "expo-localization";
 import {
   Text,
   useTheme,
@@ -60,6 +61,27 @@ function Home({ navigation }) {
   const { userProfileData } = useContext(AuthContext);
   const { setMeals } = useContext(HomeContext);
   const [tipsVisible, setTipsVisible] = useState(true);
+  const composition = [
+    {
+      name: "Weight",
+      value: userProfileData?.weight,
+      unit: "kg",
+      icon: () => <WeightIcon fill={colors["secondary"]["500"]} />,
+    },
+    {
+      name: "BMI",
+      value: userProfileData?.bmi,
+      unit: "kg/m2",
+      icon: () => <Ionicons name="ios-speedometer-outline" size={24} color={colors["secondary"]["500"]} />,
+    },
+    {
+      name: "Height",
+      value: userProfileData?.height,
+      unit: "cm",
+      icon: () => <MaterialCommunityIcons name="human-male-height" size={24} color={colors["secondary"]["500"]} />,
+    },
+  ];
+
   const userFirstTime = async () => {
     const userFirstTime = JSON.parse(await SecureStore.getItemAsync("userFirstTime"));
 
@@ -103,6 +125,7 @@ function Home({ navigation }) {
     getDailyQoute(setQuote);
     return () => {};
   }, []);
+
   return (
     <>
       <HStack
@@ -399,8 +422,7 @@ function Home({ navigation }) {
                 </View>
               </VStack> */}
               {/* Body Composition */}
-              <VStack
-                space={2}
+              <HStack
                 rounded={"md"}
                 bg={"primary.50"}
                 p={2}
@@ -408,23 +430,28 @@ function Home({ navigation }) {
                 pl={3}
                 mb={height * 0.2}
                 borderWidth={0.5}
+                justifyContent={"space-around"}
                 borderColor={colors["primary"]["100"]}
               >
-                <HStack space={2} justifyContent={"space-between"} alignItems={"center"}>
-                  <HStack>
-                    <WeightIcon fill={colors["secondary"]["500"]} />
-                    <Text style={{ fontFamily: "Poppins-Regular" }} fontSize={"16"} ml={3}>
-                      Body Composition
-                    </Text>
-                  </HStack>
-                </HStack>
-                <HStack justifyContent={"space-between"} alignItems={"center"}>
-                  <Text ml={2} pt={1} style={{ fontFamily: "Poppins-Light" }}>
-                    <Heading>{userProfileData?.weight} </Heading>
-                    kg
-                  </Text>
-                </HStack>
-              </VStack>
+                {composition.map((item, index) => (
+                  <VStack space={2}>
+                    <HStack space={2} justifyContent={"space-between"} alignItems={"center"}>
+                      <HStack>
+                        {item.icon()}
+                        <Text style={{ fontFamily: "Poppins-Regular" }} fontSize={"16"} ml={3}>
+                          {item.name}
+                        </Text>
+                      </HStack>
+                    </HStack>
+                    <HStack justifyContent={"space-between"} alignItems={"center"}>
+                      <Text ml={2} pt={1} style={{ fontFamily: "Poppins-Light" }}>
+                        <Heading>{item.value ? item.value : 0} </Heading>
+                        {item.unit}
+                      </Text>
+                    </HStack>
+                  </VStack>
+                ))}
+              </HStack>
             </VStack>
           </View>
         </Box>

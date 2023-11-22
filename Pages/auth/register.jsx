@@ -418,7 +418,9 @@ function Register({ navigation }) {
                           colorScheme={"secondary"}
                           variant="link"
                           onPress={() => {
-                            Linking.openURL("https://fafh-admin.000webhostapp.com/");
+                            Linking.openURL(
+                              "https://www.termsandconditionsgenerator.com/live.php?token=Y8AJxz4qsygaNxAkg0Mcu3DPqqsuXOxz"
+                            );
                           }}
                         >
                           Terms and Conditions
@@ -427,7 +429,9 @@ function Register({ navigation }) {
                           colorScheme={"secondary"}
                           variant="link"
                           onPress={() => {
-                            Linking.openURL("https://www.google.com");
+                            Linking.openURL(
+                              "https://www.termsandconditionsgenerator.com/live.php?token=Y8AJxz4qsygaNxAkg0Mcu3DPqqsuXOxz"
+                            );
                           }}
                         >
                           Privacy Policy

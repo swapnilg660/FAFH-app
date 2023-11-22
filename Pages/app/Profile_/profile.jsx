@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import { ScrollView, Animated, RefreshControl } from "react-native";
+import { ScrollView, Animated, RefreshControl, Linking } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import {
   Center,
@@ -16,6 +16,8 @@ import {
   Actionsheet,
   IconButton,
   Select,
+  Link,
+  Alert,
 } from "native-base";
 
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -79,22 +81,26 @@ function Profile({ navigation }) {
       title: "About",
       icon: <Entypo name="info" size={18} color={colors.white} />,
       value: "FERL, FoodLog",
+      onPress: () => Linking.openURL("https://ferl.co.za/about"),
     },
     {
       title: "Report a bug",
       icon: <MaterialCommunityIcons name="bug" size={18} color={colors.white} />,
       value: "Report a bug, Give feedback",
-      route: "ReportBug",
+      onPress: () => navigation.navigate("ReportBug"),
     },
     {
       title: "Terms and Conditions",
       icon: <MaterialCommunityIcons name="file-document" size={18} color={colors.white} />,
       value: "Terms and Conditions, Ethical Clearance",
+      onPress: () =>
+        Linking.openURL("https://www.termsandconditionsgenerator.com/live.php?token=Y8AJxz4qsygaNxAkg0Mcu3DPqqsuXOxz"),
     },
   ];
 
   const [bmi, setBmi] = React.useState(0);
   const [waterGoal, setWaterGoal] = React.useState(0);
+  const [currency, setCurrency] = React.useState("");
 
   //calculate bmi
   const calcBmi = () => {
@@ -431,6 +437,50 @@ function Profile({ navigation }) {
                   <Select.Item label="5 Glasses" value="5" />
                   <Select.Item label="6 Glasses" value="6" />
                   <Select.Item label="7 Glasses" value="7" />
+                  <Select.Item label="8 Glasses" value="8" />
+                  <Select.Item label="9 Glasses" value="9" />
+                  <Select.Item label="10 Glasses" value="10" />
+                  <Select.Item label="11 Glasses" value="11" />
+                  <Select.Item label="12 Glasses" value="12" />
+                </Select>
+              </Center>
+            </HStack>
+            <HStack
+              space="2"
+              alignItems="center"
+              justifyContent={"space-between"}
+              h={"65px"}
+              rounded={"lg"}
+              bg="#00000008"
+              p={2}
+              px={5}
+            >
+              <HStack space="3" alignItems="center">
+                <Center bg="primary.600" p="1.5" rounded="full">
+                  <Ionicons name="water" size={24} color="white" />
+                </Center>
+
+                <Text
+                  style={{
+                    fontFamily: "Poppins-SemiBold",
+                  }}
+                >
+                  Set user currency
+                </Text>
+              </HStack>
+              <Center>
+                <Select
+                  selectedValue={waterGoal}
+                  placeholder="Glasses"
+                  minWidth="115px"
+                  onValueChange={(itemValue) => {
+                    setCurrency(itemValue);
+                    updateUser({ currency: itemValue });
+                  }}
+                >
+                  <Select.Item label="ZAR" value="R" />
+                  <Select.Item label="INR" value="₹" />
+                  <Select.Item label="USD" value="$" />
                 </Select>
               </Center>
             </HStack>
@@ -496,13 +546,7 @@ function Profile({ navigation }) {
                       borderRadius: 10,
                     }
                   }
-                  onPress={() => {
-                    if (item.route) {
-                      navigation.navigate(item.route, {
-                        userProfileData: userProfileData,
-                      });
-                    }
-                  }}
+                  onPress={item.onPress}
                 >
                   <HStack p={2} space="7" px={5} alignItems="center" justifyContent={"space-between"}>
                     <HStack space="3" alignItems="center">

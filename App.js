@@ -43,10 +43,12 @@ export default function App() {
     () => ({
       signIn: async (data) => {
         let token = "";
+        let isLogged;
         await signIn(data).then((res) => {
-          token = res;
+          token = res.token;
+          isLogged = res.status;
         });
-        if (token?.includes("Error")) {
+        if (!isLogged) {
           console.log(token);
           return token;
         } else {
