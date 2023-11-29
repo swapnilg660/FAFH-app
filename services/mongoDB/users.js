@@ -32,9 +32,10 @@ export const mongoCreateUser = async (data, userToken) => {
 // update user information
 export const updateUser = async (fields) => {
   let token = await SecureStore.getItemAsync("userToken");
-  console.log("TOKEN:", token);
   var formdata = new FormData();
 
+  console.log("TOKEN:", token);
+  console.log("FIELDS: ", fields);
   for (let field in fields) {
     formdata.append(field, fields[field]);
   }
@@ -45,10 +46,10 @@ export const updateUser = async (fields) => {
     redirect: "follow",
   };
 
-  fetch(`${BASE_URL}/updateUser?userToken=` + token, requestOptions)
+  await fetch(`${BASE_URL}/updateUser?userToken=` + token, requestOptions)
     .then((response) => response.text())
-    .then((result) => console.log(result))
-    .catch((error) => console.log("error", error));
+    .then((result) => console.log("SUccesssfully updated user: " + result))
+    .catch((error) => console.log("error updating user: ", error));
 };
 
 // Get user data when logged in

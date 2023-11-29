@@ -18,7 +18,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
 import { HomeContext } from "../../../hooks/context";
 import { getFood, getNutrition, getSuggestions } from "../../../services/foodAI/FoodDatabase";
-import { round } from "react-native-reanimated";
+import { round, set } from "react-native-reanimated";
 import Collapsible from "react-native-collapsible";
 import { createTable, getDBConnection, saveMeals } from "../../../services/localDB/localDB";
 import { recordCustomeMeal, storeCustomMeals } from "../../../services/mongoDB/foodStorage";
@@ -40,7 +40,7 @@ function AddNewFood({ navigation, route }) {
   //display controllers
   const scrollViewRef = React.useRef();
   const [isCollapsed, setIsCollapsed] = React.useState(true);
-
+  const [searchTerm, setSearchTerm] = React.useState("");
   // food search skeleton controller
   const [isNutritionalInfoLoaded, setIsNutritionalInfoLoaded] = useState(true);
   const [searchQuery, setSearchQuery] = React.useState("");
@@ -75,7 +75,8 @@ function AddNewFood({ navigation, route }) {
     // getSuggestions(text, setSuggestions);
   };
 
-  const handleSearch = (text) => {
+  const handleSearch = () => {
+    let text = searchTerm;
     if (text.length == 0) {
       setIsSearch(false);
       return;
@@ -177,9 +178,10 @@ function AddNewFood({ navigation, route }) {
                   fontSize={16}
                   //   call search api here
                   onChangeText={(text) => {
-                    handleSuggest(text);
+                    // handleSuggest(text);
+                    setSearchTerm(text);
                   }}
-                  onSubmitEditing={(e) => handleSearch(e.nativeEvent.text)}
+                  onSubmitEditing={(e) => handleSearch()}
                 />
                 {/* Suggestion box */}
                 <VStack
@@ -369,14 +371,8 @@ function AddNewFood({ navigation, route }) {
         ) : (
           <Center>
             <Button
-              disabled={!searchQuery.length > 0}
               onPress={() => {
-                console.log("search query", searchQuery);
-                setWasFoodSearched(true);
-                scrollViewRef?.current?.scrollTo({
-                  animated: true,
-                  y: Dimensions.get("window").height,
-                });
+                handleSearch();
               }}
               colorScheme={searchQuery.length > 0 ? "secondary" : "muted"}
               _text={{ style: { fontFamily: "Poppins-Regular", fontSize: 17 } }}

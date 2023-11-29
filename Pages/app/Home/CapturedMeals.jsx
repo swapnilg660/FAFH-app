@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Box,
   Button,
@@ -17,7 +17,7 @@ import {
 import { Alert, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
-import { HomeContext } from "../../../hooks/context";
+import AuthContext, { HomeContext } from "../../../hooks/context";
 import { recordFood } from "../../../services/mongoDB/foodStorage";
 import { getLocales } from "expo-localization";
 
@@ -25,11 +25,13 @@ function CapturedMeals({ navigation, route }) {
   const { colors } = useTheme();
   const { occasion } = route.params;
   const { meals, setMeals } = React.useContext(HomeContext);
+  const { userProfileData } = useContext(AuthContext);
   const [totalCost, setTotalCost] = React.useState(0);
   const [isFAFH, setIsFAFH] = React.useState({
     state: true,
     location: "",
   });
+  const userCountry = JSON.parse(userProfileData.country);
   const { currencyCode, currencySymbol } = getLocales()[0];
 
   // function to get a random number
@@ -196,9 +198,11 @@ function CapturedMeals({ navigation, route }) {
                 fontSize={16}
                 w={"50%"}
                 leftElement={
-                  <Text px={5} pb={2} color={"muted.400"} fontSize="xl">
-                    {currencySymbol}
-                  </Text>
+                  <Center>
+                    <Text px={5} color={"muted.400"} fontSize={userCountry.currency ? "sm" : "xl"}>
+                      {userCountry.currency ? userCountry.currency : currencySymbol}
+                    </Text>
+                  </Center>
                 }
                 onChangeText={(text) => setTotalCost(parseInt(text))}
               />

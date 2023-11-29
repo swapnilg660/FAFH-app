@@ -13,7 +13,7 @@
     },
     "updates": {
       "fallbackToCacheTimeout": 0,
-      "url": "https://u.expo.dev/4a8b8864-444a-4d05-93fa-5f38578e4843"
+      "url": "https://u.expo.dev/0aa90a65-3182-4d0d-9999-6b78822d171e"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -40,7 +40,7 @@
     "description": "",
     "extra": {
       "eas": {
-        "projectId": "4a8b8864-444a-4d05-93fa-5f38578e4843"
+        "projectId": "0aa90a65-3182-4d0d-9999-6b78822d171e"
       }
     },
     "plugins": [

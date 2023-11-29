@@ -445,45 +445,6 @@ function Profile({ navigation }) {
                 </Select>
               </Center>
             </HStack>
-            <HStack
-              space="2"
-              alignItems="center"
-              justifyContent={"space-between"}
-              h={"65px"}
-              rounded={"lg"}
-              bg="#00000008"
-              p={2}
-              px={5}
-            >
-              <HStack space="3" alignItems="center">
-                <Center bg="primary.600" p="1.5" rounded="full">
-                  <Ionicons name="water" size={24} color="white" />
-                </Center>
-
-                <Text
-                  style={{
-                    fontFamily: "Poppins-SemiBold",
-                  }}
-                >
-                  Set user currency
-                </Text>
-              </HStack>
-              <Center>
-                <Select
-                  selectedValue={waterGoal}
-                  placeholder="Glasses"
-                  minWidth="115px"
-                  onValueChange={(itemValue) => {
-                    setCurrency(itemValue);
-                    updateUser({ currency: itemValue });
-                  }}
-                >
-                  <Select.Item label="ZAR" value="R" />
-                  <Select.Item label="INR" value="₹" />
-                  <Select.Item label="USD" value="$" />
-                </Select>
-              </Center>
-            </HStack>
           </VStack>
 
           <Text>Contact Information</Text>
@@ -636,6 +597,9 @@ function Profile({ navigation }) {
                 key={index}
                 rounded={"lg"}
                 onPress={() => {
+                  if (item.route == "deleteAccount") {
+                    signOut();
+                  }
                   navigation.navigate(item.route, {
                     actionType: item.title,
                     userProfileData: userProfileData,

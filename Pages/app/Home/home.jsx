@@ -46,13 +46,14 @@ function Home({ navigation }) {
     // map:[colors.secondary[500], colors.primary[200], colors.primary[500]]
   });
 
-  const [waterIntake, setWaterIntake] = useState({ current: 0, goal: 8 });
+  const [waterIntake, setWaterIntake] = useState({ current: 0, goal: 12 });
   const [stepsCounter, setStepsCounter] = useState({
     current: waterIntake.current * 360,
     goal: 6000,
   });
   const [quote, setQuote] = useState({});
-
+  const loca = getLocales();
+  console.log(loca);
   // Type of food ActionSheet variables
   const [actionSheetVisible, setActionSheetVisible] = useState(false);
 
@@ -61,6 +62,14 @@ function Home({ navigation }) {
   const { userProfileData } = useContext(AuthContext);
   const { setMeals } = useContext(HomeContext);
   const [tipsVisible, setTipsVisible] = useState(true);
+
+  const calcBmi = () => {
+    const heightInMeters = userProfileData?.height / 100;
+    const bmi = userProfileData?.weight / (heightInMeters * heightInMeters);
+    if (bmi > 0) return bmi.toFixed();
+    else return 0;
+  };
+
   const composition = [
     {
       name: "Weight",
@@ -70,7 +79,7 @@ function Home({ navigation }) {
     },
     {
       name: "BMI",
-      value: userProfileData?.bmi,
+      value: calcBmi(),
       unit: "kg/m2",
       icon: () => <Ionicons name="ios-speedometer-outline" size={24} color={colors["secondary"]["500"]} />,
     },

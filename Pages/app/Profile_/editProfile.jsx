@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Center,
@@ -32,6 +32,8 @@ import { DatePickerComponent } from "../../auth/register";
 import moment from "moment";
 
 import { LinearGradient } from "expo-linear-gradient";
+import useCountries from "use-countries";
+import CountryFlag from "react-native-country-flag";
 
 function EditProfile({ navigation, route }) {
   const { colors } = useTheme();
@@ -54,6 +56,7 @@ function EditProfile({ navigation, route }) {
     // doB: moment("1990-01-01").format("MMMM Do YYYY"),
     doB: `${userProfileData?.dateOfBirth}`,
     gender: `${userProfileData?.gender}`,
+    country: `${JSON.parse(userProfileData?.country).name}`,
   };
 
   // Object for error handling
@@ -162,7 +165,7 @@ function EditProfile({ navigation, route }) {
             }}
           >
             {({ handleChange, setFieldValue, handleBlur, handleSubmit, values, touched, errors, isSubmitting }) => {
-              const { name, profession, doB, gender, weight, height } = values;
+              const { name, profession, doB, gender, weight, height, country } = values;
               return (
                 <>
                   <FormControl isInvalid={touched.name && errors.name}>
@@ -224,6 +227,15 @@ function EditProfile({ navigation, route }) {
                       <Select.Item label="Other" value="Other" />
                       <Select.Item label="Prefer not to say" value="None" />
                     </Select>
+                    <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
+                      Please make a selection!
+                    </FormControl.ErrorMessage>
+                  </FormControl>
+                  <FormControl>
+                    <FormControl.Label fontWeight={"300"}>
+                      <Text color={"black"}>In which country do you reside?</Text>
+                    </FormControl.Label>
+                    <SelectCountry country={country} setFieldValue={setFieldValue} />
                     <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
                       Please make a selection!
                     </FormControl.ErrorMessage>
@@ -332,3 +344,67 @@ function EditProfile({ navigation, route }) {
 }
 
 export default EditProfile;
+
+const SelectCountry = ({ country, setFieldValue }) => {
+  const { countries } = useCountries();
+  const [displayValue, setDisplayValue] = useState(country);
+  const validCountries = [
+    "South Africa",
+    "India",
+    "USA",
+    "UK",
+    "Australia",
+    "Singapore",
+    "Nepal",
+    "Sri Lanka ",
+    "Germany",
+    "Egypt",
+    "Kenya",
+    "Mauritius",
+    "Gambia",
+    "Zimbabwe ",
+    "Nigeria",
+  ];
+  const [countriesToBeDisplayed, setCountriesToBeDisplayed] = useState(countries);
+
+  useEffect(() => {
+    let filteredCountries = countries.filter((country) => validCountries.includes(country.name));
+    setCountriesToBeDisplayed(filteredCountries);
+    console.log(filteredCountries);
+  }, []);
+
+  const search = (text) => {
+    let found = countries.find((country) => country.name.toLowerCase().includes(text.toLowerCase()));
+  };
+  return (
+    <Select
+      borderColor={"primary.100"}
+      selectedValue={displayValue}
+      accessibilityLabel="In which country do you reside?"
+      placeholder="Choose a Country"
+      fontWeight={"300"}
+      _selectedItem={{
+        bg: "primary.100",
+        endIcon: <CheckIcon size={5} />,
+        borderRadius: "20",
+      }}
+      mt={1}
+      onValueChange={(itemValue) => {
+        console.log("item value: " + itemValue);
+        let cty = countriesToBeDisplayed.filter((item) => item.name == itemValue)[0];
+        console.log("Country: " + JSON.stringify(cty));
+        setDisplayValue(cty.name);
+        setFieldValue("country", JSON.stringify(cty));
+      }}
+    >
+      {countriesToBeDisplayed.map((country, index) => (
+        <Select.Item
+          key={Math.floor(Math.random() * 100000)}
+          leftIcon={<CountryFlag key={index} isoCode={country.code} size={25} />}
+          label={country.name}
+          value={country.name}
+        />
+      ))}
+    </Select>
+  );
+};

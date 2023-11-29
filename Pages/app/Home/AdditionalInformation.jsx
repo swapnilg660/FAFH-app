@@ -28,11 +28,15 @@ import CountryFlag from "react-native-country-flag";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import AuthContext from "../../../hooks/context";
 import { getUser, updateUser } from "../../../services/mongoDB/users";
+import { getLocales } from "expo-localization";
+import { set } from "react-native-reanimated";
 
 export default function AdditionalInformation({ navigation, setShowModal }) {
   const { saveAdditionalInformation, userToken, setUserProfileData } = useContext(AuthContext);
-  [countriesToBeDisplayed, setCountriesToBeDisplayed] =  useState([]);
+
   const { window_height } = useWindowDimensions();
+  const { currencyCode, currencySymbol } = getLocales()[0];
+  const Locales = getLocales();
   const toast = useToast();
   const initialValues = {
     country: "",
@@ -46,13 +50,14 @@ export default function AdditionalInformation({ navigation, setShowModal }) {
   };
   // const saveAdditionalInformation = useContext(AuthContext);
 
-  const handleSubmit = (data, formikAction) => {
-    console.log(data);
-    updateUser(userToken, data);
+  const handleSubmit = async (data, formikAction) => {
+    await updateUser(data);
+    console.log("done");
 
+    getUser(setUserProfileData);
     formikAction.setSubmitting(false);
     setShowModal(false);
-    getUser(setUserProfileData);
+
     // formikAction.resetForm();
     // close the modal on success
     // toast.show({
@@ -192,13 +197,13 @@ export default function AdditionalInformation({ navigation, setShowModal }) {
                   </Select>
                 </FormControl>
                 <Row space={2}>
-                  <FormControl width={"50%"} isInvalid={touched.weight && errors.weight}>
+                  <FormControl width={"50%"} isInvalid={touched.height && errors.height}>
                     <FormControl.Label>
                       <Text color={"black"}>Weight</Text>
                     </FormControl.Label>
                     <Input
                       value={weight}
-                      onValueChange={(itemValue) => setFieldValue("weight", itemValue)}
+                      onChangeText={(itemValue) => setFieldValue("weight", itemValue)}
                       onBlur={handleBlur("weight")}
                       placeholder="0.0"
                       fontWeight={"300"}
@@ -208,16 +213,16 @@ export default function AdditionalInformation({ navigation, setShowModal }) {
                           <Select
                             maxWidth="100"
                             accessibilityLabel="Measurement Unit"
-                            placeholder="Unit"
                             placeholderTextColor={"white"}
-                            selectedValue={values.weightUnit}
-                            defaultValue={values.weightUnit}
+                            selectedValue={weightUnit}
+                            defaultValue={weightUnit}
                             onValueChange={(itemValue) => {
                               setFieldValue("weightUnit", itemValue);
                             }}
                             onBlur={handleBlur("weightUnit")}
                             _selectedItem={{
                               bg: "primary.100",
+
                               endIcon: <CheckIcon size={5} />,
                               borderRadius: "20",
                             }}
@@ -230,7 +235,7 @@ export default function AdditionalInformation({ navigation, setShowModal }) {
                         </FormControl>
                       }
                     />
-                    <FormControl.ErrorMessage>{touched.weight && errors.weight}</FormControl.ErrorMessage>
+                    <FormControl.ErrorMessage>{touched.height && errors.height}</FormControl.ErrorMessage>
                   </FormControl>
                   <FormControl width={"50%"} isInvalid={touched.height && errors.height}>
                     <FormControl.Label>
@@ -250,8 +255,8 @@ export default function AdditionalInformation({ navigation, setShowModal }) {
                             accessibilityLabel="Measurement Unit"
                             placeholder="Unit"
                             placeholderTextColor={"white"}
-                            selectedValue={values.heightUnit}
-                            defaultValue={values.heightUnit}
+                            selectedValue={heightUnit}
+                            defaultValue={heightUnit}
                             onValueChange={(itemValue) => {
                               setFieldValue("heightUnit", itemValue);
                             }}
@@ -297,12 +302,39 @@ export default function AdditionalInformation({ navigation, setShowModal }) {
 
 const SelectCountry = ({ country, setFieldValue }) => {
   const { countries } = useCountries();
-  useEffect(() => {}, []);
+  const [displayValue, setDisplayValue] = useState(country);
+  const validCountries = [
+    "South Africa",
+    "India",
+    "USA",
+    "UK",
+    "Australia",
+    "Singapore",
+    "Nepal",
+    "Sri Lanka ",
+    "Germany",
+    "Egypt",
+    "Kenya",
+    "Mauritius",
+    "Gambia",
+    "Zimbabwe ",
+    "Nigeria",
+  ];
+  const [countriesToBeDisplayed, setCountriesToBeDisplayed] = useState(countries);
 
+  useEffect(() => {
+    let filteredCountries = countries.filter((country) => validCountries.includes(country.name));
+    setCountriesToBeDisplayed(filteredCountries);
+    console.log(filteredCountries);
+  }, []);
+
+  const search = (text) => {
+    let found = countries.find((country) => country.name.toLowerCase().includes(text.toLowerCase()));
+  };
   return (
     <Select
       borderColor={"primary.100"}
-      selectedValue={country}
+      selectedValue={displayValue}
       accessibilityLabel="In which country do you reside?"
       placeholder="Choose a Country"
       fontWeight={"300"}
@@ -312,30 +344,37 @@ const SelectCountry = ({ country, setFieldValue }) => {
         borderRadius: "20",
       }}
       mt={1}
-      onValueChange={(itemValue) => setFieldValue("country", itemValue)}
+      onValueChange={(itemValue) => {
+        console.log("item value: " + itemValue);
+        let cty = countriesToBeDisplayed.filter((item) => item.name == itemValue)[0];
+        console.log("Country: " + JSON.stringify(cty));
+        setDisplayValue(cty.name);
+        setFieldValue("country", JSON.stringify(cty));
+      }}
       _actionSheetBody={{
         ListHeaderComponent: (
-          <FormControl>
-            <FormControl.Label>Search for a country</FormControl.Label>
-            <Input
-              p={2}
-              placeholder="Search..."
-              onChangeText={(e) => {
-                setCountriesToBeDisplayed(() =>
-                  countries.filter((country) => country.name.toLowerCase().includes(e.toLowerCase()))
-                );
-              }}
-            />
-          </FormControl>
+          <></>
+          // <FormControl>
+          //   <FormControl.Label>Search for a country</FormControl.Label>
+          //   <Input
+          //     p={2}
+          //     placeholder="Search..."
+          //     onChangeText={(e) => {
+          //       setCountriesToBeDisplayed(() =>
+          //         countries.filter((country) => country.name.toLowerCase().includes(e.toLowerCase()))
+          //       );
+          //     }}
+          //   />
+          // </FormControl>
         ),
       }}
     >
-      {countries.map((country, index) => (
+      {countriesToBeDisplayed.map((country, index) => (
         <Select.Item
           key={Math.floor(Math.random() * 100000)}
           leftIcon={<CountryFlag key={index} isoCode={country.code} size={25} />}
           label={country.name}
-          value={country.code}
+          value={country.name}
         />
       ))}
     </Select>
