@@ -53,19 +53,16 @@ export const updateUser = async (fields) => {
 };
 
 // Get user data when logged in
-export const getUser = async (setUserProfileData) => {
+export const getUser = async () => {
   var requestOptions = {
     method: "POST",
     redirect: "follow",
   };
   let token = await SecureStore.getItemAsync("userToken");
-
-  await fetch(`${BASE_URL}/getUser?userToken=${token}`, requestOptions)
+  console.log("Getting user with token: " + token);
+  return fetch(`${BASE_URL}/getUser?userToken=${token}`, requestOptions)
     .then((response) => response.json())
-    .then((result) => {
-      console.log("Found user: " + JSON.stringify(result));
-      setUserProfileData(result.data);
-    })
+    .then((result) => result.data)
     .catch((error) => console.log("Error signing in user: ", error));
 };
 

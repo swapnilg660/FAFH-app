@@ -52,9 +52,14 @@ export default function App() {
           console.log(token);
           return token;
         } else {
-          getUser(setUserProfileData);
-          dispatch({ type: "SIGN_IN", token });
-          return "Success";
+          let userData = await getUser(setUserProfileData);
+          if (userData._id) {
+            setUserProfileData(userData);
+            dispatch({ type: "SIGN_IN", token });
+            return "Success";
+          } else {
+            return "User not found!\nPlease contact admin regarding this issue.";
+          }
         }
       },
       signOut: async () => {
@@ -90,7 +95,11 @@ export default function App() {
     try {
       userToken = await SecureStore.getItemAsync("userToken");
       if (userToken) {
-        await getUser(setUserProfileData);
+        let user = await getUser();
+        if (user._id) {
+          setUserProfileData(user);
+          dispatch({ type: "RESTORE_TOKEN", token: userToken });
+        }
       }
     } catch (e) {
       // Restoring token failed
@@ -101,7 +110,6 @@ export default function App() {
 
     // This will switch to the App screen or Auth screen and this loading
     // screen will be unmounted and thrown away.
-    dispatch({ type: "RESTORE_TOKEN", token: userToken });
   };
 
   useEffect(() => {

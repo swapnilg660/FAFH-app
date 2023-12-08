@@ -53,7 +53,7 @@ function Home({ navigation }) {
   });
   const [quote, setQuote] = useState({});
   const loca = getLocales();
-  console.log(loca);
+
   // Type of food ActionSheet variables
   const [actionSheetVisible, setActionSheetVisible] = useState(false);
 
