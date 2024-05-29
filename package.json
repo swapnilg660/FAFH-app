@@ -1,5 +1,5 @@
 {
-  "name": "FoodLog",
+  "name": "Foodlog",
   "version": "2.0.0",
   "scripts": {
     "start": "expo start --dev-client",
