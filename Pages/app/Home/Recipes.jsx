@@ -1,31 +1,9 @@
-import {
-  AntDesign,
-  Feather,
-  Foundation,
-  Ionicons,
-  MaterialCommunityIcons,
-  MaterialIcons,
-} from "@expo/vector-icons";
-import {
-  Box,
-  Center,
-  Heading,
-  HStack,
-  Input,
-  Pressable,
-  ScrollView,
-  Text,
-  useTheme,
-  VStack,
-  Image,
-} from "native-base";
+import { AntDesign, Feather, Foundation, Ionicons, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import { Box, Center, Heading, HStack, Input, Pressable, ScrollView, Text, useTheme, VStack, Image } from "native-base";
 import React, { useEffect } from "react";
 import { TouchableOpacity, useWindowDimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import {
-  getRecipeImage,
-  getRecipes,
-} from "../../../services/mongoDB/recipeStorage";
+import { getRecipeImage, getRecipes } from "../../../services/mongoDB/recipeStorage";
 import { RecipesContext } from "../../../services/mongoDB/recipeStorage";
 import chickenCurry from "../../../assets/images/chickenCurry.jpg";
 import ramen from "../../../assets/images/ramen.jpg";
@@ -125,9 +103,7 @@ function Recipes({ navigation }) {
     },
   ];
   const [recipesFromDb, setRecipesFromDb] = React.useState([]);
-  const [bookMarkedRecipes, setBookMarkedRecipes] = React.useState(
-    recipesFromDb.filter((recipe) => recipe.bookmarked)
-  );
+  const [bookMarkedRecipes, setBookMarkedRecipes] = React.useState(recipesFromDb.filter((recipe) => recipe.bookmarked));
   const [imagesForRecipes, setImagesForRecipes] = React.useState([]);
   const getImages = () => {
     recipesFromDb.forEach((recipe) => {
@@ -152,16 +128,10 @@ function Recipes({ navigation }) {
               }}
             >
               <Center bg="primary.600" p="2" pl={2.5} rounded="full">
-                <MaterialIcons
-                  name="arrow-back-ios"
-                  size={24}
-                  color={colors["white"]}
-                />
+                <MaterialIcons name="arrow-back-ios" size={24} color={colors["white"]} />
               </Center>
             </Pressable>
-            <Heading style={{ fontFamily: "Poppins-SemiBold" }}>
-              Recipes
-            </Heading>
+            <Heading style={{ fontFamily: "Poppins-SemiBold" }}>Recipes</Heading>
           </HStack>
 
           {/* Search bar component with filter button */}
@@ -175,39 +145,23 @@ function Recipes({ navigation }) {
             <Input
               placeholder="Search recipes"
               leftElement={
-                <Feather
-                  name="search"
-                  style={{ paddingLeft: 10 }}
-                  size={24}
-                  color={colors.primary["600"]}
-                />
+                <Feather name="search" style={{ paddingLeft: 10 }} size={24} color={colors.primary["600"]} />
               }
               backgroundColor="white"
               borderRadius={"xl"}
-              style={{ fontFamily: "Poppins-Light", fontSize: 18 }}
+              style={{ fontFamily: "Poppins-Regular", fontSize: 18 }}
               flex={7}
             />
             <Pressable flex={1}>
               <Center bg="primary.600" p="2" pl={2.5} rounded="full">
-                <MaterialIcons
-                  name="filter-list"
-                  size={21}
-                  color={colors["white"]}
-                />
+                <MaterialIcons name="filter-list" size={21} color={colors["white"]} />
               </Center>
             </Pressable>
           </HStack>
           {/* Filter carrousel */}
           <HStack>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              style={{ marginTop: 10 }}
-            >
-              {[
-                ...filterList,
-                ...dataFilter.filter((item) => !filterList.includes(item)),
-              ].map((item, index) => (
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: 10 }}>
+              {[...filterList, ...dataFilter.filter((item) => !filterList.includes(item))].map((item, index) => (
                 <Pressable
                   onPress={() => {
                     if (item != "All") {
@@ -223,9 +177,7 @@ function Recipes({ navigation }) {
                   key={index}
                 >
                   <Center
-                    backgroundColor={
-                      filterList.includes(item) ? "primary.600" : "muted.100"
-                    }
+                    backgroundColor={filterList.includes(item) ? "primary.600" : "muted.100"}
                     borderWidth={filterList.includes(item) ? 1 : 0}
                     borderColor="primary.600"
                     borderRadius="md"
@@ -233,13 +185,7 @@ function Recipes({ navigation }) {
                     mx={1}
                     minW={20}
                   >
-                    <Text
-                      color={
-                        !filterList.includes(item) ? "primary.600" : "white"
-                      }
-                    >
-                      {item}
-                    </Text>
+                    <Text color={!filterList.includes(item) ? "primary.600" : "white"}>{item}</Text>
                   </Center>
                 </Pressable>
               ))}
@@ -247,12 +193,7 @@ function Recipes({ navigation }) {
           </HStack>
           {/* Recipes */}
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <HStack
-              mt={RECIPE_CONTAINER_HEIGHT / 4 + 20}
-              m={5}
-              space={3}
-              justifyContent="space-around"
-            >
+            <HStack mt={RECIPE_CONTAINER_HEIGHT / 4 + 20} m={5} space={3} justifyContent="space-around">
               {recipesFromDb.map((item, index) => (
                 <Pressable
                   key={index}
@@ -297,14 +238,8 @@ function Recipes({ navigation }) {
                         rounded="lg"
                         justifyContent={"center"}
                       >
-                        <Foundation
-                          name="star"
-                          size={24}
-                          color={colors.secondary["600"]}
-                        />
-                        <Text style={{ fontFamily: "Poppins-SemiBold" }}>
-                          4.5
-                        </Text>
+                        <Foundation name="star" size={24} color={colors.secondary["600"]} />
+                        <Text style={{ fontFamily: "Poppins-SemiBold" }}>4.5</Text>
                       </HStack>
                       {item.image ? (
                         <Image
@@ -351,10 +286,7 @@ function Recipes({ navigation }) {
                       zIndex={4}
                     >
                       <VStack>
-                        <Text
-                          style={{ fontFamily: "Poppins-Light" }}
-                          color="muted.500"
-                        >
+                        <Text style={{ fontFamily: "Poppins-Regular" }} color="muted.500">
                           Time
                         </Text>
                         <Text style={{ fontFamily: "Poppins-Medium" }}>
@@ -369,11 +301,7 @@ function Recipes({ navigation }) {
                             });
                           }}
                         >
-                          <MaterialIcons
-                            name="bookmark"
-                            size={34}
-                            color={colors["primary"]["600"]}
-                          />
+                          <MaterialIcons name="bookmark" size={34} color={colors["primary"]["600"]} />
                         </TouchableOpacity>
                       ) : (
                         <TouchableOpacity
@@ -384,11 +312,7 @@ function Recipes({ navigation }) {
                             console.log("[X] BOOKMARKED:", bookMarkedRecipes);
                           }}
                         >
-                          <MaterialIcons
-                            name="bookmark-border"
-                            size={34}
-                            color={colors["primary"]["600"]}
-                          />
+                          <MaterialIcons name="bookmark-border" size={34} color={colors["primary"]["600"]} />
                         </TouchableOpacity>
                       )}
                     </HStack>
@@ -446,29 +370,14 @@ function Recipes({ navigation }) {
                 {/* rating */}
                 <HStack space="3" alignItems="center">
                   {[...Array(item.rating)].map((_, index) => (
-                    <Foundation
-                      key={index}
-                      name="star"
-                      size={24}
-                      color={colors.secondary["600"]}
-                    />
+                    <Foundation key={index} name="star" size={24} color={colors.secondary["600"]} />
                   ))}
                   {[...Array(5 - item.rating)].map((_, index) => (
-                    <Foundation
-                      key={index}
-                      name="star"
-                      size={24}
-                      color={colors.secondary["100"]}
-                    />
+                    <Foundation key={index} name="star" size={24} color={colors.secondary["100"]} />
                   ))}
                 </HStack>
                 {/* Author */}
-                <HStack
-                  alignItems={"flex-end"}
-                  justifyContent={"space-between"}
-                  space={5}
-                  width={"100%"}
-                >
+                <HStack alignItems={"flex-end"} justifyContent={"space-between"} space={5} width={"100%"}>
                   <HStack space="3" alignItems="flex-end">
                     <Center
                       width={"30px"}
@@ -481,26 +390,13 @@ function Recipes({ navigation }) {
                     >
                       {item.author.substring(0, 1)}
                     </Center>
-                    <Text
-                      style={{ fontFamily: "Poppins-Light" }}
-                      color="muted.500"
-                    >
+                    <Text style={{ fontFamily: "Poppins-Regular" }} color="muted.500">
                       By {item.author}
                     </Text>
                   </HStack>
-                  <HStack
-                    alignItems={"flex-end"}
-                    justifyContent={"space-evenly"}
-                  >
-                    <MaterialCommunityIcons
-                      name="timer-outline"
-                      size={24}
-                      color="black"
-                    />
-                    <Text
-                      style={{ fontFamily: "Poppins-Light" }}
-                      color="muted.500"
-                    >
+                  <HStack alignItems={"flex-end"} justifyContent={"space-evenly"}>
+                    <MaterialCommunityIcons name="timer-outline" size={24} color="black" />
+                    <Text style={{ fontFamily: "Poppins-Regular" }} color="muted.500">
                       {item.prepTime ? `${item.prepTime} Mins` : null}
                     </Text>
                   </HStack>

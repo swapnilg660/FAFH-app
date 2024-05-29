@@ -58,8 +58,8 @@ const FAFHTHEME = extendTheme({
         italic: "Poppins-ExtraLightItalic",
       },
       200: {
-        normal: "Poppins-Light",
-        italic: "Poppins-LightItalic",
+        normal: "Poppins-Regular",
+        italic: "Poppins-RegularItalic",
       },
       300: {
         normal: "Poppins-Regular",

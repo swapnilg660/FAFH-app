@@ -7,9 +7,7 @@ import React from "react";
 const IconSelector = ({ route, isFocused }) => {
   const { colors } = useTheme();
   const reduceDimensions = isFocused ? 5 : null;
-  const color = isFocused
-    ? colors["secondary"]["600"]
-    : colors["primary"]["600"];
+  const color = isFocused ? colors["secondary"]["600"] : colors["primary"]["600"];
   switch (route.name) {
     case "HomeStack":
       return <HomeIcon fill={color} reduceDimensions={reduceDimensions} />;
@@ -82,19 +80,9 @@ function TabBarComponent({ state, descriptors, navigation }) {
             }}
           >
             {isFocused ? (
-              <HStack
-                space="3"
-                alignItems="center"
-                bg={"secondary.50"}
-                rounded="full"
-                p={3}
-              >
+              <HStack space="3" alignItems="center" bg={"secondary.50"} rounded="full" p={3}>
                 <IconSelector isFocused={isFocused} route={route} />
-                <Text
-                  fontSize={"md"}
-                  color={"secondary.600"}
-                  style={{ fontFamily: "Poppins-Light" }}
-                >
+                <Text fontSize={"md"} color={"secondary.600"} style={{ fontFamily: "Poppins-Regular" }}>
                   {label}
                 </Text>
               </HStack>

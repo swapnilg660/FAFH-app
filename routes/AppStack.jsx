@@ -3,7 +3,7 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 // import Home from "../Pages/app/Home/home";
 import HomeStack from "../Pages/app/Home/homeStack";
-import InsightsStack from "../Pages/app/Insight/insightStack";
+// import InsightsStack from "../Pages/app/Insight/insightStack";
 import ProfileStack from "../Pages/app/Profile_/profileStack"; //route settings
 import TabBarComponent from "../Components/TabBarComponent";
 const Tab = createBottomTabNavigator();

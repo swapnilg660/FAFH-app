@@ -561,7 +561,7 @@ function Profile({ navigation }) {
             </Button>
           </Center>
           <Center>
-            <Text color={"muted.400"} style={{ fontFamily: "Poppins-Light" }}>
+            <Text color={"muted.400"} style={{ fontFamily: "Poppins-Regular" }}>
               ©4IR Pioneers 2022
             </Text>
           </Center>

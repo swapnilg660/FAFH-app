@@ -21,12 +21,22 @@ import { getUser } from "./services/mongoDB/users";
 import { error } from "webpack-dev-server/lib/utils/colors";
 
 export default function App() {
-  //Load fonts
-  const fontsLoaded = useFonts();
+  const [fontsLoaded, setFontsLoaded] = useState(false);
 
-  if (!fontsLoaded) {
-    return null;
-  }
+  useEffect(() => {
+    const loadFonts = async () => {
+      await useFonts();
+      setFontsLoaded(true);
+    };
+
+    loadFonts();
+  }, []);
+
+  //Load fonts
+  // if (!fontsLoaded) {
+  //   // Render a loading indicator or return null until fonts are loaded
+  //   return null;
+  // }
 
   // user authentication
   const [userData, dispatch] = useReducer(reducer, {
@@ -132,7 +142,9 @@ export default function App() {
           setHasProfileChanged,
         }}
       >
-        <NavigationContainer>{userData.userToken == null ? <AuthStack /> : <AppStack />}</NavigationContainer>
+        {fontsLoaded ? (
+          <NavigationContainer>{userData.userToken == null ? <AuthStack /> : <AppStack />}</NavigationContainer>
+        ) : null}
       </AuthContext.Provider>
     </NativeBaseProvider>
   );

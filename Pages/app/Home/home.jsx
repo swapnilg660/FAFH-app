@@ -260,7 +260,7 @@ function Home({ navigation }) {
                   <View>
                     <Text
                       style={{
-                        fontFamily: "Poppins-Light",
+                        fontFamily: "Poppins-Regular",
                       }}
                     >
                       <Title>{data.data[data.data.length - 1]}</Title> cal
@@ -377,7 +377,7 @@ function Home({ navigation }) {
                   </HStack>
                 </HStack>
                 <HStack justifyContent={"space-between"} alignItems={"center"}>
-                  <Text ml={2} pt={1} style={{ fontFamily: "Poppins-Light" }}>
+                  <Text ml={2} pt={1} style={{ fontFamily: "Poppins-Regular" }}>
                     <Heading>
                       {waterIntake.current}/{waterIntake.goal}
                     </Heading>{" "}
@@ -453,7 +453,7 @@ function Home({ navigation }) {
                       </HStack>
                     </HStack>
                     <HStack justifyContent={"space-between"} alignItems={"center"}>
-                      <Text ml={2} pt={1} style={{ fontFamily: "Poppins-Light" }}>
+                      <Text ml={2} pt={1} style={{ fontFamily: "Poppins-Regular" }}>
                         <Heading>{item.value ? item.value : 0} </Heading>
                         {item.unit}
                       </Text>
@@ -581,6 +581,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   interLight: {
-    fontFamily: "Poppins-Light",
+    fontFamily: "Poppins-Regular",
   },
 });

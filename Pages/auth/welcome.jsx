@@ -107,7 +107,7 @@ function Welcome({ navigation }) {
           >
             FAFH
           </Text> */}
-          <Text color={"primary.600"} px="20" textAlign="center" style={{ fontFamily: "Poppins-Light" }}>
+          <Text color={"primary.600"} px="20" textAlign="center" style={{ fontFamily: "Poppins-Regular" }}>
             Tracking food and beverages you consume away from home
           </Text>
         </Center>

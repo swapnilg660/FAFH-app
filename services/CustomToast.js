@@ -18,7 +18,7 @@ function ToastComponent({ state, message }) {
       ) : (
         <AntDesign name="exclamationcircle" size={24} color="white" />
       )}
-      <Text color={"white"} style={{ fontFamily: "Poppins-Light" }}>
+      <Text color={"white"} style={{ fontFamily: "Poppins-Regular" }}>
         {message}
       </Text>
     </Row>

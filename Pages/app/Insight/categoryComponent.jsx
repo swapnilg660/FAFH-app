@@ -13,7 +13,6 @@ function Category({ name, Icon, onPress, bg, blurred, selected }) {
         >
           <Center
             bg={bg}
-            
             rounded={"full"}
             size="16"
             borderWidth={3}
@@ -24,7 +23,7 @@ function Category({ name, Icon, onPress, bg, blurred, selected }) {
           </Center>
         </Center>
 
-        <Text style={{ fontFamily: "Poppins-Light" }}>{name}</Text>
+        <Text style={{ fontFamily: "Poppins-Regular" }}>{name}</Text>
       </VStack>
     </Pressable>
   );
