@@ -10,6 +10,7 @@ import OnboardingComponent from "../Pages/auth/onBoarding";
 const Stack = createNativeStackNavigator();
 function AuthStack() {
   const { colors } = useTheme();
+  console.log("Running AuthStack")
   return (
     <Stack.Navigator
       screenOptions={{

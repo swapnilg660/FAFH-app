@@ -64,7 +64,7 @@ function CapturedMeals({ navigation, route }) {
           ? meal.userSuggestion["0"].slice(0, 30) + "..."
           : meal.userSuggestion["0"];
     }
-    return <Text style={{ fontFamily: "Poppins-Light" }}>{text}</Text>;
+    return <Text style={{ fontFamily: "Poppins-Regular" }}>{text}</Text>;
   };
 
   const handleSubmitMeal = () => {
@@ -148,7 +148,7 @@ function CapturedMeals({ navigation, route }) {
           );
         })}
         <HStack pl={3} bg="primary.50" rounded="lg" justifyContent={"space-between"} alignItems={"center"} my={1}>
-          <Text style={{ fontFamily: "Poppins-Light" }}>Add More</Text>
+          <Text style={{ fontFamily: "Poppins-Regular" }}>Add More</Text>
           <IconButton
             rounded={"none"}
             colorScheme="secondary"
@@ -216,7 +216,7 @@ function CapturedMeals({ navigation, route }) {
           <Button.Group>
             <Button
               _text={{
-                style: { fontFamily: "Poppins-Light" },
+                style: { fontFamily: "Poppins-Regular" },
               }}
               onPress={() => {
                 Alert.alert(
@@ -245,7 +245,7 @@ function CapturedMeals({ navigation, route }) {
             </Button>
             <Button
               _text={{
-                style: { fontFamily: "Poppins-Light" },
+                style: { fontFamily: "Poppins-Regular" },
               }}
               onPress={() => {
                 handleSubmitMeal();

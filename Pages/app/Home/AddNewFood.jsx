@@ -297,7 +297,7 @@ function AddNewFood({ navigation, route }) {
                       justifyContent={"space-between"}
                       alignItems="center"
                     >
-                      <Text style={{ fontFamily: "Poppins-Light" }} color={"primary.700"} fontSize="md">
+                      <Text style={{ fontFamily: "Poppins-Regular" }} color={"primary.700"} fontSize="md">
                         {nutrition[item].label.split(",")[0]}
                       </Text>
                       <HStack
@@ -308,10 +308,10 @@ function AddNewFood({ navigation, route }) {
                         px={2}
                         width={"30%"}
                       >
-                        <Text style={{ fontFamily: "Poppins-Light" }} fontSize="md">
+                        <Text style={{ fontFamily: "Poppins-Regular" }} fontSize="md">
                           {roundToTen(nutrition[item].quantity)}
                         </Text>
-                        <Text style={{ fontFamily: "Poppins-Light" }}>{nutrition[item].unit}</Text>
+                        <Text style={{ fontFamily: "Poppins-Regular" }}>{nutrition[item].unit}</Text>
                       </HStack>
                     </HStack>
                   );
@@ -346,7 +346,7 @@ function AddNewFood({ navigation, route }) {
                     alignItems="center"
                   >
                     <Skeleton isLoaded={isNutritionalInfoLoaded} my={1} h={5} rounded="md" startColor="secondary.30">
-                      <Text style={{ fontFamily: "Poppins-Light" }} color={"primary.700"} fontSize="md">
+                      <Text style={{ fontFamily: "Poppins-Regular" }} color={"primary.700"} fontSize="md">
                         {nutrition[item].label.split(",")[0]}
                       </Text>
                     </Skeleton>
@@ -358,10 +358,10 @@ function AddNewFood({ navigation, route }) {
                       px={2}
                       width={"30%"}
                     >
-                      <Text style={{ fontFamily: "Poppins-Light" }} fontSize="md">
+                      <Text style={{ fontFamily: "Poppins-Regular" }} fontSize="md">
                         {roundToTen(nutrition[item].quantity)}
                       </Text>
-                      <Text style={{ fontFamily: "Poppins-Light" }}>{nutrition[item].unit}</Text>
+                      <Text style={{ fontFamily: "Poppins-Regular" }}>{nutrition[item].unit}</Text>
                     </HStack>
                   </HStack>
                 );

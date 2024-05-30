@@ -4,7 +4,6 @@ import AuthContext from "../../hooks/context";
 import { MaterialIcons } from "@expo/vector-icons";
 
 import { StyleSheet, View, SafeAreaView, Animated } from "react-native";
-import AnimatedCheckbox from "react-native-checkbox-reanimated";
 import { googleSignIn } from "../../services/auth";
 import {
   Box,
@@ -30,6 +29,7 @@ import * as Yup from "yup";
 import ToastComponent from "../../services/CustomToast";
 
 function Login({ navigation }) {
+  console.log("Rendering login");
   //Animations
   const popInAnimation = useRef(new Animated.Value(500)).current;
 
@@ -76,33 +76,28 @@ function Login({ navigation }) {
   // Object for error handling
   const validationSchema = Yup.object({
     email: Yup.string().trim().email("Invalid email").required("Required"),
-    password: Yup.string()
-      .trim()
-      .min(6, "Must be at least 6 characters")
-      .required("Required"),
+    password: Yup.string().trim().min(6, "Must be at least 6 characters").required("Required"),
   });
 
   useEffect(() => {
+    console.log("Calling login use effect");
     Animated.timing(popInAnimation, {
       toValue: 0,
       duration: 500,
       useNativeDriver: true,
     }).start();
     // fix memory leak
+    console.log("Login use effect called");
     return () => {
       popInAnimation.stopAnimation();
     };
   }, []);
-  
+
   return (
     <ScrollView border="2" bg={"primary.50"} safeAreaTop pt={10}>
+      {console.log("Rendering login")}
       <Center mt={20} mb={10}>
-        <Heading
-          style={{ fontFamily: "Poppins-Medium" }}
-          fontSize={"2xl"}
-          fontStyle="italic"
-          color={"darkText"}
-        >
+        <Heading style={{ fontFamily: "Poppins-Medium" }} fontSize={"2xl"} fontStyle="italic" color={"darkText"}>
           Login to your account
         </Heading>
       </Center>
@@ -115,27 +110,13 @@ function Login({ navigation }) {
               handleSubmit(values, formikActions);
             }}
           >
-            {({
-              handleChange,
-              handleBlur,
-              handleSubmit,
-              values,
-              touched,
-              errors,
-              isSubmitting,
-            }) => {
+            {({ handleChange, handleBlur, handleSubmit, values, touched, errors, isSubmitting }) => {
               const { email, password } = values;
               return (
                 <>
-                  <FormControl
-                    isRequired
-                    isInvalid={touched.email && errors.email}
-                  >
+                  <FormControl isRequired isInvalid={touched.email && errors.email}>
                     <FormControl.Label>
-                      <Text
-                        color={"black"}
-                        style={{ fontFamily: "Poppins-Regular" }}
-                      >
+                      <Text color={"black"} style={{ fontFamily: "Poppins-Regular" }}>
                         Email
                       </Text>
                     </FormControl.Label>
@@ -150,19 +131,11 @@ function Login({ navigation }) {
                       style={{ fontFamily: "Poppins-Regular" }}
                       fontSize={"md"}
                     />
-                    <FormControl.ErrorMessage>
-                      {touched.email && errors.email}
-                    </FormControl.ErrorMessage>
+                    <FormControl.ErrorMessage>{touched.email && errors.email}</FormControl.ErrorMessage>
                   </FormControl>
-                  <FormControl
-                    isRequired
-                    isInvalid={touched.password && errors.password}
-                  >
+                  <FormControl isRequired isInvalid={touched.password && errors.password}>
                     <FormControl.Label>
-                      <Text
-                        color={"black"}
-                        style={{ fontFamily: "Poppins-Regular" }}
-                      >
+                      <Text color={"black"} style={{ fontFamily: "Poppins-Regular" }}>
                         Password
                       </Text>
                     </FormControl.Label>
@@ -179,11 +152,7 @@ function Login({ navigation }) {
                       fontSize={"md"}
                       InputRightElement={
                         <Icon
-                          as={
-                            <MaterialIcons
-                              name={show ? "visibility" : "visibility-off"}
-                            />
-                          }
+                          as={<MaterialIcons name={show ? "visibility" : "visibility-off"} />}
                           size={5}
                           mr="2"
                           color="muted.400"
@@ -191,31 +160,16 @@ function Login({ navigation }) {
                         />
                       }
                     />
-                    <FormControl.ErrorMessage>
-                      {touched.password && errors.password}
-                    </FormControl.ErrorMessage>
+                    <FormControl.ErrorMessage>{touched.password && errors.password}</FormControl.ErrorMessage>
                   </FormControl>
 
-                  <Pressable
-                    onPress={handleCheckboxPress}
-                    w="40%"
-                    my={2}
-                    display="flex"
-                  >
+                  <Pressable onPress={handleCheckboxPress} w="40%" my={2} display="flex">
                     <Row alignItems={"center"}>
                       <Center w={5} h={5} m={1}>
-                        <AnimatedCheckbox
-                          checked={checked}
-                          highlightColor={colors["primary"][100]}
-                          checkmarkColor={colors["secondary"][500]}
-                          boxOutlineColor={colors["secondary"][500]}
-                        />
+                        <Checkbox value={checked} onValueChange={handleCheckboxPress} />
                       </Center>
 
-                      <Text
-                        color={"black"}
-                        style={{ fontFamily: "Poppins-Regular" }}
-                      >
+                      <Text color={"black"} style={{ fontFamily: "Poppins-Regular" }}>
                         Remember Me
                       </Text>
                     </Row>
@@ -229,11 +183,7 @@ function Login({ navigation }) {
                       my={5}
                       onPress={!isSubmitting ? handleSubmit : null}
                     >
-                      {isSubmitting ? (
-                        <Spinner size="sm" color={"white"} />
-                      ) : (
-                        "LOGIN"
-                      )}
+                      {isSubmitting ? <Spinner size="sm" color={"white"} /> : "LOGIN"}
                     </Button>
                   </Center>
 
@@ -271,10 +221,8 @@ function Login({ navigation }) {
                   </Row>
 
                   <Row space="2" justifyContent={"center"} alignItems="center">
-                    <Text style={{ fontFamily: "Poppins-SemiBold" }}>
-                      Don't have an account ?
-                    </Text>
-                    {/* Ghost button to register page */}
+                    <Text style={{ fontFamily: "Poppins-SemiBold" }}>Don't have an account ?</Text>
+
                     <Button
                       variant={"link"}
                       colorScheme="secondary"
@@ -291,6 +239,7 @@ function Login({ navigation }) {
           </Formik>
         </Box>
       </Animated.View>
+      {console.log("Login rendered")}
     </ScrollView>
   );
 }

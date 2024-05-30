@@ -1,15 +1,5 @@
 import React, { useEffect } from "react";
-import {
-  Box,
-  Button,
-  Center,
-  Heading,
-  HStack,
-  ScrollView,
-  Text,
-  useTheme,
-  VStack,
-} from "native-base";
+import { Box, Button, Center, Heading, HStack, ScrollView, Text, useTheme, VStack } from "native-base";
 import { BarChart, Grid, LineChart, YAxis } from "react-native-svg-charts";
 import { Dimensions } from "react-native";
 import * as Progress from "react-native-progress";
@@ -30,24 +20,14 @@ import {
 } from "./insightSvg";
 import Category from "./categoryComponent";
 import SelectedCategory from "./selectedCategory";
-import {
-  getDailyInsights,
-  getTopRestaurants,
-} from "../../../services/mongoDB/insightsData";
-import {
-  BreakfastIcon,
-  DinnerIcon,
-  DrinkIcon,
-  LunchIcon,
-  SnackIcon,
-} from "../../../Components/customSvgIcon";
+import { getDailyInsights, getTopRestaurants } from "../../../services/mongoDB/insightsData";
+import { BreakfastIcon, DinnerIcon, DrinkIcon, LunchIcon, SnackIcon } from "../../../Components/customSvgIcon";
 
 function Insights({ navigation }) {
   const { colors } = useTheme();
   const [topRestaurants, setTopRestaurants] = React.useState(null);
   const [dailyCalories, setDailyCalories] = React.useState(null);
 
-  
   // occasion types
   const [occasions, setOccasions] = React.useState([
     {
@@ -114,24 +94,11 @@ function Insights({ navigation }) {
         </HStack>
 
         {/* Occasions */}
-        <Heading
-          m={4}
-          style={{ fontFamily: "Poppins-Regular" }}
-          fontSize={"2xl"}
-        >
+        <Heading m={4} style={{ fontFamily: "Poppins-Regular" }} fontSize={"2xl"}>
           Occasions
         </Heading>
-        <ScrollView
-          ref={OccasionScrollRef}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-        >
-          <HStack
-            space="3"
-            alignItems="center"
-            justifyContent={"space-between"}
-            px={3}
-          >
+        <ScrollView ref={OccasionScrollRef} horizontal showsHorizontalScrollIndicator={false}>
+          <HStack space="3" alignItems="center" justifyContent={"space-between"} px={3}>
             {occasions.map((occasion, index) => (
               <Category
                 key={index}
@@ -146,14 +113,11 @@ function Insights({ navigation }) {
                     animated: true,
                   });
                   let newCategories = [...occasions];
-                  newCategories[index].selected =
-                    !newCategories[index].selected;
+                  newCategories[index].selected = !newCategories[index].selected;
                   if (newCategories.some((occasion) => occasion.selected)) {
                     newCategories = newCategories.map((occasion, i) => {
                       //if this occasion is selected don't blur it
-                      return occasion.selected
-                        ? { ...occasion, blurred: false }
-                        : { ...occasion, blurred: true };
+                      return occasion.selected ? { ...occasion, blurred: false } : { ...occasion, blurred: true };
                     });
                   } else {
                     newCategories = newCategories.map((occasion, i) => {
@@ -182,7 +146,7 @@ function Insights({ navigation }) {
           ) : (
             <VStack p={3} bg="primary.30" rounded="lg">
               <Box my={2}>
-                <Text style={{ fontFamily: "Poppins-Light" }}>Carbs</Text>
+                <Text style={{ fontFamily: "Poppins-Regular" }}>Carbs</Text>
                 <Progress.Bar
                   progress={65 / 100}
                   width={Dimensions.get("window").width * 0.8}
@@ -193,7 +157,7 @@ function Insights({ navigation }) {
                 />
               </Box>
               <Box my={2}>
-                <Text style={{ fontFamily: "Poppins-Light" }}>Protein</Text>
+                <Text style={{ fontFamily: "Poppins-Regular" }}>Protein</Text>
                 <Progress.Bar
                   progress={35 / 100}
                   width={Dimensions.get("window").width * 0.8}
@@ -204,7 +168,7 @@ function Insights({ navigation }) {
                 />
               </Box>
               <Box my={2}>
-                <Text style={{ fontFamily: "Poppins-Light" }}>Fat</Text>
+                <Text style={{ fontFamily: "Poppins-Regular" }}>Fat</Text>
                 <Progress.Bar
                   progress={49 / 100}
                   width={Dimensions.get("window").width * 0.8}
@@ -214,36 +178,19 @@ function Insights({ navigation }) {
                   borderWidth={0}
                 />
               </Box>
-              <HStack
-                my={5}
-                bg="primary.50"
-                rounded={"xl"}
-                p={3}
-                justifyContent="space-between"
-                alignItems="center"
-              >
+              <HStack my={5} bg="primary.50" rounded={"xl"} p={3} justifyContent="space-between" alignItems="center">
                 <VStack space="1">
-                  <Heading
-                    color={"muted.400"}
-                    style={{ fontFamily: "Poppins-SemiBold" }}
-                  >
+                  <Heading color={"muted.400"} style={{ fontFamily: "Poppins-SemiBold" }}>
                     Total Calories
                   </Heading>
-                  <Heading
-                    fontSize={"lg"}
-                    style={{ fontFamily: "Poppins-Light" }}
-                  >
+                  <Heading fontSize={"lg"} style={{ fontFamily: "Poppins-Regular" }}>
                     {/* {value} */}
                     {dailyCalories} Calories
                   </Heading>
                 </VStack>
                 <PieChartInsights
                   td={1}
-                  colors={[
-                    colors.primary["500"],
-                    colors.secondary["500"],
-                    colors.danger["500"],
-                  ]}
+                  colors={[colors.primary["500"], colors.secondary["500"], colors.danger["500"]]}
                 />
               </HStack>
             </VStack>
@@ -257,26 +204,16 @@ function Insights({ navigation }) {
             Expenditure
           </Heading>
           <VStack p={3} bg="secondary.30" rounded="lg">
-            <HStack
-              space="3"
-              alignItems="center"
-              justifyContent={"space-evenly"}
-            >
-              <PieChartInsights
-                colors={[
-                  colors.primary["500"],
-                  colors.secondary["500"],
-                  colors.danger["500"],
-                ]}
-              />
+            <HStack space="3" alignItems="center" justifyContent={"space-evenly"}>
+              <PieChartInsights colors={[colors.primary["500"], colors.secondary["500"], colors.danger["500"]]} />
               <VStack space="2">
                 <HStack space="3" alignItems="center">
                   <Center bg="primary.500" rounded={"full"} size="3"></Center>
-                  <Text style={{ fontFamily: "Poppins-Light" }}>Home</Text>
+                  <Text style={{ fontFamily: "Poppins-Regular" }}>Home</Text>
                 </HStack>
                 <HStack space="3" alignItems="center">
                   <Center bg="danger.500" rounded={"full"} size="3"></Center>
-                  <Text style={{ fontFamily: "Poppins-Light" }}>Away</Text>
+                  <Text style={{ fontFamily: "Poppins-Regular" }}>Away</Text>
                 </HStack>
               </VStack>
             </HStack>
@@ -284,11 +221,11 @@ function Insights({ navigation }) {
             <Text
               fontSize="md"
               style={{
-                fontFamily: "Poppins-Light",
+                fontFamily: "Poppins-Regular",
               }}
             >
-              You ve Spent 75% more money on food away from home, bringing food
-              from home to work might help you save money.
+              You ve Spent 75% more money on food away from home, bringing food from home to work might help you save
+              money.
             </Text>
           </VStack>
 
