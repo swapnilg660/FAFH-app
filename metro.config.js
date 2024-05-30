@@ -18,6 +18,7 @@ module.exports = (async () => {
       ...defaultConfig.resolver,
       sourceExts: [...defaultConfig.resolver.sourceExts, "jsx", "js", "ts", "tsx", "cjs"],
       extraNodeModules: {
+        ...defaultConfig.resolver.extraNodeModules,
         "react-native-gesture-handler": require.resolve("react-native-gesture-handler"),
       },
     },
