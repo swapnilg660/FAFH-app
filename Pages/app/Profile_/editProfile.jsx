@@ -44,6 +44,7 @@ function EditProfile({ navigation, route }) {
   const toast = useToast();
   const { userProfileData, setUserProfileData, getUser } = React.useContext(AuthContext);
 
+  console.log("userProfileData: ", userProfileData);
   //form states
   const initialValues = {
     // current user's name
@@ -56,7 +57,7 @@ function EditProfile({ navigation, route }) {
     // doB: moment("1990-01-01").format("MMMM Do YYYY"),
     doB: `${userProfileData?.dateOfBirth}`,
     gender: `${userProfileData?.gender}`,
-    country: `${JSON.parse(userProfileData?.country).name}`,
+    country: userProfileData?.country ? `${JSON.parse(userProfileData?.country).name}` : "N/A",
   };
 
   // Object for error handling

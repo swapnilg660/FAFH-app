@@ -81,25 +81,16 @@ function ConfirmMeal({ navigation, route }) {
         if (!item.subclasses.length > 0) {
           return item.name;
         } else {
-          subclasses = [
-            ...subclasses,
-            ...item.subclasses.map((subitem) => subitem.name),
-          ];
+          subclasses = [...subclasses, ...item.subclasses.map((subitem) => subitem.name)];
           return item.name;
         }
       });
 
-      toDisplayFood = [...toDisplayFood, ...subclasses, "Other"].filter(
-        (item) => item !== undefined
-      );
+      toDisplayFood = [...toDisplayFood, ...subclasses, "Other"].filter((item) => item !== undefined);
       // Capitalize all the food names
-      toDisplayFood = toDisplayFood.map(
-        (item) => item.charAt(0).toUpperCase() + item.slice(1)
-      );
+      toDisplayFood = toDisplayFood.map((item) => item.charAt(0).toUpperCase() + item.slice(1));
       setDisplayedFood(toDisplayFood);
-      setSelectedFood(
-        toDisplayFood.reduce((o, key) => ({ ...o, [key]: false }), {})
-      );
+      setSelectedFood(toDisplayFood.reduce((o, key) => ({ ...o, [key]: false }), {}));
       setIsSuggestedFoodLoaded(true);
     } else {
       setIsSuggestedFoodLoaded(false);
@@ -126,16 +117,10 @@ function ConfirmMeal({ navigation, route }) {
             }}
           >
             <Center bg="primary.600" p="2" pl={2.5} rounded="full">
-              <MaterialIcons
-                name="arrow-back-ios"
-                size={24}
-                color={colors["white"]}
-              />
+              <MaterialIcons name="arrow-back-ios" size={24} color={colors["white"]} />
             </Center>
           </Pressable>
-          <Heading style={{ fontFamily: "Poppins-SemiBold" }}>
-            {foodType}
-          </Heading>
+          <Heading style={{ fontFamily: "Poppins-SemiBold" }}>{foodType}</Heading>
         </HStack>
         {/* Body */}
         <VStack space="2" px={2}>
@@ -153,11 +138,7 @@ function ConfirmMeal({ navigation, route }) {
           </Box>
           {/* Suggestions Container */}
           <VStack space="5">
-            <Heading
-              style={{ fontFamily: "Poppins-Regular" }}
-              pt={1}
-              fontSize="md"
-            >
+            <Heading style={{ fontFamily: "Poppins-Regular" }} pt={1} fontSize="md">
               In this Image:
             </Heading>
 
@@ -187,12 +168,7 @@ function ConfirmMeal({ navigation, route }) {
                       }
                     >
                       <Box>
-                        <Box
-                          bg={"primary.30"}
-                          p={3}
-                          rounded="lg"
-                          w={width - width / 8}
-                        >
+                        <Box bg={"primary.30"} p={3} rounded="lg" w={width - width / 8}>
                           <HStack space="3" alignItems="center">
                             <Checkbox
                               style={{
@@ -200,11 +176,7 @@ function ConfirmMeal({ navigation, route }) {
                               }}
                               key={index}
                               value={selectedFood[item]}
-                              color={
-                                selectedFood[item]
-                                  ? colors.primary["600"]
-                                  : undefined
-                              }
+                              color={selectedFood[item] ? colors.primary["600"] : undefined}
                             />
                             <Text>{item}</Text>
                           </HStack>
@@ -223,9 +195,7 @@ function ConfirmMeal({ navigation, route }) {
                                 }}
                               />
                               <FormControl.ErrorMessage>
-                                <Text fontSize="xs">
-                                  This can't be empty if other is checked
-                                </Text>
+                                <Text fontSize="xs">This can't be empty if other is checked</Text>
                               </FormControl.ErrorMessage>
                             </FormControl>
                           )}
@@ -237,14 +207,7 @@ function ConfirmMeal({ navigation, route }) {
               {!isSuggestedFoodLoaded &&
                 !homeError?.recError &&
                 [1, 2, 3, 4].map((item, index) => (
-                  <Skeleton
-                    key={index}
-                    my={1}
-                    h={10}
-                    width={(9 / 10) * width}
-                    startColor={"primary.30"}
-                    rounded="lg"
-                  />
+                  <Skeleton key={index} my={1} h={10} width={(9 / 10) * width} startColor={"primary.30"} rounded="lg" />
                 ))}
               {homeError?.recError && <Text>{homeError.recError}</Text>}
             </VStack>
@@ -260,11 +223,7 @@ function ConfirmMeal({ navigation, route }) {
                 >
                   Cancel
                 </Button>
-                <Button
-                  width={"40%"}
-                  colorScheme="primary"
-                  onPress={handleAddMeal}
-                >
+                <Button width={"40%"} colorScheme="primary" isDisabled={!isSuggestedFoodLoaded} onPress={handleAddMeal}>
                   Add
                 </Button>
               </Button.Group>

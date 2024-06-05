@@ -24,10 +24,7 @@ export const getSuggestions = (word, setSuggestions) => {
     redirect: "follow",
   };
 
-  fetch(
-    `https://api.edamam.com/auto-complete?app_id=${apiId}&app_key=${apiKey}&q=${word}&limit=${5}`,
-    requestOptions
-  )
+  fetch(`https://api.edamam.com/auto-complete?app_id=${apiId}&app_key=${apiKey}&q=${word}&limit=${5}`, requestOptions)
     .then((response) => response.json())
     .then((result) => {
       console.log("suggeestion: ", result);
@@ -111,10 +108,7 @@ export const getNutrition = (params, setNutrition) => {
     redirect: "follow",
   };
 
-  fetch(
-    `https://api.edamam.com/api/food-database/v2/nutrients?app_id=${apiId}&app_key=${apiKey}`,
-    requestOptions
-  )
+  fetch(`https://api.edamam.com/api/food-database/v2/nutrients?app_id=${apiId}&app_key=${apiKey}`, requestOptions)
     .then((response) => response.json())
     .then((result) => {
       console.log("NUTRITION:", result);
@@ -150,14 +144,12 @@ export const recogniseFood = async (image, setFood, setError) => {
   fetch(`${dbUrl}/recogniseImage`, requestOptions)
     .then((response) => response.json())
     .then((result) => {
-      setFood(result.recognition_results);
       console.log("[RecogniseFood(res):]", result);
-      result.success === false
-        ? setError({ recError: result.message })
-        : console.log("No error");
+      setFood(result.recognition_results);
+      result.success === false ? setError({ recError: result.message }) : console.log("No error");
     })
     .catch((error) => {
       console.log("[FoodDatabase.jsx] recogniseFoodError:", error);
-      setError({ recError: "Error in recognizing food !" });
+      setError({ recError: "Error in recognizing food!" });
     });
 };

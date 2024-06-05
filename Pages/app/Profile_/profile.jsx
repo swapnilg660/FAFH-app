@@ -576,11 +576,11 @@ function Profile({ navigation }) {
               route: "EditProfile",
               icon: <FontAwesome5 name="user-edit" size={24} color={colors.primary["700"]} />,
             },
-            {
-              title: "Change Password",
-              route: "changePassword",
-              icon: <AntDesign name="lock" size={24} color={colors.primary["700"]} />,
-            },
+            // {
+            //   title: "Change Password",
+            //   route: "changePassword",
+            //   icon: <AntDesign name="lock" size={24} color={colors.primary["700"]} />,
+            // },
             {
               title: "Delete Account",
               route: "deleteAccount",
